@@ -1,0 +1,69 @@
+{
+    "name": "freedom-guard-electron",
+    "productName": "Freedom-Guard-Electron",
+    "description": "Warp + Psiphon",
+    "keywords": [],
+    "main": "./main.js",
+    "version": "1.2.5",
+    "author": "fwldom",
+    "scripts": {
+        "start": "electron .",
+        "build": "electron-builder"
+    },
+    "build": {
+        "electronVersion": "31.0.0-beta.6",
+        "extraResources": [
+            {
+                "from": "assets/",
+                "to": "assets/",
+                "filter": [
+                    "**/*"
+                ]
+            },
+            {
+                "from": "assets/warp-plus.exe",
+                "to": "assets/warp-plus.exe"
+            },
+            {
+                "from": "assets/wintun.dll",
+                "to": "assets/wintun.dll"
+            },
+            {
+                "from": "node_modules/boxicons/css/boxicons.min.css",
+                "to": "node_modules/boxicons/css/boxicons.min.css"
+            },
+            {
+                "from": "svgs/",
+                "to": "svgs/",
+                "filter": [
+                    "**/*"
+                ]
+            }
+        ],
+        "productName": "Freedom Guard",
+        "appId": "guard.freedom.com",
+        "directories": {
+            "output": "dist"
+        },
+        "win": {
+            "icon": "ico.ico",
+            "target": "nsis"
+        },
+        "files": [
+            "assets/**/*",
+            "node_modules/boxicons/css/boxicons.min.css",
+            "node_modules/**/*",
+            "package.json",
+            "main.js",
+            "rederer.js",
+            "preload.js",
+            "*.js",
+            "*.html",
+            "*.css",
+            "fonts/*.*",
+            "svgs/*.*",
+            "*.png",
+            "*.ico"
+        ]
+    }
+}

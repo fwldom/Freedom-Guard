@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <title>Freedom Guard</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="assets/css/setting.css" />
+    <link href="boxicons.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <h2 id="Status" title="false"></h2>
+    <button id="ChangeStatus" class="bx-tada-hover"><i class="bx bx-power-off"></i></button>
+    <button class="menu-show" id="menu-show"><i class="bx bx-menu-alt-left"></i></button>
+    <button class="setting-show" id="setting-show"><i class=" bx bxs-cog"></i></button>
+    <div class="options">
+        <p>Gool</p>
+        <label class="switch">
+            <input type="checkbox" id="Gool" />
+            <span class="slider"></span>
+        </label>
+        <p>Scan</p>
+        <label class="switch">
+            <input type="checkbox" id="Scan" />
+            <span class="slider"></span>
+        </label>
+    </div>
+    <div class="box-select-country" id="box-select-country">
+    </div>
+    <div class="options-select-cfon">
+        <p>Psiphon Country</p>
+        <i class="bx bxs-chevron-down bx-tada-hover"></i>
+        <div class="box-select-country-mini" id="box-select-country-mini">
+            <div id="flagOfCfon">
+                <img src="svgs/ir.svg" id="imgOfCfon" width="50px">
+                <div id="textOfCfon">psiphon disable</div>
+                <i class="bx bx-chevron-right"></i>
+            </div>
+        </div>
+    </div>
+    <div id="setting">
+        <button id="close-setting">
+            <i class='bx bx-arrow-back'></i>
+        </button>
+        <button id="about"><i class='bx bxs-info-circle'></i></button>
+        <b>IP Version </b>
+        <div id="ip-version">
+            <select name="" id="selector-ip-version">
+                <option value="IPV4">IP Version 4</option>
+                <option value="IPV6">IP Version 6</option>
+            </select>
+        </div>
+        <b>Endpoint</b>
+        <div id="end-point" class="form-control">
+            <input placeholder="IP : 192.x.x.x" class="input input-alt" type="text" id="end-point-address">
+            <span class="input-border input-border-alt"></span>
+        </div>
+        <b>Bind Address</b>
+        <div id="bind-address" class="form-control">
+            <input type="text" class="input input-alt" placeholder="127.0.0.1:8086" id="bind-address-text">
+            <span class="input-border input-border-alt"></span>
+        </div>
+        <b>Warp Key</b>
+        <div id="warp-key" class="form-control">
+            <input type="text" class="input input-alt" placeholder="key : xxxxxxxxxxxxx" id="warp-key-text">
+            <span class="input-border input-border-alt"></span>
+        </div>
+        <b>DNS</b>
+        <div id="dns-warp" class="form-control">
+            <input type="text" class="input input-alt" placeholder="dns : 8.8.8.8" id="dns-warp-text">
+            <span class="input-border input-border-alt"></span>
+        </div>
+        <b>Scanner rtt limit</b>
+        <div id="scan-rtt" class="form-control">
+            <input type="text" class="input input-alt" placeholder="default 1s" id="scan-rtt-text">
+            <span class="input-border input-border-alt"></span>
+        </div>
+        <b>Verbose</b>
+        <div id="verbose">
+            <input type="checkbox" id="verbose-status">
+        </div>
+        <b>Cache Directory</b>
+        <div id="cache" class="form-control">
+            <input type="text" class="input input-alt" placeholder="Directory : ./../" id="cache-dir">
+            <span class="input-border input-border-alt"></span>
+        </div>
+        <b>Wireguard Config Directory</b>
+        <div id="wgconfig" class="form-control">
+            <input type="text" class="input input-alt" placeholder="Path file" id="wgconfig-dir">
+            <span class="input-border input-border-alt"></span>
+        </div>
+        <b>Config Directory</b>
+        <div id="config" class="form-control">
+            <input type="text" class="input input-alt" placeholder="Path file Config" id="config-dir">
+            <span class="input-border input-border-alt"></span>
+        </div>
+        <b>Reserved</b>
+        <div id="reserved">
+            <input type="checkbox" id="reserved-status">
+        </div>
+    </div>
+    <div id="menu">
+        <div id="menu-dns">Set DNS</div>
+        <div id="menu-freedom-vibe">Freedom Vibe</div>
+        <div id="menu-freedom-get">Freedom Get</div>
+        <div id="menu-exit">Exit Menu</div>
+    </div>
+    <div id="freedom-vibe">
+        <div id="logo-vibe">
+            <img width="105px" height="105px" src="freedom-vibe.png" alt="">
+        </div>
+        <div id="vibe-profile">
+
+        </div>
+        <p id="status-vibe">Auto</p>
+        <div id="changeStatus-vibe">
+            <i class='bx bx-power-off'></i>
+        </div>
+        <p id="status-vibe-conn">Disconnected</p>
+        <button id="close-vibe"><i class='bx bx-arrow-back'></i></button>
+        <button id="enter-custom-config"><i class='bx bx-plus'></i></button>
+        <div id="freedom-vibe-custom-config">
+            <input type="text" id="custom-config-vibe" placeholder="Enter Config">
+            <button id="submit-config-custom-vibe" style="font-size: 18px;"><i class='bx bxs-save'></i></button>
+            <button id="reset-config-custom-vibe">reset config auto</button>
+            <button id="close-custom-config"><i class='bx bx-exit-fullscreen'></i></button>
+        </div>
+    </div>
+    <div id="dns-set">
+        <button id="close-dns"><i class='bx bx-exit-fullscreen'></i></button>
+        <input type="text" id="dns1-text" placeholder="IP DNS : 1.1.1.1">
+        <input type="text" id="dns2-text" placeholder="IP DNS : 8.8.8.8">
+        <button id="submit-dns"><i class='bx bxs-save'></i></button>
+    </div>
+    <div id="freedom-get">
+
+    </div>
+    <div id="about-app">
+        <button id="close-about"><i class='bx bx-exit-fullscreen'></i></button>
+        <p> Developed By Fwldom 👩‍💻</p>
+        <p>👇 Acknowledgements 👇</p>
+        <p> <a href="https://github.com/hiddify/hiddify-core/">hiddify-core</a> from Hiddify</p>
+        <p> <a href="https://github.com/bepass-org/warp-plus">warp-plus</a> from bepass-org</p>
+        <p> <a href="https://www.sordum.org/7952/dns-jumper-v2-3/">Dns Jumper</a> from sordum</p>
+        <p> <a href="https://github.com/fwldom/Freedom-GET">Freedom Get</a> from fwldom</p>
+    </div>
+</body>
+<script src="./renderer.js"></script>
+
+</html>
