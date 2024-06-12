@@ -527,18 +527,18 @@ h2 {
 }
 
 #freedom-vibe>#freedom-vibe-custom-config>* {
-    font-size: 35px;
+    font-size: 35px !important;
     background-color: transparent;
     border: none;
     color: white;
 }
 
 #freedom-vibe>#freedom-vibe-custom-config>#reset-config-custom-vibe {
-    font-size: 18px;
+    font-size: 18px !important;
 }
 
 #freedom-vibe>#freedom-vibe-custom-config>input {
-    font-size: 16px;
+    font-size: 16px !important;
     width: 85%;
     outline: none;
 }
@@ -582,7 +582,7 @@ h2 {
     width: 100%;
 }
 
-.form-control {
+.form-control-c {
     position: relative;
     --width-of-input: 300px;
 }

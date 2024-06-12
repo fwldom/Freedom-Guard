@@ -38,6 +38,7 @@ var PsicountryFullname = ["Austria", "Belgium", "Bulgaria", "Brazil", "Canada", 
 // #endregion
 // #region Listener
 document.addEventListener("DOMContentLoaded", () => {
+    // Onclick Button and Onchange inputs
     ChangeStatusbtn = document.getElementById("ChangeStatus");
     ChangeStatusbtn.onclick = () => {
         Connect();
@@ -85,11 +86,14 @@ document.addEventListener("DOMContentLoaded", () => {
 // #endregion
 // #region For Connections
 function Connect() {
+    // Function Connect To Warp
     if (StatusGuard == false) {
         console.log("Start Connecting ...");
         document.getElementById("ChangeStatus").style.animation = "Connect 7s ease-in-out";
         var exePath = path.join(process.resourcesPath, "assets", "warp-plus.exe"); // For Test __dirname for build process.resourcePath
+        // Start warp plus
         exec("start " + exePath + " " + args);
+        // Set System Proxy
         exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /F');
         exec(`reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyServer /t REG_SZ /d ${Information["proxy"]} /F`);
         StatusGuard = true;
@@ -147,6 +151,7 @@ function Onload() {
     });
     // End Added All Elements
     try {
+        // Restore Information var from json
         Information = JSON.parse(read_file("warp.json"));
         SetSettingWarp()
     }
@@ -173,6 +178,7 @@ function CloseAllSections() {
     document.getElementById("setting").style.display = "none";
 }
 function SetSettingWarp() {
+    // Restore value setting section
     SetValueInput("selector-ip-version", "IPV" + Information['ipver'])
     SetValueInput("end-point-address", Information["endpoint"]);
     SetValueInput("bind-address-text", Information["proxy"]);
@@ -187,9 +193,11 @@ function SetSettingWarp() {
 
 }
 function SetValueInput(id, Value) {
+    // Set Value In Input
     document.getElementById(id).value = Value;
 }
 function SetService(para, status) {
+    // Change
     Information[para] = status;
     ResetArgs();
     saveSetting();
@@ -263,8 +271,8 @@ document.getElementById("setting-show").addEventListener("click", () => {
         document.getElementById("setting").style.display = "";
     }
 });
-document.getElementById("about").addEventListener("click", () => {document.getElementById("about-app").style.display = "flex"})
-document.getElementById("close-about").addEventListener("click", () => {document.getElementById("about-app").style.display = ""})
+document.getElementById("about").addEventListener("click", () => { document.getElementById("about-app").style.display = "flex" })
+document.getElementById("close-about").addEventListener("click", () => { document.getElementById("about-app").style.display = "" })
 //#endregion
 //#region Section Menu
 document.getElementById("menu-show").onclick = () => {
@@ -273,7 +281,12 @@ document.getElementById("menu-show").onclick = () => {
 document.getElementById("menu-freedom-vibe").onclick = () => {
     LoadVibe();
 };
-document.getElementById("menu-freedom-get").onclick = () => { };
+document.getElementById("menu-freedom-get").onclick = () => {
+    document.getElementById("freedom-get").style.display = "block"
+    elements.forEach(element => {
+        element.style.display = '';
+    });
+};
 document.getElementById("menu-dns").onclick = () => { document.getElementById("dns-set").style.display = "flex" };
 document.getElementById("menu-exit").onclick = () => (document.getElementById("menu").style.display = "");
 //#endregion
@@ -337,7 +350,6 @@ async function connectVibe() {
                 break;
             }
         }
-        settingVibe["status"] = true;
     }
     else {
         disconnectVibe();
@@ -357,14 +369,19 @@ function Connected() {
     document.getElementById("changeStatus-vibe").style.boxShadow = "0px 0px 50px 10px rgba(98, 255, 0, 0.7)";
     document.getElementById("changeStatus-vibe").style.animation = "";
     document.getElementById("status-vibe-conn").innerHTML = "🚀 Connected";
-
+    settingVibe["status"] = true;
 }
 function disconnectVibe() {
+    //Kill the HiddifyCli.exe process
     exec("taskkill /IM " + "HiddifyCli.exe" + " /F");
+    //Disable the proxy settings
     exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
+    //Remove the box shadow and animation from the vibe status element
     document.getElementById("changeStatus-vibe").style.boxShadow = "";
     document.getElementById("changeStatus-vibe").style.animation = "";
+    //Set the vibe status to disconnected
     document.getElementById("status-vibe-conn").innerHTML = "Disconnected";
+    //Set the vibe setting to false
     settingVibe["status"] = false;
 }
 function TestConnection() {
@@ -389,6 +406,11 @@ document.getElementById("reset-config-custom-vibe").onclick = () => {
 }
 //#endregion
 //#region Section Freedom-Get
+var parent = document.getElementById('freedom-get');
+var elements = parent.querySelectorAll('*');
+elements.forEach(element => {
+    element.style.display = 'none';
+});
 //#endregion
 //#region Section Set Dns
 document.getElementById("close-dns").onclick = () => (document.getElementById("dns-set").style.display = "");

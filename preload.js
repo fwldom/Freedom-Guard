@@ -9,7 +9,4 @@ window.addEventListener('DOMContentLoaded', () => {
     replaceText(`${type}-version`, process.versions[type])
   }
 })
-contextBridge.exposeInMainWorld('electronAPI', {
-  writeJSON: (filePath, data) => ipcRenderer.invoke('write-json', filePath, data),
-  readJSON: (filePath) => ipcRenderer.invoke('read-json', filePath),
-});
+// Read And Write json file
