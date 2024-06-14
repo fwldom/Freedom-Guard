@@ -18,6 +18,21 @@
 </head>
 
 <body>
+    <div id="loading">
+        <div class="content">
+            <div class="text">LOADING...</div>
+            <div class="text">LOADING...</div>
+        </div>
+    </div>
+    <script>
+        function Loading() {
+            document.getElementById("loading").style.display = "flex";
+            setTimeout(() => {
+                document.getElementById("loading").style.display = "none";
+            }, 2000);
+        }
+        Loading();
+    </script>
     <h2 id="Status" title="false"></h2>
     <button id="ChangeStatus" class="bx-tada-hover"><i class="bx bx-power-off"></i></button>
     <button class="menu-show" id="menu-show"><i class="bx bx-menu-alt-left"></i></button>
@@ -140,7 +155,6 @@
         <input type="text" id="dns2-text" placeholder="IP DNS : 8.8.8.8">
         <button id="submit-dns"><i class='bx bxs-save'></i></button>
     </div>
-
     <div id="freedom-get" style="display: none !important;">
         <nav class="navbar navbar-inverse">
             <div class="container">
@@ -165,7 +179,8 @@
                             href="https://github.com/yebekhe/TVC" target="_blank">TVC</a> دسترسی داشته باشین.
                         این‌کانفیگ‌ها به‌صورت خودکار و منظم، بدون دخل‌وتصرف از یه‌سری <a
                             href="https://raw.githubusercontent.com/yebekhe/TVC/main/channelsData/channelsAssets.json"
-                            target="_blank">کانال تلگرامی</a> جمع‌آوری میشن و برای رعایت مسائل امنیتی توصیه میشه تنها
+                            target="_blank">کانال تلگرامی</a> جمع‌آوری میشن و برای رعایت مسائل امنیتی توصیه میشه
+                        تنها
                         برای مصارف عادی ازشون استفاده کنین.</p>
                 </div>
                 <div class="form-group">
@@ -227,31 +242,38 @@
                                 <div class="dirLeft">
                                     <small>Buy me a coffee:</small>
                                     <br>
-                                    <a href="https://buymeacoffee.com/ircf" class="btn btn-default btn-block" target="_blank">buymeacoffee.com/ircf</a>
+                                    <a href="https://buymeacoffee.com/ircf" class="btn btn-default btn-block"
+                                        target="_blank">buymeacoffee.com/ircf</a>
                                     <br>
                                     <small>Tether (TRC20):</small>
                                     <br>
-                                    <input type="text" class="form-control text-center" value="TF5cT8fQMuajHGGH141U9JbTygFojkrFdB" />
+                                    <input type="text" class="form-control text-center"
+                                        value="TF5cT8fQMuajHGGH141U9JbTygFojkrFdB" />
                                     <br>
                                     <small>Bitcoin:</small>
                                     <br>
-                                    <input type="text" class="form-control text-center" value="bc1qyhx0qn9722vdvlz4s64g4sxq3yne0f5ryz3jyd" />
+                                    <input type="text" class="form-control text-center"
+                                        value="bc1qyhx0qn9722vdvlz4s64g4sxq3yne0f5ryz3jyd" />
                                     <br>
                                     <small>Tron (TRX):</small>
                                     <br>
-                                    <input type="text" class="form-control text-center" value="TF5cT8fQMuajHGGH141U9JbTygFojkrFdB" />
+                                    <input type="text" class="form-control text-center"
+                                        value="TF5cT8fQMuajHGGH141U9JbTygFojkrFdB" />
                                     <br>
                                     <small>Ethereum:</small>
                                     <br>
-                                    <input type="text" class="form-control text-center" value="0x2A72777912A15A6387a1116f9bDDFe1Cb9474BF1" />
-									<br>
+                                    <input type="text" class="form-control text-center"
+                                        value="0x2A72777912A15A6387a1116f9bDDFe1Cb9474BF1" />
+                                    <br>
                                     <small>Litecoin:</small>
                                     <br>
-                                    <input type="text" class="form-control text-center" value="ltc1q5d4u366xef336pjvccn7akn02upavmk45fhtdw" />
+                                    <input type="text" class="form-control text-center"
+                                        value="ltc1q5d4u366xef336pjvccn7akn02upavmk45fhtdw" />
                                     <br>
-									<small>TON (ERC20):</small>
-									<br>
-									<input type="text" class="form-control text-center" value="0x2A72777912A15A6387a1116f9bDDFe1Cb9474BF1" />
+                                    <small>TON (ERC20):</small>
+                                    <br>
+                                    <input type="text" class="form-control text-center"
+                                        value="0x2A72777912A15A6387a1116f9bDDFe1Cb9474BF1" />
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -310,6 +332,7 @@
     </div>
     <div id="about-app">
         <button id="close-about"><i class='bx bx-exit-fullscreen'></i></button>
+        <p> Freedom Guard 1.2.5</p>
         <p> Developed By Fwldom 👩‍💻</p>
         <p>👇 Acknowledgements 👇</p>
         <p> <a href="https://github.com/hiddify/hiddify-core/">hiddify-core</a> from Hiddify</p>

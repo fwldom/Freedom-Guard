@@ -3,9 +3,10 @@
 	backdrop-filter: blur(35px);
     background: #05274e linear-gradient(180deg, rgba(2, 0, 36, 0.3) 15%, rgba(45, 44, 61, 0.5) 35%, rgba(0, 212, 255, 0.4) 100%);
 	width: 100%;
-	height: 90%;
+	height: 100%;
+	overflow: auto;
 	position: fixed;
-	top: 12%;
+	top: 0%;
 	left: 0;
 	font-family: "vazir",'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	font-size: 12px;
@@ -41,9 +42,6 @@
 	box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
 	padding: 22px 0;
 	margin: 0 0 30px 0;
-	position: fixed;
-	top: -14.5%;
-	right: 0;
 	z-index: 100;
 }
 .navbar img {

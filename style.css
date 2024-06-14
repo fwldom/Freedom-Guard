@@ -355,6 +355,7 @@ h2 {
     flex-direction: column;
     z-index: 9;
 }
+
 #about-app>#close-about {
     position: absolute;
     top: 0%;
@@ -365,6 +366,7 @@ h2 {
     border: none;
     background-color: transparent;
 }
+
 #setting>#about {
     max-width: 55px;
     min-height: 45px;
@@ -643,3 +645,73 @@ h2 {
 }
 
 /*#endregion*/
+/*#region Section Loading */
+#loading {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 15;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(25px);
+}
+
+.content {
+    position: relative;
+}
+
+.content .text {
+    color: #fff;
+    font-size: 3rem;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+.content .text:nth-child(1) {
+    color: transparent;
+    -webkit-text-stroke: 2px #8338ec;
+}
+
+.content .text:nth-child(2) {
+    color: #c19bf5;
+    animation: animate 2s ease-in-out infinite;
+}
+
+@keyframes animate {
+
+    0%,
+    100% {
+        clip-path: polygon(0% 45%,
+                16% 44%,
+                33% 50%,
+                54% 60%,
+                70% 61%,
+                84% 59%,
+                100% 52%,
+                100% 100%,
+                0% 100%);
+    }
+
+    50% {
+        clip-path: polygon(0% 60%,
+                15% 65%,
+                34% 66%,
+                51% 62%,
+                67% 50%,
+                84% 45%,
+                100% 46%,
+                100% 100%,
+                0% 100%);
+    }
+}
+
+/*#endregion*/
+.modal-backdrop {
+    z-index: -1;
+}

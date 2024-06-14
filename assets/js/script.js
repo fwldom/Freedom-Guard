@@ -148,8 +148,8 @@ $(document).on('click', '#get', function(e) {
     else {
         document.getElementById('get').disabled = false;
         $('#get').html('دریافت کانفیگ');
-        //type = (type === 'ss' ? 'shadowsocks' : type);
-        //config = 'https://raw.githubusercontent.com/'+source+'/main/subscriptions/xray/normal/'+type;
+        type = (type === 'ss' ? 'shadowsocks' : type);
+        config = 'https://raw.githubusercontent.com/'+source+'/main/subscriptions/xray/normal/'+type;
         if ( type === "warp" ) {
             config = 'https://raw.githubusercontent.com/ircfspace/warpsub/main/export/warp';
         }

@@ -279,9 +279,11 @@ document.getElementById("menu-show").onclick = () => {
     document.getElementById("menu").style.display = "flex";
 };
 document.getElementById("menu-freedom-vibe").onclick = () => {
+    Loading();
     LoadVibe();
 };
 document.getElementById("menu-freedom-get").onclick = () => {
+    Loading();
     document.getElementById("freedom-get").style.display = "block"
     elements.forEach(element => {
         element.style.display = '';
@@ -344,6 +346,7 @@ async function connectVibe() {
         }
         for (var config of configs) {
             Run("exec", "HiddifyCli.exe", ' run' + ' -c ' + config + ' --system-proxy');
+            settingVibe["status"] = true;
             await sleep(10000);
             if (confirm("Are You Connected? | آیا متصل هستید؟")) {
                 Connected();
@@ -369,7 +372,6 @@ function Connected() {
     document.getElementById("changeStatus-vibe").style.boxShadow = "0px 0px 50px 10px rgba(98, 255, 0, 0.7)";
     document.getElementById("changeStatus-vibe").style.animation = "";
     document.getElementById("status-vibe-conn").innerHTML = "🚀 Connected";
-    settingVibe["status"] = true;
 }
 function disconnectVibe() {
     //Kill the HiddifyCli.exe process
