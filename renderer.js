@@ -36,7 +36,7 @@ var args = [""];
 var Psicountry = ["AT", "BE", "BG", "BR", "CA", "CH", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GB", "HU", "HR", "IE", "IN", "IT", "JP", "LV", "NL", "NO", "PL", "PT", "RO", "RS", "SE", "SG", "SK", "UA", "US"];
 var PsicountryFullname = ["Austria", "Belgium", "Bulgaria", "Brazil", "Canada", "Switzerland", "Czech Republic", "Germany", "Denmark", "Estonia", "Spain", "Finland", "France", "United Kingdom", "Hungary", "Croatia", "Ireland", "India", "Italy", "Japan", "Latvia", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Serbia", "Sweden", "Singapore", "Slovakia", "Ukraine", "United States"];
 // #endregion
-// #region Listener
+// #region all Listener
 document.addEventListener("DOMContentLoaded", () => {
     // Onclick Button and Onchange inputs
     ChangeStatusbtn = document.getElementById("ChangeStatus");
