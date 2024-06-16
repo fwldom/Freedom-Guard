@@ -314,7 +314,7 @@ var settingVibe = {
 function LoadVibe() {
     document.getElementById("freedom-vibe").style.display = "flex";
     try {
-        settingVibe = JSON.parse(read_file("vibe.json"));
+        settingVibe = JSON.parse(read_file("vibe.json")); // Load Setting From File.json 
     }
     catch {
         saveSetting();
@@ -361,7 +361,7 @@ async function connectVibe() {
             Run("exec", "HiddifyCli.exe", ' run' + ' -c ' + config + ' --system-proxy');
             settingVibe["status"] = true;
             await sleep(10000);
-            if (confirm("Are You Connected? | آیا متصل هستید؟")) {
+            if (confirm("Are You Connected? | آیا متصل هستید؟\n اگر مشکل اتصال دارید بر روی Cancel بزنید.")) {
                 Connected();
                 break;
             }
@@ -372,9 +372,11 @@ async function connectVibe() {
     }
 }
 async function saveSetting() {
+    // Save settingVibe and Information (Setting Warp) In files.json
     write_file("vibe.json", JSON.stringify(settingVibe));
     write_file("warp.json", JSON.stringify(Information));
 }
+// function Read File and Write  
 read_file = function (path) {
     return fs.readFileSync(path, 'utf8');
 }
@@ -382,11 +384,13 @@ write_file = function (path, output) {
     fs.writeFileSync(path, output);
 }
 function Connected() {
+    // function runed when the proxy is connected
     document.getElementById("changeStatus-vibe").style.boxShadow = "0px 0px 50px 10px rgba(98, 255, 0, 0.7)";
     document.getElementById("changeStatus-vibe").style.animation = "";
     document.getElementById("status-vibe-conn").innerHTML = "🚀 Connected";
 }
 function disconnectVibe() {
+    // function runed when the proxy is disconnected
     //Kill the HiddifyCli.exe process
     exec("taskkill /IM " + "HiddifyCli.exe" + " /F");
     //Disable the proxy settings
@@ -398,9 +402,6 @@ function disconnectVibe() {
     document.getElementById("status-vibe-conn").innerHTML = "Disconnected";
     //Set the vibe setting to false
     settingVibe["status"] = false;
-}
-function TestConnection() {
-
 }
 document.getElementById("changeStatus-vibe").onclick = () => connectVibe();
 document.getElementById("close-vibe").onclick = () => document.getElementById("freedom-vibe").style.display = "none";
@@ -431,6 +432,7 @@ elements.forEach(element => {
 document.getElementById("close-dns").onclick = () => (document.getElementById("dns-set").style.display = "");
 document.getElementById("submit-dns").onclick = () => SetDNS(document.getElementById("dns1-text").value, document.getElementById("dns2-text").value);
 function SetDNS(dns1, dns2) {
+    // Run Dns Jumper With DNS address as parameter for Apply DNS
     if (dns1 != "", dns2 != "") Run("exec", "DnsJumper.exe", [dns1 + "," + dns2]);
 }
 //#endregion
