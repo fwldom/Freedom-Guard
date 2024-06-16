@@ -304,11 +304,15 @@ h2 {
 }
 
 #setting>div {
-    width: 80%;
+    width: 100%;
     min-height: fit-content;
     background-color: transparent;
     border-top: 1px solid #10061b;
     padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5%;
 }
 
 #setting>b {
@@ -332,8 +336,11 @@ h2 {
     font-size: 25px;
     outline: #170a3a;
     color: #ded0ea;
+    width: 70%;
 }
-
+#setting .btn{
+    max-height: 50px;
+}
 @media only screen and (max-width: 600px) {
     #setting {
         width: 100%;

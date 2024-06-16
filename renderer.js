@@ -14,6 +14,7 @@ const { readFile } = require("fs/promises");
 // #endregion
 // #region Global Var
 var StatusGuard = false;
+var AssetsPath = path.join(process.resourcesPath, "assets");
 var Information = {
     proxy: "127.0.0.1:8086",
     gool: false,
@@ -167,7 +168,7 @@ function SetCfon(country) {
     Information["cfon"] = true;
     Information["cfonc"] = country;
     document.getElementById("textOfCfon").innerHTML = PsicountryFullname[Psicountry.indexOf(country)];
-    document.getElementById("imgOfCfon").src = process.resourcesPath + `\\svgs\\${country}.svg`;
+    document.getElementById("imgOfCfon").src = path.join(process.resourcesPath, "svgs", country, ".svg");
     ResetArgs();
     // set
 }
@@ -190,7 +191,6 @@ function SetSettingWarp() {
     SetValueInput("wgconfig-dir", Information["wgconf"]);
     SetValueInput("config-dir", Information["config"]);
     document.getElementById("reserved-status").checked = Information["reserved"];
-
 }
 function SetValueInput(id, Value) {
     // Set Value In Input
@@ -262,7 +262,20 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 // #endregion
-//#region Section Setting
+//#region Section Setting Warp
+document.getElementById("find-best-endpoint").addEventListener("click", () => {
+    Run("exec", "win_scanner.bat");
+    Loading();
+    setTimeout(() => {
+        document.getElementById("end-point-address").value = read_file(path.join(AssetsPath, "bestendpoint.txt"));
+        alert("Finded Best Endpoint");
+        var event = new Event('change', {
+            bubbles: true,
+            cancelable: false,
+        });
+        document.getElementById("end-point-address").dispatchEvent(event);
+    }, 10500);
+});
 document.getElementById("setting-show").addEventListener("click", () => {
     if (document.getElementById("setting").style.display == "") {
         CloseAllSections();

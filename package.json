@@ -4,7 +4,7 @@
     "description": "Warp + Psiphon",
     "keywords": [],
     "main": "./main.js",
-    "version": "1.2.5",
+    "version": "1.2.6",
     "author": "fwldom",
     "scripts": {
         "start": "electron .",
