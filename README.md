@@ -3,8 +3,8 @@
 > Freedom Guard is tool for bypass censorship of internet.<br>
 > Woman Life Freedom
 ### OS Support
-> Windows ([Download Lastest Version](https://github.com/fwldom/Freedom-Guard-Electron/releases/latest/download/Freedom-Guard.exe))
-> Linux (not published)
+> Windows ([Download Lastest Version](https://github.com/fwldom/Freedom-Guard-Electron/releases/latest/download/Freedom-Guard.exe))<br>
+> Linux (not published)<br>
 > Mac (not published)
 ### features
 - Freedom Guard (with Warp Plus , Main)
