@@ -36,4 +36,4 @@ email : fwldom@duck.com
 > Freedom Get from fwldom <br>
 > Scanner IP Endpoint (Warp) from Ptechgithub <br>
 ### Visitors 
-![Visitor Count](https://profile-counter.glitch.me/fwldom/Freedom-Guard-Electron/count.svg)
+![Visitor Count](https://profile-counter.glitch.me/Freedom-Guard-Electron/count.svg)
