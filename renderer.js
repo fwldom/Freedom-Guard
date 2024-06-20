@@ -15,7 +15,7 @@ const { readFile } = require("fs/promises");
 // #region Global Var
 var StatusGuard = false;
 var AssetsPath = path.join(process.resourcesPath, "assets");
-var Information = {
+var settingWarp = {
     proxy: "127.0.0.1:8086",
     gool: false,
     scan: false,
@@ -34,15 +34,15 @@ var Information = {
     dns: "",
 };
 var args = [""];
-var Psicountry = ["AT", "BE", "BG", "BR", "CA", "CH", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GB", "HU", "HR", "IE", "IN", "IT", "JP", "LV", "NL", "NO", "PL", "PT", "RO", "RS", "SE", "SG", "SK", "UA", "US"];
-var PsicountryFullname = ["Austria", "Belgium", "Bulgaria", "Brazil", "Canada", "Switzerland", "Czech Republic", "Germany", "Denmark", "Estonia", "Spain", "Finland", "France", "United Kingdom", "Hungary", "Croatia", "Ireland", "India", "Italy", "Japan", "Latvia", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Serbia", "Sweden", "Singapore", "Slovakia", "Ukraine", "United States"];
+var Psicountry = ["IR", "AT", "BE", "BG", "BR", "CA", "CH", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GB", "HU", "HR", "IE", "IN", "IT", "JP", "LV", "NL", "NO", "PL", "PT", "RO", "RS", "SE", "SG", "SK", "UA", "US"];
+var PsicountryFullname = ["disable", "Austria", "Belgium", "Bulgaria", "Brazil", "Canada", "Switzerland", "Czech Republic", "Germany", "Denmark", "Estonia", "Spain", "Finland", "France", "United Kingdom", "Hungary", "Croatia", "Ireland", "India", "Italy", "Japan", "Latvia", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Serbia", "Sweden", "Singapore", "Slovakia", "Ukraine", "United States"];
 // #endregion
 // #region all Listener
 document.addEventListener("DOMContentLoaded", () => {
     // Onclick Button and Onchange inputs
     ChangeStatusbtn = document.getElementById("ChangeStatus");
     ChangeStatusbtn.onclick = () => {
-        Connect();
+        ConnectWarp();
     };
     document.body.onload = () => {
         Onload();
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 // #endregion
 // #region For Connections
-function Connect() {
+function ConnectWarp() {
     // Function Connect To Warp
     if (StatusGuard == false) {
         console.log("Start Connecting ...");
@@ -96,7 +96,7 @@ function Connect() {
         exec("start " + exePath + " " + args);
         // Set System Proxy
         exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /F');
-        exec(`reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyServer /t REG_SZ /d ${Information["proxy"]} /F`);
+        exec(`reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyServer /t REG_SZ /d ${settingWarp["proxy"]} /F`);
         StatusGuard = true;
         setTimeout(() => {
             console.log("Connected !!!");
@@ -152,12 +152,11 @@ function Onload() {
     });
     // End Added All Elements
     try {
-        // Restore Information var from json
-        Information = JSON.parse(read_file("warp.json"));
+        // Restore var settingWarp  from json
+        settingWarp = JSON.parse(read_file("warp.json"));
         SetSettingWarp()
     }
     catch {
-        LoadVibe()
         saveSetting()
     }
 }
@@ -165,10 +164,10 @@ function Onload() {
 // #region Functions other
 function SetCfon(country) {
     document.getElementById("box-select-country-mini").onclick();
-    Information["cfon"] = true;
-    Information["cfonc"] = country;
+    settingWarp["cfon"] = true;
+    settingWarp["cfonc"] = country;
     document.getElementById("textOfCfon").innerHTML = PsicountryFullname[Psicountry.indexOf(country)];
-    document.getElementById("imgOfCfon").src = path.join(process.resourcesPath, "svgs", country, ".svg");
+    document.getElementById("imgOfCfonCustom").src = path.join(process.resourcesPath, "svgs", country.toString().toLowerCase() + ".svg");
     ResetArgs();
     // set
 }
@@ -180,17 +179,17 @@ function CloseAllSections() {
 }
 function SetSettingWarp() {
     // Restore value setting section
-    SetValueInput("selector-ip-version", "IPV" + Information['ipver'])
-    SetValueInput("end-point-address", Information["endpoint"]);
-    SetValueInput("bind-address-text", Information["proxy"]);
-    SetValueInput("warp-key-text", Information["warpkey"]);
-    SetValueInput("dns-warp-text", Information["dns"]);
-    SetValueInput("scan-rtt-text", Information["scanrtt"]);
-    document.getElementById("verbose-status").checked = Information["verbose"];
-    SetValueInput("cache-dir", Information["cache"]);
-    SetValueInput("wgconfig-dir", Information["wgconf"]);
-    SetValueInput("config-dir", Information["config"]);
-    document.getElementById("reserved-status").checked = Information["reserved"];
+    SetValueInput("selector-ip-version", "IPV" + settingWarp['ipver'])
+    SetValueInput("end-point-address", settingWarp["endpoint"]);
+    SetValueInput("bind-address-text", settingWarp["proxy"]);
+    SetValueInput("warp-key-text", settingWarp["warpkey"]);
+    SetValueInput("dns-warp-text", settingWarp["dns"]);
+    SetValueInput("scan-rtt-text", settingWarp["scanrtt"]);
+    document.getElementById("verbose-status").checked = settingWarp["verbose"];
+    SetValueInput("cache-dir", settingWarp["cache"]);
+    SetValueInput("wgconfig-dir", settingWarp["wgconf"]);
+    SetValueInput("config-dir", settingWarp["config"]);
+    document.getElementById("reserved-status").checked = settingWarp["reserved"];
 }
 function SetValueInput(id, Value) {
     // Set Value In Input
@@ -198,53 +197,53 @@ function SetValueInput(id, Value) {
 }
 function SetService(para, status) {
     // Change
-    Information[para] = status;
+    settingWarp[para] = status;
     ResetArgs();
     saveSetting();
 }
 function ResetArgs() {
     args = [];
-    if (Information["proxy"] != "127.0.0.1:8086" & Information["proxy"] != "") {
-        args.push("--bind " + Information["proxy"]);
+    if (settingWarp["proxy"] != "127.0.0.1:8086" & settingWarp["proxy"] != "") {
+        args.push("--bind " + settingWarp["proxy"]);
     }
-    if (Information["gool"]) {
+    if (settingWarp["gool"]) {
         args.push("--gool");
     }
-    if (Information["scan"]) {
+    if (settingWarp["scan"]) {
         args.push("--scan");
     }
-    if (Information["cfon"]) {
-        args.push("--cfon" + Information["cfonc"]);
+    if (settingWarp["cfon"] && settingWarp["cfonc"] != "IR") {
+        args.push("--cfon " + settingWarp["cfonc"]);
     }
-    if (Information["endpoint"] != "") {
-        args.push("--endpoint  " + Information["endpoint"]);
+    if (settingWarp["endpoint"] != "") {
+        args.push("--endpoint  " + settingWarp["endpoint"]);
     }
-    if (Information["ipver"] != "") {
-        args.push("-" + Information["ipver"]);
+    if (settingWarp["ipver"] != "") {
+        args.push("-" + settingWarp["ipver"]);
     }
-    if (Information["warpkey"] != "") {
-        args.push("--key " + Information["warpkey"]);
+    if (settingWarp["warpkey"] != "") {
+        args.push("--key " + settingWarp["warpkey"]);
     }
-    if (Information["scanrtt"] != "") {
-        args.push("--rtt " + Information["scanrtt"] + "s");
+    if (settingWarp["scanrtt"] != "") {
+        args.push("--rtt " + settingWarp["scanrtt"] + "s");
     }
-    if (Information["verbose"]) {
+    if (settingWarp["verbose"]) {
         args.push("--verbose ");
     }
-    if (Information["cache"] != "") {
-        args.push("--cache-dir " + Information["cache"]);
+    if (settingWarp["cache"] != "") {
+        args.push("--cache-dir " + settingWarp["cache"]);
     }
-    if (Information["wgconf"] != "") {
-        args.push("--wgconf " + Information["wgconf"]);
+    if (settingWarp["wgconf"] != "") {
+        args.push("--wgconf " + settingWarp["wgconf"]);
     }
-    if (Information["config"] != "") {
-        args.push("--config " + Information["config"]);
+    if (settingWarp["config"] != "") {
+        args.push("--config " + settingWarp["config"]);
     }
-    if (Information["reserved"] != "") {
-        args.push("--reserved " + Information["reserved"]);
+    if (settingWarp["reserved"] != "") {
+        args.push("--reserved " + settingWarp["reserved"]);
     }
-    if (Information["dns"] != "") {
-        args.push("--dns " + Information["dns"]);
+    if (settingWarp["dns"] != "") {
+        args.push("--dns " + settingWarp["dns"]);
     }
 }
 function Run(type, nameFile, args) {
@@ -372,9 +371,9 @@ async function connectVibe() {
     }
 }
 async function saveSetting() {
-    // Save settingVibe and Information (Setting Warp) In files.json
+    // Save setting vibe & setting warp In vibe.json & warp.json
     write_file("vibe.json", JSON.stringify(settingVibe));
-    write_file("warp.json", JSON.stringify(Information));
+    write_file("warp.json", JSON.stringify(settingWarp));
 }
 // function Read File and Write  
 read_file = function (path) {
@@ -436,3 +435,5 @@ function SetDNS(dns1, dns2) {
     if (dns1 != "", dns2 != "") Run("exec", "DnsJumper.exe", [dns1 + "," + dns2]);
 }
 //#endregion
+
+

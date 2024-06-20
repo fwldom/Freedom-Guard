@@ -1,3 +1,4 @@
+/* #region warp */
 body {
     display: flex;
     justify-content: center;
@@ -286,7 +287,6 @@ h2 {
     margin: 16px 0px 15px auto;
     font-size: 25px;
 }
-
 /*#endregion */
 /*#region Section Setting */
 #setting {
@@ -355,12 +355,13 @@ h2 {
     left: 12.5%;
     top: 25%;
     position: absolute;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     backdrop-filter: blur(10px);
     background-color: rgba(11, 2, 38, 0.6);
     flex-direction: column;
     z-index: 9;
+    border-radius: 15px;
 }
 
 #about-app>#close-about {
@@ -559,7 +560,7 @@ h2 {
 }
 
 /*#endregion */
-/*#region Section All */
+/* #region Section All */
 .input {
     color: #fff;
     font-size: 0.9rem;
@@ -614,7 +615,7 @@ h2 {
 }
 
 /*#endregion */
-/*#region Section Set Dns */
+/* #region Section Set Dns */
 #dns-set {
     display: none;
     position: absolute;
@@ -652,7 +653,7 @@ h2 {
 }
 
 /*#endregion*/
-/*#region Section Loading */
+/* #region Section Loading */
 #loading {
     position: absolute;
     left: 0;
@@ -719,6 +720,10 @@ h2 {
 }
 
 /*#endregion*/
+/* #region other */
+
 .modal-backdrop {
     z-index: -1;
 }
+
+/* #endregion */
