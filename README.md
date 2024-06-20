@@ -1,5 +1,5 @@
 # Freedom-Guard-Electron
- Warp + Psiphon + Gool + Scan
+ Warp + Psiphon + Gool + Scan + Freedom Vibe + Freedom Get
 > Freedom Guard is tool for bypass censorship of internet.<br>
 > Woman Life Freedom
 ### OS Support
