@@ -3,9 +3,49 @@
 > Freedom Guard is tool for bypass censorship of internet.<br>
 > Woman Life Freedom
 ### OS Support
-> Windows ([Download Latest Version](https://github.com/fwldom/Freedom-Guard-Electron/releases/latest/download/Freedom-Guard.exe))<br>
-> Linux (not published)<br>
-> Mac (not published)
+<div align=left>
+<table>
+    <thead align=left>
+        <tr>
+            <th>OS</th>
+            <th>Download</th>
+        </tr>
+    </thead>
+    <tbody align=left>
+        </tr>
+        <tr>
+            <td>Windows</td>
+            <td>
+              <!--  <a href=""><img src="https://img.shields.io/badge/OfficialSetup{Disabled}-x64-0078d7.svg?logo=windows"></a><br>-->
+                <a href="https://github.com/fwldom/Freedom-Guard-Electron/releases/latest/download/Freedom-Guard.exe"><img src="https://img.shields.io/badge/Setup-x64-2d7d9a.svg?logo=windows"></a><br>
+               <!--<a href=""><img src="https://img.shields.io/badge/Portable{Disabled}-x64-67b7d1.svg?logo=windows"></a>-->
+            </td>
+        </tr>
+        <tr>
+        </tr>
+        <td></td>
+         <!--
+            <td>macOS</td>
+            <td>
+                <a href=""><img src="https://img.shields.io/badge/DMG-Universal{Disabled}-ea005e.svg?logo=apple|Disable"></a><br>
+                <a href=""><img src="https://img.shields.io/badge/PKG-Universal{Disabled}-bc544b.svg?logo=apple|Disable" /></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Linux</td>
+            <td>
+                <a href=""><img src="https://img.shields.io/badge/AppImage{Disabled}-x64-f84e29.svg?logo=linux"> </a><br>
+                <a href=""><img src="https://img.shields.io/badge/DebPackage{Disabled}-x64-FF9966.svg?logo=debian"> </a><br>
+                <a href=""><img src="https://img.shields.io/badge/RpmPackage{Disabled}-x64-F1B42F.svg?logo=redhat"> </a>
+            </td>
+        </tr>
+         -->
+    </tbody>
+</table>
+
+
+</div>
+
 ### features
 - Freedom Guard (with Warp Plus , Main)
 - Freedom Vibe (With Hiddify Core)
