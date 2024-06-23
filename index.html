@@ -25,11 +25,18 @@
         </div>
     </div>
     <script>
-        function Loading() {
+        function Loading(time) {
             document.getElementById("loading").style.display = "flex";
-            setTimeout(() => {
-                document.getElementById("loading").style.display = "none";
-            }, 2000);
+            if (time != "") {
+                setTimeout(() => {
+                    document.getElementById("loading").style.display = "none";
+                }, time);
+            }
+            else {
+                setTimeout(() => {
+                    document.getElementById("loading").style.display = "none";
+                }, 2000);
+            }
         }
         Loading();
     </script>

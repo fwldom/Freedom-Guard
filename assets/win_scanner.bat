@@ -5,19 +5,17 @@ if not exist "warp.exe" echo Missing warp.exe program&pause&exit
 
 echo.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 echo.::                                                                 ::
-echo.::                Welcome to the Windows Platform WARP Startup     ::
-echo.::                This program is provided for scan Warp IP        ::
-echo.::                github.com/Ptechgithub                           ::
-echo.::                github.com/yonggekkk                             ::
-echo.::                                                                 ::
+echo.::                        Finder Endpoint                          ::
 echo.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 echo.
 echo.
 goto main
 
 :main
-title CF Preferred WARP IP
-set /a menu=1
+title Scanner Warp IP
+IF "%~1"=="-4" set /a menu=1
+IF "%~1"=="-6" set /a menu=2
+IF "%~1"=="" set /a menu=1
 echo 1. Preferred IPV4 &echo 2. Preferred IPV6&echo 0. Exit&echo.
 if %menu%==0 exit
 if %menu%==1 title CF Preferred WARP IP&set ipv4=162.159.192.0/24 162.159.193.0/24 162.159.195.0/24 188.114.96.0/24 188.114.97.0/24 188.114.98.0/24 188.114.99.0/24&goto getv4
@@ -108,5 +106,4 @@ echo.::                                                                 ::
 echo.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 echo.
 echo %endpoint% > bestendpoint.txt
-pause
 exit

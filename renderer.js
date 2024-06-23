@@ -10,6 +10,7 @@ const { execFile, spawn, exec } = require("child_process");
 const { remote } = require('electron');
 var fs = require("fs");
 const { readFile } = require("fs/promises");
+const axios = require('axios'); // Import axios
 ;
 // #endregion
 // #region Global Var
@@ -66,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("setting").style.display = "none";
     };
     document.getElementById("selector-ip-version").onchange = () => {
-        SetService("ipver", document.getElementById("selector-ip-version").value.match(/\d+/g));
+        SetService("ipver", document.getElementById("selector-ip-version").value.match(/\d+/g)).toString();
     };
     document.getElementById("end-point-address").onchange = () => {
         SetService("endpoint", document.getElementById("end-point-address").value);
@@ -85,11 +86,11 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 });
 // #endregion
-// #region For Connections
+// #region For Connections Warp
 function ConnectWarp() {
     // Function Connect To Warp
     if (StatusGuard == false) {
-        console.log("Start Connecting ...");
+        console.log("Start Connecting Warp ...");
         document.getElementById("ChangeStatus").style.animation = "Connect 7s ease-in-out";
         var exePath = path.join(process.resourcesPath, "assets", "warp-plus.exe"); // For Test __dirname for build process.resourcePath
         // Start warp plus
@@ -162,6 +163,18 @@ function Onload() {
 }
 // #endregion
 // #region Functions other
+async function testProxy() {
+    try {
+      const response = await axios.get('https://api.ipify.org?format=json', {
+        timeout: 5000, // Timeout in ms
+      });
+      console.log('IP :', response.data.ip);
+      return true;
+    } catch (error) {
+      console.error('Error Test Connection:', error.message);
+      return false;
+    }
+  }
 function SetCfon(country) {
     document.getElementById("box-select-country-mini").onclick();
     settingWarp["cfon"] = true;
@@ -246,16 +259,33 @@ function ResetArgs() {
         args.push("--dns " + settingWarp["dns"]);
     }
 }
-function Run(type, nameFile, args) {
-    if (type == "exec") {
-        var exePath = path.join(process.resourcesPath, "assets", nameFile);
-        exec("taskkill /IM " + nameFile + " /F");
-        exec("start " + exePath + " " + args);
+var childProcess = null;
+function KillProcess() {
+    if (childProcess != null) {
+        childProcess.kill();
+        if (process.platform === 'win32') {
+            spawn('taskkill', ['/PID', childProcess.pid, '/F', '/T']); // Windows
+        } else {
+            childProcess.kill('SIGTERM'); // POSIX systems
+        }
+        childProcess = null;
     }
-    else if (type == "child") {
-        var exePath = path.join(process.resourcesPath, "assets", nameFile);
-        var childProcess = spawn(exePath, args);
-    }
+}
+function Run(nameFile, args) {
+    KillProcess();
+    var exePath = path.join(process.resourcesPath, "assets", nameFile); // Adjust the path to your .exe file
+    childProcess = spawn(exePath, args, { shell: true });
+    childProcess.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+    });
+
+    childProcess.stderr.on('data', (data) => {
+        console.error(`stderr: ${data}`);
+    });
+
+    childProcess.on('close', (code) => {
+        console.log(`child process exited with code ${code}`);
+    });
 }
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -263,8 +293,9 @@ function sleep(ms) {
 // #endregion
 //#region Section Setting Warp
 document.getElementById("find-best-endpoint").addEventListener("click", () => {
-    Run("exec", "win_scanner.bat");
-    Loading();
+    if (settingWarp["ipver"] == "") settingWarp["ipver"] = 4;
+    Run("win_scanner.bat", ["-"+settingWarp["ipver"]]);
+    Loading(20500);
     setTimeout(() => {
         document.getElementById("end-point-address").value = read_file(path.join(AssetsPath, "bestendpoint.txt"));
         alert("Finded Best Endpoint");
@@ -273,7 +304,7 @@ document.getElementById("find-best-endpoint").addEventListener("click", () => {
             cancelable: false,
         });
         document.getElementById("end-point-address").dispatchEvent(event);
-    }, 10500);
+    }, 20500);
 });
 document.getElementById("setting-show").addEventListener("click", () => {
     if (document.getElementById("setting").style.display == "") {
@@ -291,11 +322,11 @@ document.getElementById("menu-show").onclick = () => {
     document.getElementById("menu").style.display = "flex";
 };
 document.getElementById("menu-freedom-vibe").onclick = () => {
-    Loading();
+    Loading("");
     LoadVibe();
 };
 document.getElementById("menu-freedom-get").onclick = () => {
-    Loading();
+    Loading("");
     document.getElementById("freedom-get").style.display = "block"
     elements.forEach(element => {
         element.style.display = '';
@@ -322,6 +353,7 @@ function LoadVibe() {
     if (settingVibe["config"] == "") {
         settingVibe["config"] = "auto";
     }
+    settingVibe["status"] = false;
 }
 async function connectVibe() {
     // this is For Connect To Freedom-Vibe
@@ -356,14 +388,17 @@ async function connectVibe() {
         else {
             var configs = [settingVibe["config"]];
         }
+        settingVibe["status"] = true;
         for (var config of configs) {
-            Run("exec", "HiddifyCli.exe", ' run' + ' -c ' + config + ' --system-proxy');
-            settingVibe["status"] = true;
-            await sleep(10000);
-            if (confirm("Are You Connected? | آیا متصل هستید؟\n اگر مشکل اتصال دارید بر روی Cancel بزنید.")) {
-                Connected();
-                break;
+            Run("HiddifyCli.exe",['run','-c',config,'--system-proxy']);
+            await sleep(25000);
+            if (settingVibe["status"] == true) {
+                if (testProxy()) {
+                    Connected();
+                    break;
+                }
             }
+            else break;
         }
     }
     else {
@@ -432,7 +467,7 @@ document.getElementById("close-dns").onclick = () => (document.getElementById("d
 document.getElementById("submit-dns").onclick = () => SetDNS(document.getElementById("dns1-text").value, document.getElementById("dns2-text").value);
 function SetDNS(dns1, dns2) {
     // Run Dns Jumper With DNS address as parameter for Apply DNS
-    if (dns1 != "", dns2 != "") Run("exec", "DnsJumper.exe", [dns1 + "," + dns2]);
+    if (dns1 != "", dns2 != "") Run("DnsJumper.exe", [dns1 + "," + dns2]);
 }
 //#endregion
 

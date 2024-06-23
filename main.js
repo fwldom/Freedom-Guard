@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
-
+const {exec} = require("child_process")
 function createWindow() {
   var mainWindow = new BrowserWindow({
     width: 400,
@@ -19,6 +19,9 @@ function createWindow() {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
+  exec("taskkill /IM " + "HiddifyCli.exe" + " /F");
+  exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
+  exec("taskkill /IM " + "warp-plus.exe" + " /F");
   if (process.platform !== 'darwin') {
     app.quit();
   }
