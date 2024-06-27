@@ -1,4 +1,4 @@
-//#region Libraries
+// #region Libraries
 ;
 const { open } = require("fs");
 const { dirname } = require("path");
@@ -11,11 +11,14 @@ const { remote } = require('electron');
 var fs = require("fs");
 const { readFile } = require("fs/promises");
 const axios = require('axios'); // Import axios
+const { type } = require("os");
 ;
 // #endregion
 // #region Global Var
+__dirname = __dirname.replace("app.asar", "")
+var childProcess = null;
 var StatusGuard = false;
-var AssetsPath = path.join(process.resourcesPath, "assets");
+var AssetsPath = path.join(__dirname, "assets");
 var settingWarp = {
     proxy: "127.0.0.1:8086",
     gool: false,
@@ -34,7 +37,8 @@ var settingWarp = {
     reserved: "",
     dns: "",
 };
-var args = [""];
+var argsWarp = [""];
+var argsVibe = [""];
 var Psicountry = ["IR", "AT", "BE", "BG", "BR", "CA", "CH", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GB", "HU", "HR", "IE", "IN", "IT", "JP", "LV", "NL", "NO", "PL", "PT", "RO", "RS", "SE", "SG", "SK", "UA", "US"];
 var PsicountryFullname = ["disable", "Austria", "Belgium", "Bulgaria", "Brazil", "Canada", "Switzerland", "Czech Republic", "Germany", "Denmark", "Estonia", "Spain", "Finland", "France", "United Kingdom", "Hungary", "Croatia", "Ireland", "India", "Italy", "Japan", "Latvia", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Serbia", "Sweden", "Singapore", "Slovakia", "Ukraine", "United States"];
 // #endregion
@@ -90,30 +94,26 @@ document.addEventListener("DOMContentLoaded", () => {
 function ConnectWarp() {
     // Function Connect To Warp
     if (StatusGuard == false) {
-        console.log("Start Connecting Warp ...");
+        console.log("Starting Warp ...");
         document.getElementById("ChangeStatus").style.animation = "Connect 7s ease-in-out";
-        var exePath = path.join(process.resourcesPath, "assets", "warp-plus.exe"); // For Test __dirname for build process.resourcePath
         // Start warp plus
-        exec("start " + exePath + " " + args);
+        Run("warp-plus.exe", argsWarp);
         // Set System Proxy
         exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /F');
         exec(`reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyServer /t REG_SZ /d ${settingWarp["proxy"]} /F`);
         StatusGuard = true;
-        setTimeout(() => {
-            console.log("Connected !!!");
-            document.getElementById("ChangeStatus").style.animation = "s";
-            document.getElementById("ChangeStatus").style.borderColor = "#15ff00";
-            var started = new Date().getTime();
-            var http = new XMLHttpRequest();
-            http.open("GET", "ircf.space", true);
-            http.onreadystatechange = function () {
-                if (http.readyState == 4) {
-                    var ended = new Date().getTime();
-                    var milliseconds = ended - started;
-                    console.log(milliseconds);
+        var testConnectionWarp = setTimeout(() => {
+            if (testProxy()) {
+                console.log("Connected Warp !!!");
+                document.getElementById("ChangeStatus").style.animation = "s";
+                document.getElementById("ChangeStatus").style.borderColor = "#15ff00";
+            }
+            else {
+                if (StatusGuard == true) {
+                    FindBestEndpointWarp("conn");
                 }
-            };
-        }, 3500);
+            }
+        }, 5500);
     } else {
         document.getElementById("ChangeStatus").style.animation = "Connect 7s ease-in-out";
         document.getElementById("ChangeStatus").style.borderColor = "";
@@ -122,8 +122,8 @@ function ConnectWarp() {
         document.getElementById("ChangeStatus").style.animation = "Connect 5s";
         setTimeout(() => {
             document.getElementById("ChangeStatus").style.animation = "";
-            StatusGuard = false;
         }, 3500);
+        StatusGuard = false;
     }
 }
 
@@ -139,7 +139,7 @@ function Onload() {
         countryDiv.id = `cfonCountry${country}`;
         countryDiv.title = country;
         let img = document.createElement("img");
-        img.src = process.resourcesPath + `\\svgs\\${country}.svg`;
+        img.src = path.join(__dirname, "svgs", country + ".svg");
         img.id = "imgOfCfon";
         let p = document.createElement("p");
         p.id = "textOfCfonS";
@@ -163,24 +163,43 @@ function Onload() {
 }
 // #endregion
 // #region Functions other
+function FindBestEndpointWarp(type = 'find') {
+    if (settingWarp["ipver"] == "") settingWarp["ipver"] = 4;
+    Run("win_scanner.bat", ["-" + settingWarp["ipver"]]);
+    Loading(25000, "Searching For Endpoint ...");
+    childProcess.on('exit', () => {
+        document.getElementById("end-point-address").value = read_file(path.join(AssetsPath, "bestendpoint.txt"));
+        alert("Finded Best Endpoint");
+        var event = new Event('change', {
+            bubbles: true,
+            cancelable: false,
+        });
+        document.getElementById("end-point-address").dispatchEvent(event);
+        if (type == "conn") {
+            StatusGuard = false;
+            ConnectWarp();
+        }
+        Loading(100, "Searching For Endpoint ...");
+    });
+}
 async function testProxy() {
     try {
-      const response = await axios.get('https://api.ipify.org?format=json', {
-        timeout: 5000, // Timeout in ms
-      });
-      console.log('IP :', response.data.ip);
-      return true;
+        const response = await axios.get('https://api.ipify.org?format=json', {
+            timeout: 5000, // Timeout in ms
+        });
+        console.log('IP :', response.data.ip);
+        return true;
     } catch (error) {
-      console.error('Error Test Connection:', error.message);
-      return false;
+        console.error('Error Test Connection:', error.message);
+        return false;
     }
-  }
+}
 function SetCfon(country) {
     document.getElementById("box-select-country-mini").onclick();
     settingWarp["cfon"] = true;
     settingWarp["cfonc"] = country;
     document.getElementById("textOfCfon").innerHTML = PsicountryFullname[Psicountry.indexOf(country)];
-    document.getElementById("imgOfCfonCustom").src = path.join(process.resourcesPath, "svgs", country.toString().toLowerCase() + ".svg");
+    document.getElementById("imgOfCfonCustom").src = path.join(__dirname, "svgs", country.toString().toLowerCase() + ".svg");
     ResetArgs();
     // set
 }
@@ -215,51 +234,50 @@ function SetService(para, status) {
     saveSetting();
 }
 function ResetArgs() {
-    args = [];
+    argsWarp = [];
     if (settingWarp["proxy"] != "127.0.0.1:8086" & settingWarp["proxy"] != "") {
-        args.push("--bind " + settingWarp["proxy"]);
+        argsWarp.push("--bind " + settingWarp["proxy"]);
     }
     if (settingWarp["gool"]) {
-        args.push("--gool");
+        argsWarp.push("--gool");
     }
     if (settingWarp["scan"]) {
-        args.push("--scan");
+        argsWarp.push("--scan");
     }
     if (settingWarp["cfon"] && settingWarp["cfonc"] != "IR") {
-        args.push("--cfon " + settingWarp["cfonc"]);
+        argsWarp.push("--cfon " + settingWarp["cfonc"]);
     }
     if (settingWarp["endpoint"] != "") {
-        args.push("--endpoint  " + settingWarp["endpoint"]);
+        argsWarp.push("--endpoint  " + settingWarp["endpoint"]);
     }
     if (settingWarp["ipver"] != "") {
-        args.push("-" + settingWarp["ipver"]);
+        argsWarp.push("-" + settingWarp["ipver"]);
     }
     if (settingWarp["warpkey"] != "") {
-        args.push("--key " + settingWarp["warpkey"]);
+        argsWarp.push("--key " + settingWarp["warpkey"]);
     }
     if (settingWarp["scanrtt"] != "") {
-        args.push("--rtt " + settingWarp["scanrtt"] + "s");
+        argsWarp.push("--rtt " + settingWarp["scanrtt"] + "s");
     }
     if (settingWarp["verbose"]) {
-        args.push("--verbose ");
+        argsWarp.push("--verbose ");
     }
     if (settingWarp["cache"] != "") {
-        args.push("--cache-dir " + settingWarp["cache"]);
+        argsWarp.push("--cache-dir " + settingWarp["cache"]);
     }
     if (settingWarp["wgconf"] != "") {
-        args.push("--wgconf " + settingWarp["wgconf"]);
+        argsWarp.push("--wgconf " + settingWarp["wgconf"]);
     }
     if (settingWarp["config"] != "") {
-        args.push("--config " + settingWarp["config"]);
+        argsWarp.push("--config " + settingWarp["config"]);
     }
     if (settingWarp["reserved"] != "") {
-        args.push("--reserved " + settingWarp["reserved"]);
+        argsWarp.push("--reserved " + settingWarp["reserved"]);
     }
     if (settingWarp["dns"] != "") {
-        args.push("--dns " + settingWarp["dns"]);
+        argsWarp.push("--dns " + settingWarp["dns"]);
     }
 }
-var childProcess = null;
 function KillProcess() {
     if (childProcess != null) {
         childProcess.kill();
@@ -273,13 +291,16 @@ function KillProcess() {
 }
 function Run(nameFile, args) {
     KillProcess();
-    var exePath = path.join(process.resourcesPath, "assets", nameFile); // Adjust the path to your .exe file
-    childProcess = spawn(exePath, args, { shell: true });
+    var exePath = `"${path.join(__dirname, "assets", nameFile)}"`; // Adjust the path to your .exe file
+    childProcess = spawn(exePath, args, { shell: true, runAsAdmin: true });
     childProcess.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
     });
 
     childProcess.stderr.on('data', (data) => {
+        if (data instanceof Buffer) {
+            data = data.toString(); // Convert Buffer to string
+        }
         console.error(`stderr: ${data}`);
     });
 
@@ -287,24 +308,14 @@ function Run(nameFile, args) {
         console.log(`child process exited with code ${code}`);
     });
 }
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 // #endregion
-//#region Section Setting Warp
+// #region Section Setting Warp
 document.getElementById("find-best-endpoint").addEventListener("click", () => {
-    if (settingWarp["ipver"] == "") settingWarp["ipver"] = 4;
-    Run("win_scanner.bat", ["-"+settingWarp["ipver"]]);
-    Loading(20500);
-    setTimeout(() => {
-        document.getElementById("end-point-address").value = read_file(path.join(AssetsPath, "bestendpoint.txt"));
-        alert("Finded Best Endpoint");
-        var event = new Event('change', {
-            bubbles: true,
-            cancelable: false,
-        });
-        document.getElementById("end-point-address").dispatchEvent(event);
-    }, 20500);
+    FindBestEndpointWarp();
 });
 document.getElementById("setting-show").addEventListener("click", () => {
     if (document.getElementById("setting").style.display == "") {
@@ -317,7 +328,7 @@ document.getElementById("setting-show").addEventListener("click", () => {
 document.getElementById("about").addEventListener("click", () => { document.getElementById("about-app").style.display = "flex" })
 document.getElementById("close-about").addEventListener("click", () => { document.getElementById("about-app").style.display = "" })
 //#endregion
-//#region Section Menu
+// #region Section Menu
 document.getElementById("menu-show").onclick = () => {
     document.getElementById("menu").style.display = "flex";
 };
@@ -335,7 +346,7 @@ document.getElementById("menu-freedom-get").onclick = () => {
 document.getElementById("menu-dns").onclick = () => { document.getElementById("dns-set").style.display = "flex" };
 document.getElementById("menu-exit").onclick = () => (document.getElementById("menu").style.display = "");
 //#endregion
-//#region Section Freedom-Vibe
+// #region Section Freedom-Vibe
 var settingVibe = {
     "status": false,
     "config": "auto",
@@ -390,7 +401,7 @@ async function connectVibe() {
         }
         settingVibe["status"] = true;
         for (var config of configs) {
-            Run("HiddifyCli.exe",['run','-c',config,'--system-proxy']);
+            Run("HiddifyCli.exe", ['run', '-c', config, '--system-proxy']);
             await sleep(25000);
             if (settingVibe["status"] == true) {
                 if (testProxy()) {
@@ -455,14 +466,14 @@ document.getElementById("reset-config-custom-vibe").onclick = () => {
     document.getElementById("status-vibe").innerHTML = "Auto";
 }
 //#endregion
-//#region Section Freedom-Get
+// #region Section Freedom-Get
 var parent = document.getElementById('freedom-get');
 var elements = parent.querySelectorAll('*');
 elements.forEach(element => {
     element.style.display = 'none';
 });
 //#endregion
-//#region Section Set Dns
+// #region Section Set Dns
 document.getElementById("close-dns").onclick = () => (document.getElementById("dns-set").style.display = "");
 document.getElementById("submit-dns").onclick = () => SetDNS(document.getElementById("dns1-text").value, document.getElementById("dns2-text").value);
 function SetDNS(dns1, dns2) {

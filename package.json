@@ -1,6 +1,6 @@
 {
-    "name": "freedom-guard-electron",
-    "productName": "Freedom-Guard-Electron",
+    "name": "freedom-guard",
+    "productName": "Freedom Guard",
     "description": "Warp + Psiphon",
     "keywords": [],
     "main": "./main.js",
@@ -27,10 +27,6 @@
             {
                 "from": "assets/wintun.dll",
                 "to": "assets/wintun.dll"
-            },
-            {
-                "from": "node_modules/boxicons/css/boxicons.min.css",
-                "to": "node_modules/boxicons/css/boxicons.min.css"
             },
             {
                 "from": "svgs/",

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Freedom Guard</title>
+    <title>Freedom Guard (Nika Version) 1.2.6 </title>
     <link rel="stylesheet" href="assets/css/setting.css" />
     <link href="boxicons.min.css" rel="stylesheet" />
     <link href="./assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -20,13 +20,15 @@
 <body>
     <div id="loading">
         <div class="content">
-            <div class="text">LOADING...</div>
-            <div class="text">LOADING...</div>
+            <div class="text" id="text-loading-1">LOADING...</div>
+            <div class="text" id="text-loading-2">LOADING...</div>
         </div>
     </div>
     <script>
-        function Loading(time) {
+        function Loading(time,textloading = "LOADING ...") {
             document.getElementById("loading").style.display = "flex";
+            document.getElementById("text-loading-1").innerHTML = textloading;
+            document.getElementById("text-loading-2").innerHTML = textloading;
             if (time != "") {
                 setTimeout(() => {
                     document.getElementById("loading").style.display = "none";
@@ -340,11 +342,11 @@
     </div>
     <div id="about-app">
         <button id="close-about"><i class='bx bx-exit-fullscreen'></i></button>
-        <p> Freedom Guard 1.2.6</p>
+        <p> Freedom Guard 1.2.6 (Nika Version)</p>
         <p> Developed By Fwldom 👩‍💻</p>
         <p>👇 Acknowledgements 👇</p>
         <p> <a href="https://github.com/hiddify/hiddify-core/">hiddify-core 1.3.6</a> from Hiddify</p>
-        <p> <a href="https://github.com/bepass-org/warp-plus">warp-plus 1.1.3</a> from bepass-org</p>
+        <p> <a href="https://github.com/bepass-org/warp-plus">warp-plus 1.2.3</a> from bepass-org</p>
         <p> <a href="https://www.sordum.org/7952/dns-jumper-v2-3/">Dns Jumper 2.3</a> from sordum</p>
         <p> <a href="https://github.com/fwldom/Freedom-GET">Freedom Get 1.5</a> from fwldom</p>
         <p> <a href="https://github.com/Ptechgithub/warp">Scanner Endpoint 1.2</a> from Ptechgithub</p>

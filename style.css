@@ -287,6 +287,7 @@ h2 {
     margin: 16px 0px 15px auto;
     font-size: 25px;
 }
+
 /*#endregion */
 /*#region Section Setting */
 #setting {
@@ -338,9 +339,11 @@ h2 {
     color: #ded0ea;
     width: 70%;
 }
-#setting .btn{
+
+#setting .btn {
     max-height: 50px;
 }
+
 @media only screen and (max-width: 600px) {
     #setting {
         width: 100%;
@@ -672,13 +675,19 @@ h2 {
 
 .content {
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 98vh;
+    width: 100vw;
 }
 
 .content .text {
     color: #fff;
-    font-size: 3rem;
+    font-size: 2.5rem;
     position: absolute;
-    transform: translate(-50%, -50%);
+    width: 80%;
+    text-align: center;
 }
 
 .content .text:nth-child(1) {
@@ -727,3 +736,6 @@ h2 {
 }
 
 /* #endregion */
+* {
+    transition: 0.5s;
+}
