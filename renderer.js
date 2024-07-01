@@ -12,6 +12,7 @@ var fs = require("fs");
 const { readFile } = require("fs/promises");
 const axios = require('axios'); // Import axios
 const { type } = require("os");
+const geoip = require('geoip-lite');
 ;
 // #endregion
 // #region Global Var
@@ -59,16 +60,18 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("Scan").onclick = () => {
         if (document.getElementById("Scan").checked) SetService("scan", true);
         else SetService("scan", false);
+        SetCfon("IR");
     };
-    document.getElementById("box-select-country-mini").onclick = () => {
+    document.getElementById("box-select-country-mini").addEventListener("click", () => {
         if (document.getElementById("box-select-country").style.display == "grid") {
             document.getElementById("box-select-country").style.display = "none";
         } else {
             document.getElementById("box-select-country").style.display = "grid";
         }
-    };
+    });
     document.getElementById("close-setting").onclick = () => {
         document.getElementById("setting").style.display = "none";
+        document.getElementById("setting-vibe").style.display = "none";
     };
     document.getElementById("selector-ip-version").onchange = () => {
         SetService("ipver", document.getElementById("selector-ip-version").value.match(/\d+/g)).toString();
@@ -130,7 +133,7 @@ function ConnectWarp() {
 // #endregion
 // #region Functions For Load
 function Onload() {
-    ResetArgs();
+    ResetArgsWarp();
     // Start Add Element Countries to box select country psiphon
     var container = document.getElementById("box-select-country");
     Psicountry.forEach((country, index) => {
@@ -149,6 +152,8 @@ function Onload() {
         container.appendChild(countryDiv);
         countryDiv.addEventListener("click", () => {
             SetCfon(country);
+            if (document.getElementById("Scan").checked) document.getElementById("Scan").click();
+            document.getElementById("box-select-country").style.display = "none";
         });
     });
     // End Added All Elements
@@ -183,24 +188,41 @@ function FindBestEndpointWarp(type = 'find') {
     });
 }
 async function testProxy() {
+    var startTime = Date.now();
     try {
         const response = await axios.get('https://api.ipify.org?format=json', {
             timeout: 5000, // Timeout in ms
         });
         console.log('IP :', response.data.ip);
+        var endTime = Date.now(); // Capture the end time
+        var pingTime = endTime - startTime; // Calculate the ping time
+        if (pingTime < 1500) { pingTime = `<font color='green'>${pingTime}ms</font>`; } else { pingTime = `<font color='red'>${pingTime}ms</font>` };
+        function getCountryFromIP(ip) {
+            var geo = geoip.lookup(ip);
+            if (geo) {
+                var country = geo.country;
+                return `<img src="${path.join(__dirname, "svgs", country + ".svg")}" width="40rem" style='margin:1rem'>`
+            } else {
+                return '❓';
+            }
+        }
+        var countryEmoji = getCountryFromIP(response.data.ip);
+        document.getElementById("ip-ping-vibe").innerHTML = "" + countryEmoji + response.data.ip + " | " + pingTime + "";
+        document.getElementById("ip-ping-warp").innerHTML = "" + countryEmoji + response.data.ip + " | " + pingTime + "";
         return true;
     } catch (error) {
         console.error('Error Test Connection:', error.message);
+        document.getElementById("ip-ping-vibe").innerHTML = " " + "Not Connected To Internet";
+        document.getElementById("ip-ping-warp").innerHTML = " " + "Not Connected To Internet";
         return false;
     }
 }
 function SetCfon(country) {
-    document.getElementById("box-select-country-mini").onclick();
     settingWarp["cfon"] = true;
     settingWarp["cfonc"] = country;
     document.getElementById("textOfCfon").innerHTML = PsicountryFullname[Psicountry.indexOf(country)];
     document.getElementById("imgOfCfonCustom").src = path.join(__dirname, "svgs", country.toString().toLowerCase() + ".svg");
-    ResetArgs();
+    ResetArgsWarp();
     // set
 }
 function CloseAllSections() {
@@ -208,6 +230,7 @@ function CloseAllSections() {
     document.getElementById("box-select-country").style.display = "none";
     document.getElementById("menu").style.display = "none";
     document.getElementById("setting").style.display = "none";
+    document.getElementById("setting-vibe").style.display = "none";
 }
 function SetSettingWarp() {
     // Restore value setting section
@@ -230,10 +253,10 @@ function SetValueInput(id, Value) {
 function SetService(para, status) {
     // Change
     settingWarp[para] = status;
-    ResetArgs();
+    ResetArgsWarp();
     saveSetting();
 }
-function ResetArgs() {
+function ResetArgsWarp() {
     argsWarp = [];
     if (settingWarp["proxy"] != "127.0.0.1:8086" & settingWarp["proxy"] != "") {
         argsWarp.push("--bind " + settingWarp["proxy"]);
@@ -260,7 +283,7 @@ function ResetArgs() {
         argsWarp.push("--rtt " + settingWarp["scanrtt"] + "s");
     }
     if (settingWarp["verbose"]) {
-        argsWarp.push("--verbose ");
+        argsWarp.push("--verbose");
     }
     if (settingWarp["cache"] != "") {
         argsWarp.push("--cache-dir " + settingWarp["cache"]);
@@ -271,8 +294,8 @@ function ResetArgs() {
     if (settingWarp["config"] != "") {
         argsWarp.push("--config " + settingWarp["config"]);
     }
-    if (settingWarp["reserved"] != "") {
-        argsWarp.push("--reserved " + settingWarp["reserved"]);
+    if (settingWarp["reserved"]) {
+        argsWarp.push("--reserved");
     }
     if (settingWarp["dns"] != "") {
         argsWarp.push("--dns " + settingWarp["dns"]);
@@ -308,7 +331,6 @@ function Run(nameFile, args) {
         console.log(`child process exited with code ${code}`);
     });
 }
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -317,12 +339,28 @@ function sleep(ms) {
 document.getElementById("find-best-endpoint").addEventListener("click", () => {
     FindBestEndpointWarp();
 });
+document.getElementById("verbose-status").addEventListener("change", () => {
+    if (document.getElementById("verbose-status").checked) SetService("verbose", true);
+    else SetService("verbose", false);
+});
+document.getElementById("reserved-status").addEventListener("change", () => {
+    if (document.getElementById("reserved-status").checked) SetService("reserved", true);
+    else SetService("reserved", false);
+});
 document.getElementById("setting-show").addEventListener("click", () => {
     if (document.getElementById("setting").style.display == "") {
         CloseAllSections();
         document.getElementById("setting").style.display = "flex";
     } else {
         document.getElementById("setting").style.display = "";
+    }
+});
+document.getElementById("setting-show-vibe").addEventListener("click", () => {
+    if (document.getElementById("setting-vibe").style.display == "") {
+        CloseAllSections();
+        document.getElementById("setting-vibe").style.display = "flex";
+    } else {
+        document.getElementById("setting-vibe").style.display = "";
     }
 });
 document.getElementById("about").addEventListener("click", () => { document.getElementById("about-app").style.display = "flex" })
@@ -350,7 +388,10 @@ document.getElementById("menu-exit").onclick = () => (document.getElementById("m
 var settingVibe = {
     "status": false,
     "config": "auto",
-    "fragment": ""
+    "fragment": false,
+    "fragment-size": "",
+    "dns-direct": "",
+    "dns-remote": ""
 }
 function LoadVibe() {
     document.getElementById("freedom-vibe").style.display = "flex";
@@ -359,12 +400,16 @@ function LoadVibe() {
     }
     catch {
         saveSetting();
-        document.getElementById("custom-config-vibe").value = settingVibe["config"];
     }
     if (settingVibe["config"] == "") {
         settingVibe["config"] = "auto";
     }
     settingVibe["status"] = false;
+    document.getElementById("config-vibe-text").value = settingVibe["config"];
+    document.getElementById("dns-direct-address").value = settingVibe["dns-direct"];
+    document.getElementById("dns-remote-address").value = settingVibe["dns-remote"];
+    document.getElementById("fragment-status-vibe").checked = settingVibe["fragment"];
+    document.getElementById("fragment-vibe-size-text").value = settingVibe["fragment-size"];
 }
 async function connectVibe() {
     // this is For Connect To Freedom-Vibe
@@ -401,7 +446,8 @@ async function connectVibe() {
         }
         settingVibe["status"] = true;
         for (var config of configs) {
-            Run("HiddifyCli.exe", ['run', '-c', config, '--system-proxy']);
+            ResetArgsVibe(config);
+            Run("HiddifyCli.exe", argsVibe);
             await sleep(25000);
             if (settingVibe["status"] == true) {
                 if (testProxy()) {
@@ -450,20 +496,64 @@ function disconnectVibe() {
 }
 document.getElementById("changeStatus-vibe").onclick = () => connectVibe();
 document.getElementById("close-vibe").onclick = () => document.getElementById("freedom-vibe").style.display = "none";
-document.getElementById("enter-custom-config").onclick = () => document.getElementById("freedom-vibe-custom-config").style.display = "flex";
-document.getElementById("close-custom-config").onclick = () => document.getElementById("freedom-vibe-custom-config").style.display = "none";
-document.getElementById("submit-config-custom-vibe").onclick = () => {
-    settingVibe["config"] = document.getElementById("custom-config-vibe").value;
-    saveSetting();
-    document.getElementById("freedom-vibe-custom-config").style.display = "none";
-    document.getElementById("status-vibe").innerHTML = "Custom Config";
+document.getElementById("close-setting-vibe").onclick = () => {
+    document.getElementById("setting-vibe").style.display = "none";
 };
-document.getElementById("reset-config-custom-vibe").onclick = () => {
-    document.getElementById("custom-config-vibe").value = "auto";
-    settingVibe["config"] = document.getElementById("custom-config-vibe").value;
+document.getElementById("fragment-status-vibe").addEventListener("click", () => {
+    if (document.getElementById("fragment-status-vibe").checked) {
+        settingVibe["fragment"] = true;
+        document.getElementById("fragment-vibe-size-text").removeAttribute("disabled");
+    }
+    else {
+        settingVibe["fragment"] = false;
+    }
     saveSetting();
-    document.getElementById("freedom-vibe-custom-config").style.display = "none";
-    document.getElementById("status-vibe").innerHTML = "Auto";
+    ResetArgsVibe();
+});
+document.getElementById("fragment-vibe-size-text").addEventListener("change", () => {
+    console.log(document.getElementById("fragment-vibe-size-text").value);
+    settingVibe["fragment-size"] = document.getElementById("fragment-vibe-size-text").value;
+    if (document.getElementById("fragment-status-vibe").checked) {
+        settingVibe["fragment"] = true;
+    }
+    else {
+        settingVibe["fragment"] = false;
+    }
+    saveSetting();
+    ResetArgsVibe();
+});
+document.getElementById("dns-direct-address").addEventListener("change", () => {
+    settingVibe["dns-direct"] = document.getElementById("dns-direct-address").value;
+    saveSetting();
+    ResetArgsVibe();
+});
+document.getElementById("dns-remote-address").addEventListener("change", () => {
+    settingVibe["dns-remote"] = document.getElementById("dns-remote-address").value;
+    saveSetting();
+    ResetArgsVibe();
+});
+document.getElementById("config-vibe-text").addEventListener("change", () => {
+    settingVibe["config"] = document.getElementById("config-vibe-text").value;
+    saveSetting();
+});
+function ResetArgsVibe(config = "auto") {
+    argsVibe = [];
+    argsVibe.push("run");
+    argsVibe.push("--config");
+    argsVibe.push(config);
+    argsVibe.push("--system-proxy");
+    if (settingVibe["fragment"] & settingVibe["fragment-size"] != "") {
+        argsVibe.push("--fragment");
+        argsVibe.push(settingVibe["fragment-size"]);
+    }
+    if (settingVibe["dns-direct"] != "") {
+        argsVibe.push("--dns-direct");
+        argsVibe.push(settingVibe["dns-direct"]);
+    }
+    if (settingVibe["dns-remote"] != "") {
+        argsVibe.push("--dns-remote");
+        argsVibe.push(settingVibe["dns-remote"]);
+    }
 }
 //#endregion
 // #region Section Freedom-Get
@@ -483,3 +573,7 @@ function SetDNS(dns1, dns2) {
 //#endregion
 
 
+Onload();
+setInterval(() => {
+    testProxy()
+}, 7500);

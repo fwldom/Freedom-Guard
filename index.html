@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Freedom Guard (Nika Version) 1.2.6 </title>
+    <title>Freedom Guard (Hadis Version) 1.2.7 </title>
     <link rel="stylesheet" href="assets/css/setting.css" />
     <link href="boxicons.min.css" rel="stylesheet" />
     <link href="./assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -15,6 +15,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="ico.png" type="image/png">
 </head>
 
 <body>
@@ -22,10 +23,13 @@
         <div class="content">
             <div class="text" id="text-loading-1">LOADING...</div>
             <div class="text" id="text-loading-2">LOADING...</div>
+            <img src="./assets/iran.jpg" style="align-items: flex-end;" height="32%" id="" alt="">
+            <p>به یاد حدیث نجفی</p>
+            <div id="text-hashtag" dir="rtl" style="justify-content: flex-end;margin-right: 2vw;">#زن_زندگی_آزادی</div>
         </div>
     </div>
     <script>
-        function Loading(time,textloading = "LOADING ...") {
+        function Loading(time = 2000, textloading = "LOADING ...") {
             document.getElementById("loading").style.display = "flex";
             document.getElementById("text-loading-1").innerHTML = textloading;
             document.getElementById("text-loading-2").innerHTML = textloading;
@@ -40,7 +44,7 @@
                 }, 2000);
             }
         }
-        Loading();
+        Loading(5500);
     </script>
     <h2 id="Status" title="false"></h2>
     <button id="ChangeStatus" class="bx-tada-hover"><i class="bx bx-power-off"></i></button>
@@ -58,6 +62,7 @@
             <span class="slider"></span>
         </label>
     </div>
+    <p id="ip-ping-warp">IP : x.x.x.x | Ping : ms</p>
     <div class="box-select-country" id="box-select-country">
     </div>
     <div class="options-select-cfon">
@@ -66,7 +71,7 @@
         <div class="box-select-country-mini" id="box-select-country-mini">
             <div id="flagOfCfon">
                 <img src="svgs/ir.svg" id="imgOfCfonCustom" width="50px">
-                <div id="textOfCfon">psiphon disable</div>
+                <div id="textOfCfon">disable</div>
                 <i class="bx bx-chevron-right"></i>
             </div>
         </div>
@@ -76,7 +81,7 @@
             <i class='bx bx-arrow-back'></i>
         </button>
         <button id="about"><i class='bx bxs-info-circle'></i></button>
-        <b>IP Version </b>
+        <b style="margin-top: 2vh;">IP Version </b>
         <div id="ip-version">
             <select name="" id="selector-ip-version">
                 <option value="IPV4">IP Version 4</option>
@@ -111,7 +116,10 @@
         </div>
         <b>Verbose</b>
         <div id="verbose">
-            <input type="checkbox" id="verbose-status">
+            <label class="switch">
+                <input type="checkbox" id="verbose-status" />
+                <span class="slider"></span>
+            </label>
         </div>
         <b>Cache Directory</b>
         <div id="cache" class="form-control-c">
@@ -130,7 +138,10 @@
         </div>
         <b>Reserved</b>
         <div id="reserved">
-            <input type="checkbox" id="reserved-status">
+            <label class="switch">
+                <input type="checkbox" id="reserved-status" />
+                <span class="slider"></span>
+            </label>
         </div>
     </div>
     <div id="menu">
@@ -140,6 +151,7 @@
         <div id="menu-exit">Exit Menu</div>
     </div>
     <div id="freedom-vibe">
+        <button class="setting-show-vibe" id="setting-show-vibe"><i class=" bx bxs-cog"></i></button>
         <div id="logo-vibe">
             <img width="105px" height="105px" src="freedom-vibe.png" alt="">
         </div>
@@ -149,14 +161,41 @@
         <div id="changeStatus-vibe">
             <i class='bx bx-power-off'></i>
         </div>
+        <p id="ip-ping-vibe">IP : x.x.x.x | Ping : ms</p>
         <p id="status-vibe-conn">Disconnected</p>
         <button id="close-vibe"><i class='bx bx-arrow-back'></i></button>
-        <button id="enter-custom-config"><i class='bx bx-plus'></i></button>
-        <div id="freedom-vibe-custom-config">
-            <input type="text" id="custom-config-vibe" placeholder="Enter Config">
-            <button id="submit-config-custom-vibe" style="font-size: 18px;"><i class='bx bxs-save'></i></button>
-            <button id="reset-config-custom-vibe">reset config auto</button>
-            <button id="close-custom-config"><i class='bx bx-exit-fullscreen'></i></button>
+        <div id="setting-vibe">
+            <button id="close-setting-vibe">
+                <i class='bx bx-arrow-back'></i>
+            </button>
+            <button id="about"><i class='bx bxs-info-circle'></i></button>
+            <b>Config URL vless,vmess,url file,...</b>
+            <div id="config-vibe" class="form-control-c">
+                <input placeholder="config URL: https://|vless://" class="input input-alt" type="text" id="config-vibe-text">
+                <span class="input-border input-border-alt"></span>
+            </div>
+            <b>Fragment</b>
+            <div id="fragment-vibe">
+                <label class="switch">
+                    <input type="checkbox" id="fragment-status-vibe" />
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <b>Fragment Size</b>
+            <div id="fragment-vibe-size" class="form-control-c">
+                <input disabled placeholder="Size default: 2-4" type="text" id="fragment-vibe-size-text">
+                <span class="input-border input-border-alt"></span>
+            </div>
+            <b>Dns Direct</b>
+            <div id="dns-direct" class="form-control-c">
+                <input placeholder="Dns Direct : 1.x.x.1" type="text" id="dns-direct-address">
+                <span class="input-border input-border-alt"></span>
+            </div>
+            <b>Dns Remote</b>
+            <div id="dns-remote" class="form-control-c">
+                <input placeholder="Dns Remote : 1.x.x.1" type="text" id="dns-remote-address">
+                <span class="input-border input-border-alt"></span>
+            </div>
         </div>
     </div>
     <div id="dns-set">
@@ -342,7 +381,7 @@
     </div>
     <div id="about-app">
         <button id="close-about"><i class='bx bx-exit-fullscreen'></i></button>
-        <p> Freedom Guard 1.2.6 (Nika Version)</p>
+        <p> Freedom Guard 1.2.7 (Hadis Version)</p>
         <p> Developed By Fwldom 👩‍💻</p>
         <p>👇 Acknowledgements 👇</p>
         <p> <a href="https://github.com/hiddify/hiddify-core/">hiddify-core 1.3.6</a> from Hiddify</p>
@@ -350,6 +389,7 @@
         <p> <a href="https://www.sordum.org/7952/dns-jumper-v2-3/">Dns Jumper 2.3</a> from sordum</p>
         <p> <a href="https://github.com/fwldom/Freedom-GET">Freedom Get 1.5</a> from fwldom</p>
         <p> <a href="https://github.com/Ptechgithub/warp">Scanner Endpoint 1.2</a> from Ptechgithub</p>
+        <p> email : <a href="mailto:fwldom@duck.com">fwldom@duck.com</a></p>
     </div>
 </body>
 <script src="./renderer.js"></script>

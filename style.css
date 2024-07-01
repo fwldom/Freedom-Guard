@@ -3,7 +3,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     background-color: #170a3a;
 }
@@ -20,7 +20,11 @@ h2 {
     margin-top: 2rem;
     font-size: 18px;
 }
-
+#ip-ping-warp,#ip-ping-vibe {
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 10px;
+}
 #ChangeStatus {
     margin-top: 7rem;
     width: 175px;
@@ -97,7 +101,6 @@ h2 {
     cursor: pointer;
     font-size: 45px;
 }
-
 .setting-show {
     right: 2px;
     margin-right: 7px;
@@ -290,7 +293,7 @@ h2 {
 
 /*#endregion */
 /*#region Section Setting */
-#setting {
+#setting,#setting-vibe {
     display: none;
     position: absolute;
     right: 0%;
@@ -304,7 +307,7 @@ h2 {
     z-index: 5;
 }
 
-#setting>div {
+#setting>div,#setting-vibe>div {
     width: 100%;
     min-height: fit-content;
     background-color: transparent;
@@ -312,26 +315,25 @@ h2 {
     padding: 10px;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 5%;
 }
 
-#setting>b {
+#setting>b ,#setting-vibe>b{
     color: #ccc;
     margin: 3px;
     margin-left: 10px;
 }
 
-#close-setting {
+#close-setting,#close-setting-vibe {
     max-width: 55px;
     min-height: 45px;
-    font-size: 18px;
+    font-size: 23px;
     background-color: transparent;
     border: none;
     color: #ffffff;
 }
 
-#setting input[type="text"] {
+#setting input[type="text"],#setting-vibe input[type="text"] {
     background-color: transparent;
     border: none;
     font-size: 25px;
@@ -340,12 +342,12 @@ h2 {
     width: 70%;
 }
 
-#setting .btn {
+#setting .btn,#setting-vibe .btn {
     max-height: 50px;
 }
 
 @media only screen and (max-width: 600px) {
-    #setting {
+    #setting,#setting-vibe {
         width: 100%;
     }
 }
@@ -378,10 +380,10 @@ h2 {
     background-color: transparent;
 }
 
-#setting>#about {
+#setting>#about, #setting-vibe>#about{
     max-width: 55px;
     min-height: 45px;
-    font-size: 18px;
+    font-size: 25px;
     background-color: transparent;
     border: none;
     color: #ffffff;
@@ -512,7 +514,8 @@ h2 {
     color: white;
 }
 
-#freedom-vibe>#enter-custom-config {
+#freedom-vibe>
+.setting-show-vibe {
     position: absolute;
     right: 1%;
     top: 1%;
@@ -664,7 +667,7 @@ h2 {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    display: none;
+    /* display: none; */
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -680,6 +683,12 @@ h2 {
     align-items: center;
     height: 98vh;
     width: 100vw;
+    flex-direction: column;
+    flex-wrap: wrap;
+    color: #fff;
+    font-size: 1.5rem;
+    margin: 5px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .content .text {
@@ -700,8 +709,36 @@ h2 {
     animation: animate 2s ease-in-out infinite;
 }
 
-@keyframes animate {
+.content img {
+    margin: 30px;
+    border: 2px solid black;
+    margin-top: auto;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px 5px rgba(0, 179, 255, 0.259);
+    animation: ScaleUpUp 0.5s infinite;
+    transform: scale(1.1);
+}
+@keyframes ScaleUpUp {
+    20% {
+        transform: scale(1.1);
+    }
+    from {
+        transition: 0.3s;
+        transform: scale(1.1);
+    }
+    50% {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
+.content #text-hashtag {
+    align-self: flex-end;
+    justify-self: flex-end;
+}
 
+@keyframes animate {
     0%,
     100% {
         clip-path: polygon(0% 45%,

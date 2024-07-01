@@ -4,7 +4,7 @@
     "description": "Warp + Psiphon",
     "keywords": [],
     "main": "./main.js",
-    "version": "1.2.6",
+    "version": "1.2.7",
     "author": "fwldom",
     "scripts": {
         "start": "electron .",
@@ -45,6 +45,10 @@
             "icon": "ico.ico",
             "target": "nsis"
         },
+        "linux": {
+            "icon": "ico.ico",
+            "target": "deb"
+        },
         "files": [
             "assets/**/*",
             "node_modules/boxicons/css/boxicons.min.css",
@@ -63,6 +67,7 @@
         ]
     },
     "dependencies": {
-        "axios": "^1.7.2"
+        "axios": "^1.7.2",
+        "geoip-lite": "^1.4.10"
     }
 }
