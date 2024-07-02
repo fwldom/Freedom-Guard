@@ -1,24 +1,57 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const {exec} = require("child_process")
+const { exec } = require("child_process")
+var mainWindow = null
 function createWindow() {
-  var mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 400,
     height: 680,
+    icon: path.join(__dirname, 'ico.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       contextIsolation: false
     },
-    autoHideMenuBar: true
+    autoHideMenuBar: true,
+    titleBarOverlay: "Freedom Guard"
   });
   mainWindow.loadFile('index.html');
 }
-
+let tray
+app.whenReady().then(() => {
+  const icon = nativeImage.createFromPath('ico.png')
+  tray = new Tray(icon)
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show Application',
+      type: 'normal',
+      click: () => {
+        mainWindow.show();
+      }
+    },
+    {
+      label: 'Hide Application',
+      type: 'normal',
+      click: () => {
+        mainWindow.hide();
+      }
+    },
+    {
+      label: 'Close Application',
+      type: 'normal',
+      click: () => {
+        app.quit();
+      }
+    },
+  ]);
+  tray.setContextMenu(contextMenu);
+  tray.setToolTip('Freedom Guard')
+  tray.setTitle('VPN (Warp, Vibe , Psiphon)')
+})
 app.on('ready', createWindow);
 
-app.on('window-all-closed', () => {
+app.on('before-quit', () => {
   exec("taskkill /IM " + "HiddifyCli.exe" + " /F");
   exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
   exec("taskkill /IM " + "warp-plus.exe" + " /F");
@@ -26,7 +59,24 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-
+app.setUserTasks([
+  {
+    program: process.execPath,
+    arguments: '--new-window',
+    iconPath: process.execPath,
+    iconIndex: 0,
+    title: 'New Window',
+    description: 'Create a new window'
+  },
+  {
+    program: process.execPath,
+    arguments: '--new-window',
+    iconPath: process.execPath,
+    iconIndex: 0,
+    title: 'New Window',
+    description: 'Create a new window'
+  },
+])
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();

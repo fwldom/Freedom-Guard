@@ -1,17 +1,16 @@
 {
     "name": "freedom-guard",
     "productName": "Freedom Guard",
-    "description": "Warp + Psiphon",
+    "description": "Warp + Psiphon + Freedom Vibe + Freedom Get",
     "keywords": [],
     "main": "./main.js",
     "version": "1.2.7",
-    "author": "fwldom",
+    "author": "fwldom <fwldom@duck.com>",
     "scripts": {
         "start": "electron .",
         "build": "electron-builder"
     },
     "build": {
-        "electronVersion": "31.0.0-beta.6",
         "extraResources": [
             {
                 "from": "assets/",
@@ -19,14 +18,6 @@
                 "filter": [
                     "**/*"
                 ]
-            },
-            {
-                "from": "assets/warp-plus.exe",
-                "to": "assets/warp-plus.exe"
-            },
-            {
-                "from": "assets/wintun.dll",
-                "to": "assets/wintun.dll"
             },
             {
                 "from": "svgs/",
@@ -38,6 +29,9 @@
         ],
         "productName": "Freedom Guard",
         "appId": "guard.freedom.com",
+        "artifactName": "freedom-guard-${os}-${arch}.${ext}",
+        "asar": true,
+        "publish": null,
         "directories": {
             "output": "dist"
         },
@@ -46,8 +40,9 @@
             "target": "nsis"
         },
         "linux": {
-            "icon": "ico.ico",
-            "target": "deb"
+            "target": "tar.gz",
+            "category": "VPN",
+            "icon": "ico.png"
         },
         "files": [
             "assets/**/*",
@@ -69,5 +64,13 @@
     "dependencies": {
         "axios": "^1.7.2",
         "geoip-lite": "^1.4.10"
+    },
+    "devDependencies": {
+        "electron": "31.1.0",
+        "fs": "^0.0.1-security"
+    },
+    "bugs": {
+        "url": "https://github.com/fwldom/Freedom-Guard-Electron/issues",
+        "email": "fwldom@duck.com"
     }
 }

@@ -11,7 +11,7 @@ const { remote } = require('electron');
 var fs = require("fs");
 const { readFile } = require("fs/promises");
 const axios = require('axios'); // Import axios
-const { type } = require("os");
+const { type, platform } = require("os");
 const geoip = require('geoip-lite');
 ;
 // #endregion
@@ -26,7 +26,7 @@ var settingWarp = {
     scan: false,
     endpoint: "",
     cfon: false,
-    cfonc: "",
+    cfonc: "IR",
     ipver: "",
     warpver: "",
     warpkey: "",
@@ -94,34 +94,46 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 // #endregion
 // #region For Connections Warp
-function ConnectWarp() {
+async function ConnectWarp() {
     // Function Connect To Warp
     if (StatusGuard == false) {
         console.log("Starting Warp ...");
-        document.getElementById("ChangeStatus").style.animation = "Connect 7s ease-in-out";
+        document.getElementById("ChangeStatus").style.animation = "Connect 7s infinite";
         // Start warp plus
         Run("warp-plus.exe", argsWarp);
         // Set System Proxy
-        exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /F');
-        exec(`reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyServer /t REG_SZ /d ${settingWarp["proxy"]} /F`);
+        if (process.platform == "linux") {
+            exec("bash "+path.join(__dirname,"assets","bash")+` set_proxy.sh 127.0.0.1 ${settingWarp["proxy"].split(':')[1].trim()}`);
+        }
+        else if (process.platform == "win32") {
+            exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /F');
+            exec(`reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyServer /t REG_SZ /d ${settingWarp["proxy"]} /F`);
+        }
         StatusGuard = true;
-        var testConnectionWarp = setTimeout(() => {
-            if (testProxy()) {
-                console.log("Connected Warp !!!");
-                document.getElementById("ChangeStatus").style.animation = "s";
-                document.getElementById("ChangeStatus").style.borderColor = "#15ff00";
+        await sleep(7500);
+        testProxy();
+        await sleep(5000);
+        if (testproxystat) {
+            Showmess(5000, "Connected Warp")
+            document.getElementById("ChangeStatus").style.animation = "s";
+            document.getElementById("ChangeStatus").style.borderColor = "#15ff00";
+        }
+        else {
+            if (StatusGuard == true) {
+                FindBestEndpointWarp("conn");
+                Showmess(5000, "Finding Endpoint Warp ...")
             }
-            else {
-                if (StatusGuard == true) {
-                    FindBestEndpointWarp("conn");
-                }
-            }
-        }, 5500);
+        }
     } else {
         document.getElementById("ChangeStatus").style.animation = "Connect 7s ease-in-out";
         document.getElementById("ChangeStatus").style.borderColor = "";
         exec("taskkill /IM warp-plus.exe /F");
-        exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
+        if (process.platform == "linux") {
+            exec("bash "+path.join(__dirname,"assets","bash")+` reset_proxy.sh`);
+        }
+        else {
+            exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
+        }
         document.getElementById("ChangeStatus").style.animation = "Connect 5s";
         setTimeout(() => {
             document.getElementById("ChangeStatus").style.animation = "";
@@ -136,6 +148,7 @@ function Onload() {
     ResetArgsWarp();
     // Start Add Element Countries to box select country psiphon
     var container = document.getElementById("box-select-country");
+    container.innerHTML = ""
     Psicountry.forEach((country, index) => {
         let countryDiv = document.createElement("div");
         countryDiv.className = "cfonCountry";
@@ -169,24 +182,37 @@ function Onload() {
 // #endregion
 // #region Functions other
 function FindBestEndpointWarp(type = 'find') {
+    if (process.platform == "linux") {
+        Loading(100, "Searching For Endpoint ...");
+        alert("Scanner IP Endpoint not support in linux");
+        return;
+    }
     if (settingWarp["ipver"] == "") settingWarp["ipver"] = 4;
     Run("win_scanner.bat", ["-" + settingWarp["ipver"]]);
-    Loading(25000, "Searching For Endpoint ...");
+    if (type != "conn") {
+        Loading(25000, "Searching Endpoint ...");
+    }
     childProcess.on('exit', () => {
-        document.getElementById("end-point-address").value = read_file(path.join(AssetsPath, "bestendpoint.txt"));
-        alert("Finded Best Endpoint");
+        document.getElementById("end-point-address").value = read_file(path.join(AssetsPath, "bin", "bestendpoint.txt"));
         var event = new Event('change', {
             bubbles: true,
             cancelable: false,
         });
         document.getElementById("end-point-address").dispatchEvent(event);
-        if (type == "conn") {
+        if (type == "conn" && StatusGuard == true) {
             StatusGuard = false;
             ConnectWarp();
         }
-        Loading(100, "Searching For Endpoint ...");
+        if (type != "conn") {
+            alert("Finded Best Endpoint");
+            Loading(1, "Searching Endpoint ...");
+        }
+        else {
+            Showmess(3000, "Finded Best Endpoint. Reconnecting")
+        }
     });
 }
+var testproxystat = false;
 async function testProxy() {
     var startTime = Date.now();
     try {
@@ -209,11 +235,13 @@ async function testProxy() {
         var countryEmoji = getCountryFromIP(response.data.ip);
         document.getElementById("ip-ping-vibe").innerHTML = "" + countryEmoji + response.data.ip + " | " + pingTime + "";
         document.getElementById("ip-ping-warp").innerHTML = "" + countryEmoji + response.data.ip + " | " + pingTime + "";
+        testproxystat = true;
         return true;
     } catch (error) {
         console.error('Error Test Connection:', error.message);
         document.getElementById("ip-ping-vibe").innerHTML = " " + "Not Connected To Internet";
         document.getElementById("ip-ping-warp").innerHTML = " " + "Not Connected To Internet";
+        testproxystat = false;
         return false;
     }
 }
@@ -259,7 +287,8 @@ function SetService(para, status) {
 function ResetArgsWarp() {
     argsWarp = [];
     if (settingWarp["proxy"] != "127.0.0.1:8086" & settingWarp["proxy"] != "") {
-        argsWarp.push("--bind " + settingWarp["proxy"]);
+        argsWarp.push("--bind");
+        argsWarp.push(settingWarp["proxy"]);
     }
     if (settingWarp["gool"]) {
         argsWarp.push("--gool");
@@ -267,38 +296,48 @@ function ResetArgsWarp() {
     if (settingWarp["scan"]) {
         argsWarp.push("--scan");
     }
-    if (settingWarp["cfon"] && settingWarp["cfonc"] != "IR") {
-        argsWarp.push("--cfon " + settingWarp["cfonc"]);
+    if (settingWarp["cfon"] && settingWarp["cfonc"] != "IR" && settingWarp["cfonc"] != "") {
+        argsWarp.push("--cfon");
+        argsWarp.push(settingWarp["cfonc"]);
     }
     if (settingWarp["endpoint"] != "") {
-        argsWarp.push("--endpoint  " + settingWarp["endpoint"]);
+        argsWarp.push("--endpoint");
+        argsWarp.push(settingWarp["endpoint"]);
+
     }
     if (settingWarp["ipver"] != "") {
         argsWarp.push("-" + settingWarp["ipver"]);
     }
     if (settingWarp["warpkey"] != "") {
-        argsWarp.push("--key " + settingWarp["warpkey"]);
+        argsWarp.push("--key");
+        argsWarp.push(settingWarp["warpkey"]);
+
     }
     if (settingWarp["scanrtt"] != "") {
-        argsWarp.push("--rtt " + settingWarp["scanrtt"] + "s");
+        argsWarp.push("--rtt");
+        argsWarp.push(settingWarp["scanrtt"] + "s");
     }
     if (settingWarp["verbose"]) {
         argsWarp.push("--verbose");
     }
     if (settingWarp["cache"] != "") {
-        argsWarp.push("--cache-dir " + settingWarp["cache"]);
+        argsWarp.push("--cache-dir");
+        argsWarp.push(settingWarp["cache"]);
     }
     if (settingWarp["wgconf"] != "") {
-        argsWarp.push("--wgconf " + settingWarp["wgconf"]);
+        argsWarp.push("--wgconf");
+        argsWarp.push(settingWarp["wgconf"]);
     }
     if (settingWarp["config"] != "") {
-        argsWarp.push("--config " + settingWarp["config"]);
+        argsWarp.push("--config");
+        argsWarp.push(settingWarp["config"]);
     }
     if (settingWarp["reserved"]) {
         argsWarp.push("--reserved");
     }
     if (settingWarp["dns"] != "") {
-        argsWarp.push("--dns " + settingWarp["dns"]);
+        argsWarp.push("--dns");
+        argsWarp.push(settingWarp["dns"]);
     }
 }
 function KillProcess() {
@@ -314,8 +353,15 @@ function KillProcess() {
 }
 function Run(nameFile, args) {
     KillProcess();
-    var exePath = `"${path.join(__dirname, "assets", nameFile)}"`; // Adjust the path to your .exe file
-    childProcess = spawn(exePath, args, { shell: true, runAsAdmin: true });
+    var exePath = `"${path.join(__dirname, "assets", "bin", nameFile)}"`; // Adjust the path to your .exe file
+    if (process.platform == "linux") {
+        exePath = `"${path.join(__dirname, "assets", "bin", nameFile.replace(".exe", ""))}"`; // Adjust the path to your .exe file
+        exec("chmod +x " + exePath);
+        childProcess = spawn(exePath, args, { shell: true, runAsAdmin: true });
+    }
+    else {
+        childProcess = spawn(exePath, args, { shell: true, runAsAdmin: true });
+    }
     childProcess.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
     });
@@ -333,6 +379,20 @@ function Run(nameFile, args) {
 }
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+function Showmess(time = 2500, text = "message text", type = "info") {
+    document.getElementById("message").style.display = "flex";
+    document.getElementById("message").style.width = "";
+    document.getElementById("message").style.transition = time / 5 + "ms";
+    document.getElementById("message-border").style.width = "100%";
+    document.getElementById("messageText").innerText = text;
+    setTimeout(() => {
+        document.getElementById("message-border").style.width = "0%";
+        document.getElementById("message").style.width = "0%";
+        setTimeout(() => {
+            document.getElementById("message").style.display = "none";
+        }, 1000);
+    }, time);
 }
 // #endregion
 // #region Section Setting Warp
@@ -450,9 +510,14 @@ async function connectVibe() {
             Run("HiddifyCli.exe", argsVibe);
             await sleep(25000);
             if (settingVibe["status"] == true) {
-                if (testProxy()) {
+                await sleep(5000);
+                testProxy();
+                if (testproxystat) {
                     Connected();
                     break;
+                }
+                else {
+                    Showmess(5000, "Test Next Config")
                 }
             }
             else break;
@@ -479,6 +544,7 @@ function Connected() {
     document.getElementById("changeStatus-vibe").style.boxShadow = "0px 0px 50px 10px rgba(98, 255, 0, 0.7)";
     document.getElementById("changeStatus-vibe").style.animation = "";
     document.getElementById("status-vibe-conn").innerHTML = "🚀 Connected";
+    Showmess(5000, "Connected To Vibe!")
 }
 function disconnectVibe() {
     // function runed when the proxy is disconnected
@@ -506,6 +572,7 @@ document.getElementById("fragment-status-vibe").addEventListener("click", () => 
     }
     else {
         settingVibe["fragment"] = false;
+        document.getElementById("fragment-vibe-size-text").setAttribute("disabled", "");
     }
     saveSetting();
     ResetArgsVibe();
@@ -571,8 +638,6 @@ function SetDNS(dns1, dns2) {
     if (dns1 != "", dns2 != "") Run("DnsJumper.exe", [dns1 + "," + dns2]);
 }
 //#endregion
-
-
 Onload();
 setInterval(() => {
     testProxy()

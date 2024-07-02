@@ -20,11 +20,14 @@ h2 {
     margin-top: 2rem;
     font-size: 18px;
 }
-#ip-ping-warp,#ip-ping-vibe {
+
+#ip-ping-warp,
+#ip-ping-vibe {
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 10px;
 }
+
 #ChangeStatus {
     margin-top: 7rem;
     width: 175px;
@@ -101,6 +104,7 @@ h2 {
     cursor: pointer;
     font-size: 45px;
 }
+
 .setting-show {
     right: 2px;
     margin-right: 7px;
@@ -293,7 +297,8 @@ h2 {
 
 /*#endregion */
 /*#region Section Setting */
-#setting,#setting-vibe {
+#setting,
+#setting-vibe {
     display: none;
     position: absolute;
     right: 0%;
@@ -307,7 +312,8 @@ h2 {
     z-index: 5;
 }
 
-#setting>div,#setting-vibe>div {
+#setting>div,
+#setting-vibe>div {
     width: 100%;
     min-height: fit-content;
     background-color: transparent;
@@ -318,13 +324,15 @@ h2 {
     gap: 5%;
 }
 
-#setting>b ,#setting-vibe>b{
+#setting>b,
+#setting-vibe>b {
     color: #ccc;
     margin: 3px;
     margin-left: 10px;
 }
 
-#close-setting,#close-setting-vibe {
+#close-setting,
+#close-setting-vibe {
     max-width: 55px;
     min-height: 45px;
     font-size: 23px;
@@ -333,7 +341,8 @@ h2 {
     color: #ffffff;
 }
 
-#setting input[type="text"],#setting-vibe input[type="text"] {
+#setting input[type="text"],
+#setting-vibe input[type="text"] {
     background-color: transparent;
     border: none;
     font-size: 25px;
@@ -342,15 +351,12 @@ h2 {
     width: 70%;
 }
 
-#setting .btn,#setting-vibe .btn {
+#setting .btn,
+#setting-vibe .btn {
     max-height: 50px;
 }
 
-@media only screen and (max-width: 600px) {
-    #setting,#setting-vibe {
-        width: 100%;
-    }
-}
+
 
 #about-app {
     color: white;
@@ -380,7 +386,8 @@ h2 {
     background-color: transparent;
 }
 
-#setting>#about, #setting-vibe>#about{
+#setting>#about,
+#setting-vibe>#about {
     max-width: 55px;
     min-height: 45px;
     font-size: 25px;
@@ -514,8 +521,7 @@ h2 {
     color: white;
 }
 
-#freedom-vibe>
-.setting-show-vibe {
+#freedom-vibe>.setting-show-vibe {
     position: absolute;
     right: 1%;
     top: 1%;
@@ -718,27 +724,33 @@ h2 {
     animation: ScaleUpUp 0.5s infinite;
     transform: scale(1.1);
 }
+
 @keyframes ScaleUpUp {
     20% {
         transform: scale(1.1);
     }
+
     from {
         transition: 0.3s;
         transform: scale(1.1);
     }
+
     50% {
         transform: scale(1);
     }
+
     to {
         transform: scale(1.1);
     }
 }
+
 .content #text-hashtag {
     align-self: flex-end;
     justify-self: flex-end;
 }
 
 @keyframes animate {
+
     0%,
     100% {
         clip-path: polygon(0% 45%,
@@ -775,4 +787,40 @@ h2 {
 /* #endregion */
 * {
     transition: 0.5s;
+}
+
+#message-border {
+    height: 3px;
+    background: linear-gradient(90deg, #FF6464 0%, #FFBF59 50%, #47C9FF 100%);
+    transition: width 0.4s cubic-bezier(0.42, 0, 0.58, 1.00);
+    border-radius: 15px;
+}
+#message {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    width: 30%;
+    height: 20vh;
+    background: linear-gradient(90deg, rgb(255, 255, 255) 0%, #f1e9f2 50%, #ccc 100%);
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    transition: 5s;
+    border-radius: 5px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    z-index: 15;
+    flex-direction: column;
+}
+@media only screen and (max-width: 600px) {
+    #setting,
+    #setting-vibe {
+        width: 100%;
+    }
+    #message {
+        width: 50%;
+        height: 10vh;
+    }
 }
