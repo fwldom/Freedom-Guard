@@ -66,7 +66,7 @@
 > Freedom Guard (Warp)
 
 ![image](https://github.com/fwldom/Freedom-Guard-Electron/assets/111840687/2bfdffbd-c70f-4c05-b291-9ca252f0b08d)
-### Contact 🇺🇸
+### Contact 
 email : fwldom@duck.com
 ## 👇 Acknowledgements 👇
 
