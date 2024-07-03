@@ -21,8 +21,6 @@
                <!--<a href=""><img src="https://img.shields.io/badge/Portable{Disabled}-x64-67b7d1.svg?logo=windows"></a>-->
             </td>
         </tr>
-        <tr>
-        </tr>
         <td></td>
          <!--
             <td>macOS</td>
@@ -30,16 +28,14 @@
                 <a href=""><img src="https://img.shields.io/badge/DMG-Universal{Disabled}-ea005e.svg?logo=apple|Disable"></a><br>
                 <a href=""><img src="https://img.shields.io/badge/PKG-Universal{Disabled}-bc544b.svg?logo=apple|Disable" /></a>
             </td>
+           -->
         </tr>
         <tr>
             <td>Linux</td>
             <td>
-                <a href=""><img src="https://img.shields.io/badge/AppImage{Disabled}-x64-f84e29.svg?logo=linux"> </a><br>
-                <a href=""><img src="https://img.shields.io/badge/DebPackage{Disabled}-x64-FF9966.svg?logo=debian"> </a><br>
-                <a href=""><img src="https://img.shields.io/badge/RpmPackage{Disabled}-x64-F1B42F.svg?logo=redhat"> </a>
+                <a href="https://github.com/fwldom/Freedom-Guard/releases/latest/download/freedom-guard-linux-x64.tar.gz"><img src="https://img.shields.io/badge/tar.gz-x64-f84e29.svg?logo=linux"> </a><br>
             </td>
         </tr>
-         -->
     </tbody>
 </table>
 
