@@ -1,11 +1,13 @@
-# Freedom-Guard-Electron
+# Freedom Guard
  Warp + Psiphon + Gool + Scan + Freedom Vibe + Freedom Get
 > Freedom Guard is tool for bypass censorship of internet.<br>
 > Woman Life Freedom
-### OS Support
-<div align=left>
+
+### <div align="center"> Download the latest version | دانلود آخرین نسخه </div>
+
+<div align=center>
 <table>
-    <thead align=left>
+    <thead align=center>
         <tr>
             <th>OS</th>
             <th>Download</th>
@@ -17,11 +19,9 @@
             <td>Windows</td>
             <td>
               <!--  <a href=""><img src="https://img.shields.io/badge/OfficialSetup{Disabled}-x64-0078d7.svg?logo=windows"></a><br>-->
-                <a href="https://github.com/fwldom/Freedom-Guard-Electron/releases/latest/download/Freedom-Guard.exe"><img src="https://img.shields.io/badge/Setup-x64-2d7d9a.svg?logo=windows"></a><br>
+                <a href="https://github.com/fwldom/Freedom-Guard-Electron/releases/latest/download/freedom-guard-win.exe"><img src="https://img.shields.io/badge/Setup-x64-2d7d9a.svg?logo=windows"></a><br>
                <!--<a href=""><img src="https://img.shields.io/badge/Portable{Disabled}-x64-67b7d1.svg?logo=windows"></a>-->
             </td>
-        </tr>
-        <tr>
         </tr>
         <td></td>
          <!--
@@ -30,16 +30,14 @@
                 <a href=""><img src="https://img.shields.io/badge/DMG-Universal{Disabled}-ea005e.svg?logo=apple|Disable"></a><br>
                 <a href=""><img src="https://img.shields.io/badge/PKG-Universal{Disabled}-bc544b.svg?logo=apple|Disable" /></a>
             </td>
+           -->
         </tr>
         <tr>
             <td>Linux</td>
             <td>
-                <a href=""><img src="https://img.shields.io/badge/AppImage{Disabled}-x64-f84e29.svg?logo=linux"> </a><br>
-                <a href=""><img src="https://img.shields.io/badge/DebPackage{Disabled}-x64-FF9966.svg?logo=debian"> </a><br>
-                <a href=""><img src="https://img.shields.io/badge/RpmPackage{Disabled}-x64-F1B42F.svg?logo=redhat"> </a>
+                <a href="https://github.com/fwldom/Freedom-Guard/releases/latest/download/freedom-guard-linux.tar.gz"><img src="https://img.shields.io/badge/tar.gz-x64-f84e29.svg?logo=linux"> </a><br>
             </td>
         </tr>
-         -->
     </tbody>
 </table>
 
