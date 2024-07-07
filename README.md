@@ -2,10 +2,12 @@
  Warp + Psiphon + Gool + Scan + Freedom Vibe + Freedom Get
 > Freedom Guard is tool for bypass censorship of internet.<br>
 > Woman Life Freedom
-### OS Support
-<div align=left>
+
+### <div align="center"> Download the latest version | دانلود آخرین نسخه </div>
+
+<div align=center>
 <table>
-    <thead align=left>
+    <thead align=center>
         <tr>
             <th>OS</th>
             <th>Download</th>
