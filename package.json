@@ -13,6 +13,10 @@
     "build": {
         "extraResources": [
             {
+                "from": "./ico.png",
+                "to": "./ico.png"
+            },
+            {
                 "from": "assets/",
                 "to": "assets/",
                 "filter": [
@@ -29,15 +33,16 @@
         ],
         "productName": "Freedom Guard",
         "appId": "guard.freedom.com",
-        "artifactName": "freedom-guard-${os}-${arch}.${ext}",
+        "artifactName": "freedom-guard-${os}.${ext}",
         "asar": true,
         "publish": null,
         "directories": {
             "output": "dist"
         },
         "win": {
-            "icon": "ico.ico",
-            "target": "nsis"
+            "icon": "ico.png",
+            "target": "nsis",
+            "requestedExecutionLevel": "requireAdministrator"
         },
         "linux": {
             "target": "tar.gz",
@@ -63,7 +68,8 @@
     },
     "dependencies": {
         "axios": "^1.7.2",
-        "geoip-lite": "^1.4.10"
+        "geoip-lite": "^1.4.10",
+        "node-gyp": "^10.1.0"
     },
     "devDependencies": {
         "electron": "31.1.0",

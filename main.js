@@ -41,7 +41,8 @@ app.whenReady().then(() => {
       label: 'Close Application',
       type: 'normal',
       click: () => {
-        app.quit();
+        mainWindow.close();
+        app.exit();
       }
     },
   ]);
@@ -67,15 +68,7 @@ app.setUserTasks([
     iconIndex: 0,
     title: 'New Window',
     description: 'Create a new window'
-  },
-  {
-    program: process.execPath,
-    arguments: '--new-window',
-    iconPath: process.execPath,
-    iconIndex: 0,
-    title: 'New Window',
-    description: 'Create a new window'
-  },
+  }
 ])
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {

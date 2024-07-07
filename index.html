@@ -88,6 +88,13 @@
                 <option value="IPV6">IP Version 6</option>
             </select>
         </div>
+        <b style="margin-top: 2vh;">VPN Type Warp</b>
+        <div id="vpn-type">
+            <select value="system" id="vpn-type-selected">
+                <option value="system">System Proxy</option>
+                <option value="tun">VPN Mode (Tun)</option>
+            </select>
+        </div>
         <b>Endpoint</b>
         <div id="end-point" class="form-control-c">
             <input placeholder="IP : 192.x.x.x" class="input input-alt" type="text" id="end-point-address">
@@ -146,7 +153,8 @@
     </div>
     <div id="message">
         <p id="messageText"></p>
-        <span id="message-border" style="justify-content: flex-end;align-items: flex-end;margin-top: auto;border-radius: 15px;"></span>
+        <span id="message-border"
+            style="justify-content: flex-end;align-items: flex-end;margin-top: auto;border-radius: 15px;"></span>
     </div>
     <div id="menu">
         <div id="menu-dns" class="bx-tada-hover">Set DNS</div>
@@ -178,6 +186,13 @@
                 <input placeholder="config URL: https://|vless://" class="input input-alt" type="text"
                     id="config-vibe-text">
                 <span class="input-border input-border-alt"></span>
+            </div>
+            <b>VPN Type Vibe</b>
+            <div id="vpn-type">
+                <select value="system" id="vpn-type-selected-vibe">
+                    <option value="system">System Proxy</option>
+                    <option value="tun">VPN Mode (Tun)</option>
+                </select>
             </div>
             <b>Fragment</b>
             <div id="fragment-vibe">
