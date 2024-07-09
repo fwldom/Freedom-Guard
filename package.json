@@ -7,8 +7,9 @@
     "version": "1.2.7",
     "author": "fwldom <fwldom@duck.com>",
     "scripts": {
-        "start": "electron .",
-        "build": "electron-builder"
+        "start": "npx electron .",
+        "win": "npx electron-builder --win",
+        "linux": "npx electron-builder --linux"
     },
     "build": {
         "extraResources": [
@@ -35,7 +36,6 @@
         "appId": "guard.freedom.com",
         "artifactName": "freedom-guard-${os}.${ext}",
         "asar": true,
-        "publish": null,
         "directories": {
             "output": "dist"
         },
@@ -45,12 +45,17 @@
             "requestedExecutionLevel": "requireAdministrator"
         },
         "linux": {
+            "icon": "ico.ico",
             "target": "tar.gz",
-            "category": "VPN",
-            "icon": "ico.png"
+            "category": "VPN"
+        },
+        "publish": {
+            "provider": "github",
+            "publishAutoUpdate": false
         },
         "files": [
             "assets/**/*",
+            "!assets/bin/*",
             "node_modules/boxicons/css/boxicons.min.css",
             "node_modules/**/*",
             "package.json",
@@ -63,7 +68,9 @@
             "fonts/*.*",
             "svgs/*.*",
             "*.png",
-            "*.ico"
+            "*.ico",
+            "!vibe.json",
+            "!warp.json"
         ]
     },
     "dependencies": {
@@ -72,7 +79,7 @@
         "node-gyp": "^10.1.0"
     },
     "devDependencies": {
-        "electron": "31.1.0",
+        "electron": "^31.1.0",
         "fs": "^0.0.1-security"
     },
     "bugs": {

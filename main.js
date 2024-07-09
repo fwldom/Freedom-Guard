@@ -20,7 +20,7 @@ function createWindow() {
 }
 let tray
 app.whenReady().then(() => {
-  const icon = nativeImage.createFromPath('ico.png')
+  var icon = nativeImage.createFromPath(path.join(__dirname, "assets", 'ico.png'))
   tray = new Tray(icon)
   const contextMenu = Menu.buildFromTemplate([
     {

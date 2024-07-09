@@ -111,10 +111,10 @@ async function ConnectWarp() {
             exec(`reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyServer /t REG_SZ /d ${settingWarp["proxy"]} /F`);
         }
         StatusGuard = true;
-        await sleep(7500);
+        await sleep(15000);
         testProxy();
-        await sleep(5000);
-        if (testproxystat) {
+        await sleep(10000);
+        if (testproxystat && filterBypassStat) {
             Showmess(5000, "Connected Warp")
             document.getElementById("ChangeStatus").style.animation = "s";
             document.getElementById("ChangeStatus").style.borderColor = "#15ff00";
@@ -217,32 +217,44 @@ function FindBestEndpointWarp(type = 'find') {
     });
 }
 var testproxystat = false;
+var countryIP = "";
+filterBypassStat = false;
 async function testProxy() {
     var startTime = Date.now();
     try {
-        const response = await axios.get('https://api.ipify.org?format=json', {
+        const testConnection = await axios.get('https://api.ipify.org?format=json', {
             timeout: 5000, // Timeout in ms
-        });
-        console.log('IP :', response.data.ip);
+        }); 
+        console.log('IP :', testConnection.data.ip);
         var endTime = Date.now(); // Capture the end time
         var pingTime = endTime - startTime; // Calculate the ping time
         if (pingTime < 1500) { pingTime = `<font color='green'>${pingTime}ms</font>`; } else { pingTime = `<font color='red'>${pingTime}ms</font>` };
         function getCountryFromIP(ip) {
             var geo = geoip.lookup(ip);
             if (geo) {
-                var country = geo.country;
-                return `<img src="${path.join(__dirname, "svgs", country + ".svg")}" width="40rem" style='margin:1rem'>`
+                countryIP = geo.country;
+                return `<img src="${path.join(__dirname, "svgs", countryIP.toLowerCase() + ".svg")}" width="40rem" style='margin:1rem'>`
             } else {
                 return '❓';
             }
         }
-        var countryEmoji = getCountryFromIP(response.data.ip);
-        document.getElementById("ip-ping-vibe").innerHTML = "" + countryEmoji + response.data.ip + " | " + pingTime + "";
-        document.getElementById("ip-ping-warp").innerHTML = "" + countryEmoji + response.data.ip + " | " + pingTime + "";
+        var countryEmoji = getCountryFromIP(testConnection.data.ip);
+        document.getElementById("ip-ping-vibe").innerHTML = "" + countryEmoji + testConnection.data.ip + " | " + pingTime + "";
+        document.getElementById("ip-ping-warp").innerHTML = "" + countryEmoji + testConnection.data.ip + " | " + pingTime + "";
         testproxystat = true;
+        try {
+            const testBypass = await axios.get('https://ircf.space', {
+                timeout: 5000, // Timeout in ms
+            });
+            filterBypassStat = true;
+        }
+        catch {
+            filterBypassStat = false;
+            return false;
+        }
         return true;
     } catch (error) {
-        console.error('Error Test Connection:', error.message);
+        console.error('Error Test Connection:', error.message );
         document.getElementById("ip-ping-vibe").innerHTML = " " + "Not Connected To Internet";
         document.getElementById("ip-ping-warp").innerHTML = " " + "Not Connected To Internet";
         testproxystat = false;
@@ -267,6 +279,7 @@ function CloseAllSections() {
 function SetSettingWarp() {
     // Restore value setting section
     SetValueInput("selector-ip-version", "IPV" + settingWarp['ipver'])
+    SetValueInput("vpn-type-selected", settingWarp["tun"] ? "tun" : "system")
     SetValueInput("end-point-address", settingWarp["endpoint"]);
     SetValueInput("bind-address-text", settingWarp["proxy"]);
     SetValueInput("warp-key-text", settingWarp["warpkey"]);
