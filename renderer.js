@@ -648,9 +648,8 @@ document.getElementById("config-vibe-text").addEventListener("change", () => {
     ResetArgsVibe();
 });
 document.getElementById("vpn-type-selected-vibe").addEventListener("change", () => {
-    if (document.getElementById("vpn-type-selected-vibe").value == "tun") {
-        settingVibe["tun"] = true;
-    } else settingVibe["tun"] = false;
+    document.getElementById("vpn-type-selected-vibe").value == "tun" ? settingVibe["tun"] = true : settingVibe["tun"] = false;
+    saveSetting();
     ResetArgsVibe();
 });
 function ResetArgsVibe(config = "auto") {
@@ -658,7 +657,6 @@ function ResetArgsVibe(config = "auto") {
     argsVibe.push("run");
     argsVibe.push("--config");
     argsVibe.push(config);
-    argsVibe.push("--system-proxy");
     if (settingVibe["fragment"] & settingVibe["fragment-size"] != "") {
         argsVibe.push("--fragment");
         argsVibe.push(settingVibe["fragment-size"]);
@@ -673,10 +671,7 @@ function ResetArgsVibe(config = "auto") {
     }
     if (settingVibe["tun"]) {
         argsVibe.push("--tun");
-    }
-    else {
-        argsVibe.push("--system-proxy");
-    }
+    } else argsVibe.push("--system-proxy");
 
 }
 //#endregion
