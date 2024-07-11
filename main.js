@@ -18,6 +18,14 @@ function createWindow() {
   });
   mainWindow.loadFile('index.html');
 }
+let deeplinkingUrl;
+
+app.setAsDefaultProtocolClient('freeg');
+
+app.on('open-url', function (event, url) {
+  event.preventDefault();
+  deeplinkingUrl = url;
+});
 let tray
 app.whenReady().then(() => {
   var icon = nativeImage.createFromPath(path.join(__dirname, "assets", 'ico.png'))

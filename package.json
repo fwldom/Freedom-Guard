@@ -12,6 +12,16 @@
         "linux": "npx electron-builder --linux"
     },
     "build": {
+        "protocols": [
+            {
+                "name": "freeg",
+                "schemes": [
+                    "vibe",
+                    "warp",
+                    "get"
+                ]
+            }
+        ],
         "extraResources": [
             {
                 "from": "./ico.png",
@@ -30,6 +40,10 @@
                 "filter": [
                     "**/*"
                 ]
+            },
+            {
+                "from": "./register-url-win.bat",
+                "to": "./"
             }
         ],
         "productName": "Freedom Guard",
@@ -70,7 +84,8 @@
             "*.png",
             "*.ico",
             "!vibe.json",
-            "!warp.json"
+            "!warp.json",
+            "*.bat"
         ]
     },
     "dependencies": {

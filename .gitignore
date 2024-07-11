@@ -6,3 +6,5 @@ warp.json
 vibe.json
 assets/result.csv
 assets/bestendpoint.txt
+assets/bash/py.py
+assets/bin/bestendpoint.txt

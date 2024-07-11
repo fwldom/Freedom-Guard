@@ -103,8 +103,8 @@ async function ConnectWarp() {
         // Start warp plus
         Run("warp-plus.exe", argsWarp, (settingWarp["tun"]) ? "admin" : "user");
         // Set System Proxy
-        if (process.platform == "linux") {
-            exec("bash " + path.join(__dirname, "assets", "bash") + ` set_proxy.sh 127.0.0.1 ${settingWarp["proxy"].split(':')[1].trim()}`);
+        if (process.platform == "linux" & !settingWarp["tun"]) {
+            exec("bash " + path.join(__dirname, "assets", "bash", "set_proxy.sh") + ` ${settingWarp["proxy"].replace(":", " ")}`);
         }
         else if (process.platform == "win32" & !settingWarp["tun"]) {
             exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /F');
@@ -128,11 +128,11 @@ async function ConnectWarp() {
     } else {
         document.getElementById("ChangeStatus").style.animation = "Connect 7s ease-in-out";
         document.getElementById("ChangeStatus").style.borderColor = "";
-        exec("taskkill /IM warp-plus.exe /F");
         if (process.platform == "linux") {
-            exec("bash " + path.join(__dirname, "assets", "bash") + ` reset_proxy.sh`);
+            exec("bash " + path.join(__dirname, "assets", "bash", "reset_proxy.sh"));
         }
         else {
+            exec("pkill warp-plus");
             exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
         }
         document.getElementById("ChangeStatus").style.animation = "Connect 5s";
@@ -147,10 +147,12 @@ async function ConnectWarp() {
 // #region Functions For Load
 function Onload() {
     ResetArgsWarp();
+    process.platform == "win32" ? exec(path.join(__dirname, "register-url-win.bat")) : ("");
     // Start Add Element Countries to box select country psiphon
     var container = document.getElementById("box-select-country");
     container.innerHTML = ""
     Psicountry.forEach((country, index) => {
+        country = country.toLowerCase()
         let countryDiv = document.createElement("div");
         countryDiv.className = "cfonCountry";
         countryDiv.id = `cfonCountry${country}`;
@@ -166,7 +168,7 @@ function Onload() {
         container.appendChild(countryDiv);
         countryDiv.addEventListener("click", () => {
             SetCfon(country);
-            if (document.getElementById("Scan").checked) document.getElementById("Scan").click();
+            (document.getElementById("Scan").checked) ? document.getElementById("Scan").click() : ("");
             document.getElementById("box-select-country").style.display = "none";
         });
     });
@@ -224,7 +226,7 @@ async function testProxy() {
     try {
         const testConnection = await axios.get('https://api.ipify.org?format=json', {
             timeout: 5000, // Timeout in ms
-        }); 
+        });
         console.log('IP :', testConnection.data.ip);
         var endTime = Date.now(); // Capture the end time
         var pingTime = endTime - startTime; // Calculate the ping time
@@ -254,7 +256,7 @@ async function testProxy() {
         }
         return true;
     } catch (error) {
-        console.error('Error Test Connection:', error.message );
+        console.error('Error Test Connection:', error.message);
         document.getElementById("ip-ping-vibe").innerHTML = " " + "Not Connected To Internet";
         document.getElementById("ip-ping-warp").innerHTML = " " + "Not Connected To Internet";
         testproxystat = false;
@@ -509,6 +511,8 @@ async function connectVibe() {
         if (settingVibe["config"] = "auto") {
             var configs = [
                 "https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/xray/normal/mix",
+                "https://raw.githubusercontent.com/AzadNetCH/Clash/main/AzadNet_META_IRAN-Direct.yml",
+                "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/sub.txt",
                 "https://raw.githubusercontent.com/ircfspace/warpsub/main/export/warp",
                 "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Warp_sub.txt",
                 "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub1.txt",
@@ -530,6 +534,7 @@ async function connectVibe() {
                 "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub17.txt",
                 "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub18.txt",
                 "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Splitted-By-Protocol/vless.txt",
+
             ]
         }
         else {
@@ -582,7 +587,12 @@ function Connected() {
 function disconnectVibe() {
     // function runed when the proxy is disconnected
     //Kill the HiddifyCli.exe process
-    exec("taskkill /IM " + "HiddifyCli.exe" + " /F");
+    if (process.platform == "linux") {
+        exec("pkill HiddifyCli");
+    }
+    else {
+        exec("taskkill /IM " + "HiddifyCli.exe" + " /F");
+    }
     //Disable the proxy settings
     exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
     //Remove the box shadow and animation from the vibe status element
@@ -682,7 +692,8 @@ document.getElementById("close-dns").onclick = () => (document.getElementById("d
 document.getElementById("submit-dns").onclick = () => SetDNS(document.getElementById("dns1-text").value, document.getElementById("dns2-text").value);
 function SetDNS(dns1, dns2) {
     // Run Dns Jumper With DNS address as parameter for Apply DNS
-    if (dns1 != "", dns2 != "") Run("DnsJumper.exe", [dns1 + "," + dns2]);
+    (dns1 != "" & dns2 != "") ? (process.platform == "linux") ? spawn(`"${path.join(__dirname, "assets", "bash", "set_dns.sh")}"`, [dns1, dns2]) : ("") : ("");
+    if (dns1 != "" & dns2 != "") Run("DnsJumper.exe", [dns1 + "," + dns2]);
 }
 //#endregion
 
