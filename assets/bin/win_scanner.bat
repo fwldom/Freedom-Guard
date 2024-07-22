@@ -95,6 +95,7 @@ goto show
 )
 
 :show
+del result.csv
 del ip.txt> nul 2>&1
 echo.:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 echo.::                                                                 ::

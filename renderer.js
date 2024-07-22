@@ -292,6 +292,8 @@ function SetSettingWarp() {
     SetValueInput("wgconfig-dir", settingWarp["wgconf"]);
     SetValueInput("config-dir", settingWarp["config"]);
     document.getElementById("reserved-status").checked = settingWarp["reserved"];
+    document.getElementById("Gool").checked = settingWarp["gool"];
+    document.getElementById("Scan").checked = settingWarp["scan"];
 }
 function SetValueInput(id, Value) {
     // Set Value In Input
@@ -508,11 +510,11 @@ async function connectVibe() {
     // this is For Connect To Freedom-Vibe
     if (settingVibe["status"] == false) {
         document.getElementById("changeStatus-vibe").style.animation = "changeStatus-vibe-animation 5s infinite";
-        if (settingVibe["config"] = "auto") {
+        if (settingVibe["config"] == "auto" || settingVibe["config"] == "") {
             var configs = [
+                "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/sub.txt",
                 "https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/xray/normal/mix",
                 "https://raw.githubusercontent.com/AzadNetCH/Clash/main/AzadNet_META_IRAN-Direct.yml",
-                "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/sub.txt",
                 "https://raw.githubusercontent.com/ircfspace/warpsub/main/export/warp",
                 "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Warp_sub.txt",
                 "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub1.txt",
@@ -534,7 +536,6 @@ async function connectVibe() {
                 "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub17.txt",
                 "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub18.txt",
                 "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Splitted-By-Protocol/vless.txt",
-
             ]
         }
         else {
@@ -553,7 +554,7 @@ async function connectVibe() {
                     break;
                 }
                 else {
-                    Showmess(5000, "Test Next Config")
+                    Showmess(5000, "Next Config...")
                 }
             }
             else break;
@@ -623,12 +624,7 @@ document.getElementById("fragment-status-vibe").addEventListener("click", () => 
 document.getElementById("fragment-vibe-size-text").addEventListener("change", () => {
     console.log(document.getElementById("fragment-vibe-size-text").value);
     settingVibe["fragment-size"] = document.getElementById("fragment-vibe-size-text").value;
-    if (document.getElementById("fragment-status-vibe").checked) {
-        settingVibe["fragment"] = true;
-    }
-    else {
-        settingVibe["fragment"] = false;
-    }
+    document.getElementById("fragment-status-vibe").checked ? settingVibe["fragment"] = true : settingVibe["fragment"] = false;
     saveSetting();
     ResetArgsVibe();
 });
@@ -697,3 +693,24 @@ Onload();
 setInterval(() => {
     testProxy()
 }, 7500);
+// #region deep links 
+const { ipcRenderer } = require('electron');
+ipcRenderer.on('start-vibe', (event, ev) => {
+    ResetArgsVibe();
+    LoadVibe();
+    connectVibe();
+});
+ipcRenderer.on('start-warp', (event, ev) => {
+    ResetArgsWarp();
+    ConnectWarp();
+});
+ipcRenderer.on('start-get', (event, key, value) => {
+
+});
+ipcRenderer.on('set-warp-true', (event, key) => {
+    settingWarp[`${key}`] = true;
+    ResetArgsWarp();
+    SetSettingWarp();
+});
+// #endregion
+

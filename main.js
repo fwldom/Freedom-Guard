@@ -1,4 +1,6 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } = require('electron');
+const { net, protocol, session } = require('electron')
+const { dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { exec } = require("child_process")
@@ -18,19 +20,77 @@ function createWindow() {
   });
   mainWindow.loadFile('index.html');
 }
-let deeplinkingUrl;
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient('freedom-guard', process.execPath, [path.resolve(process.argv[1])])
+  }
+} else {
+  app.setAsDefaultProtocolClient('freedom-guard')
+}
+const gotTheLock = app.requestSingleInstanceLock()
 
-app.setAsDefaultProtocolClient('freeg');
-
-app.on('open-url', function (event, url) {
-  event.preventDefault();
-  deeplinkingUrl = url;
-});
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+    dialog.showErrorBox(`You arrived from: ${commandLine.pop()}`);
+    url = commandLine.pop()
+    const urlParts = url.split("://")[1];
+    const urlParams = urlParts.split("&");
+    const urlInfo = {};
+    urlParams.forEach(param => {
+      const [key, value] = param.split("=");
+      urlInfo[key] = value;
+    });
+  })
+}
 let tray
 app.whenReady().then(() => {
   var icon = nativeImage.createFromPath(path.join(__dirname, "assets", 'ico.png'))
   tray = new Tray(icon)
   const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Connect to Freedom Vibe',
+      type: 'normal',
+      click: () => {
+        mainWindow.webContents.send('start-vibe', '');
+        mainWindow.focus()
+      }
+    },
+    {
+      label: 'Connect to Freedom Warp',
+      type: 'normal',
+      click: () => {
+        mainWindow.webContents.send('start-warp', '');
+        mainWindow.focus()
+      }
+    },
+    {
+      label: 'Settings',
+      submenu: [
+        {
+          label: 'Freedom Warp',
+          submenu: [
+            {
+              label: 'Gool', type: 'normal', id: "Gool", click: () => {
+                mainWindow.webContents.send('set-warp-true', 'gool'); mainWindow.focus()
+              }
+            },
+            {
+              label: 'Scan', type: 'normal', click: () => {
+                mainWindow.webContents.send('set-warp-true', 'scan'); mainWindow.focus()
+              }
+            }
+
+          ]
+        }]
+    },
+    { type: 'separator' },
     {
       label: 'Show Application',
       type: 'normal',
