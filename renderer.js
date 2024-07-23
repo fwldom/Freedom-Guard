@@ -184,9 +184,6 @@ function Onload() {
 }
 // #endregion
 // #region Functions other
-function TunMode() {
-
-}
 function FindBestEndpointWarp(type = 'find') {
     if (process.platform == "linux") {
         Loading(100, "Searching For Endpoint ...");
@@ -269,7 +266,7 @@ function SetCfon(country) {
     document.getElementById("textOfCfon").innerHTML = PsicountryFullname[Psicountry.indexOf(country)];
     document.getElementById("imgOfCfonCustom").src = path.join(__dirname, "svgs", country.toString().toLowerCase() + ".svg");
     ResetArgsWarp();
-    // set
+    // Set Psiphon Country 
 }
 function CloseAllSections() {
     // For Close Sections (Setting & Menu & Psiphon)
@@ -548,8 +545,7 @@ async function connectVibe() {
             await sleep(25000);
             if (settingVibe["status"] == true) {
                 await sleep(5000);
-                testProxy();
-                if (testproxystat) {
+                if (testProxy()) {
                     Connected();
                     break;
                 }
@@ -687,12 +683,6 @@ function SetDNS(dns1, dns2) {
     if (dns1 != "" & dns2 != "") Run("DnsJumper.exe", [dns1 + "," + dns2]);
 }
 //#endregion
-
-// Interval Timers and Loads
-Onload();
-setInterval(() => {
-    testProxy()
-}, 7500);
 // #region deep links 
 const { ipcRenderer } = require('electron');
 ipcRenderer.on('start-vibe', (event, ev) => {
@@ -713,4 +703,9 @@ ipcRenderer.on('set-warp-true', (event, key) => {
     SetSettingWarp();
 });
 // #endregion
+// Interval Timers and Loads
+Onload();
+setInterval(() => {
+    testProxy()
+}, 7500);
 
