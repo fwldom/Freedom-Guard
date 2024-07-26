@@ -181,6 +181,7 @@ function Onload() {
     catch {
         saveSetting()
     }
+    testProxy();
 }
 // #endregion
 // #region Functions other

@@ -386,8 +386,8 @@ h2 {
     background-color: transparent;
 }
 
-#setting>#about,
-#setting-vibe>#about {
+#setting #about,
+#setting-vibe #about {
     max-width: 55px;
     min-height: 45px;
     font-size: 25px;
@@ -795,6 +795,7 @@ h2 {
     transition: width 0.4s cubic-bezier(0.42, 0, 0.58, 1.00);
     border-radius: 15px;
 }
+
 #message {
     display: none;
     justify-content: center;
@@ -814,13 +815,27 @@ h2 {
     z-index: 15;
     flex-direction: column;
 }
+
 @media only screen and (max-width: 600px) {
+
     #setting,
     #setting-vibe {
         width: 100%;
     }
+
     #message {
         width: 50%;
         height: 10vh;
     }
+}
+
+select {
+    background-color: transparent;
+    color: white;
+    font-size: 25px;
+    border: none;
+}
+
+select option {
+    color: black;
 }
