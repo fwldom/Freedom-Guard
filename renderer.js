@@ -13,7 +13,8 @@ const { readFile } = require("fs/promises");
 const axios = require('axios'); // Import axios
 const { type, platform } = require("os");
 const geoip = require('geoip-lite');
-;
+const versionapp = "1.2.9"
+    ;
 // #endregion
 // #region Global Var
 __dirname = __dirname.replace("app.asar", "")
@@ -126,6 +127,7 @@ async function ConnectWarp() {
             }
         }
     } else {
+        KillProcess();
         document.getElementById("ChangeStatus").style.animation = "Connect 7s ease-in-out";
         document.getElementById("ChangeStatus").style.borderColor = "";
         if (process.platform == "linux") {
@@ -182,6 +184,21 @@ function Onload() {
         saveSetting()
     }
     testProxy();
+    try {
+        keyUser = read_file("one.one");
+    }
+    catch {
+        try {
+            if (process.platform == "win32") {
+                exec("start http://fg.mywebcommunity.org/reg.php")
+            }
+            else if (process.platform == "linux") {
+                exec("wget http://fg.mywebcommunity.org/reg.php")
+            }
+            write_file("one.one", "ok");
+        }
+        catch { };
+    }
 }
 // #endregion
 // #region Functions other
@@ -585,6 +602,7 @@ function Connected() {
 function disconnectVibe() {
     // function runed when the proxy is disconnected
     //Kill the HiddifyCli.exe process
+    KillProcess();
     if (process.platform == "linux") {
         exec("pkill HiddifyCli");
     }
@@ -686,6 +704,7 @@ function SetDNS(dns1, dns2) {
 //#endregion
 // #region deep links 
 const { ipcRenderer } = require('electron');
+const { randomBytes } = require("crypto");
 ipcRenderer.on('start-vibe', (event, ev) => {
     ResetArgsVibe();
     LoadVibe();

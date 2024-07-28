@@ -4,7 +4,7 @@
     "description": "Warp + Psiphon + Freedom Vibe + Freedom Get",
     "keywords": [],
     "main": "./main.js",
-    "version": "1.2.8",
+    "version": "1.2.9",
     "author": "fwldom <fwldom@duck.com>",
     "scripts": {
         "start": "npx electron .",
@@ -91,6 +91,7 @@
             "*.ico",
             "!vibe.json",
             "!warp.json",
+            "!one.one",
             "*.bat"
         ]
     },
