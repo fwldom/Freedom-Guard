@@ -184,6 +184,7 @@ h2 {
     transform: translateX(1.5em);
 }
 
+/* #endregion warp */
 /*#region Section Psiphon Selector */
 .box-select-country {
     display: none;
@@ -334,8 +335,8 @@ h2 {
 #close-setting,
 #close-setting-vibe {
     max-width: 55px;
-    min-height: 45px;
-    font-size: 23px;
+    min-height: 8vh;
+    font-size: 30px;
     background-color: transparent;
     border: none;
     color: #ffffff;
@@ -369,7 +370,7 @@ h2 {
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(10px);
-    background-color: rgba(11, 2, 38, 0.6);
+    background-color: rgba(0, 0, 0, 1.0);
     flex-direction: column;
     z-index: 9;
     border-radius: 15px;
@@ -464,7 +465,7 @@ h2 {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    margin-bottom: auto;
+    margin-bottom: 2.5vh;
     box-shadow: 10px 10px 20px 5px rgba(36, 0, 155, 0.3);
     display: flex;
     justify-content: center;
@@ -480,6 +481,7 @@ h2 {
 #freedom-vibe>#status-vibe,
 #freedom-vibe>#status-vibe-conn {
     font-size: 18px;
+    margin-bottom: auto;
     color: white;
     font-weight: bold;
     font-family: "Vazirmatn", "Vazir", 'Segoe UI', Geneva, Verdana, sans-serif;
@@ -531,44 +533,148 @@ h2 {
     color: white;
 }
 
-#freedom-vibe>#freedom-vibe-custom-config {
-    width: 75%;
-    height: 25%;
-    background-color: #05274e;
-    box-shadow: 1px 1px 5px 1px #0974f1;
-    position: absolute;
-    z-index: 7;
-    top: 37%;
-    left: 12.5%;
-    border-radius: 10px;
-    display: none;
-    justify-content: space-around;
+
+#freedom-vibe>#vibe-profile {
+    background-color: rgba(191, 188, 199, 0.185);
+    width: 98vw;
+    left: 1vw;
+    backdrop-filter: blur(50px);
+    bottom: 1vh;
+    position: sticky;
+    height: 2.5em;
+    border-radius: 15px;
+    color: white;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    flex-direction: row;
-    flex-wrap: wrap;
+    padding: 2vw;
 }
 
-#freedom-vibe>#freedom-vibe-custom-config>* {
-    font-size: 35px !important;
-    background-color: transparent;
+#freedom-vibe>#vibe-profile * {
+    display: flex;
+    height: 80%;
+    align-items: center;
+    padding-top: 2%;
+}
+
+#vibe-profile-manage {
+    width: 98vw;
+    position: absolute;
+    left: 1vw;
+    top: 49vh;
+    height: 50vh;
+    background-color: rgba(191, 188, 199, 0.185);
+    backdrop-filter: blur(50px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 15px;
+    color: white;
+    font-size: 1.5rem;
+}
+
+#vibe-profile-manage>#vibe-profile-list {
+    overflow-y: auto;
+    width: 98vw;
+    display: flex;
+    margin-bottom: 10vh;
+    height: 40vh;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#vibe-profile-manage>#vibe-profile-list::-webkit-scrollbar {
+    width: 2vw;
+}
+
+#vibe-profile-manage>#vibe-profile-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+#vibe-profile-manage>#vibe-profile-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+#vibe-profile-manage>#vibe-profile-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+#profile-add {
+    overflow: hidden;
+    width: 98vw;
+    position: absolute;
+    left: 1vw;
+    top: 25vh;
+    height: 45vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: rgba(191, 188, 199, 0.185);
+    backdrop-filter: blur(50px);
+    box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    color: white;
+    font-size: 1.5rem;
+    display: none;
+}
+
+#profile-add>#close-profile-add {
+    position: absolute;
+}
+
+#profile-add * {
+    color: white;
+    margin: 10vw;
     border: none;
+    margin: 3vh;
+    width: 80%;
+    background-color: rgba(113, 111, 121, 0.185);
+    backdrop-filter: blur(50px);
+}
+
+#vibe-profile-manage #config-box-vibe-sel,
+#vibe-profile-manage .config-box-vibe-sel {
+    width: 98%;
+    height: 5vh;
+    background-color: #414141;
+    margin-top: 1vh;
+    padding: 1vw;
+    border-radius: 10px;
+    font-size: 1.5rem;
     color: white;
 }
 
-#freedom-vibe>#freedom-vibe-custom-config>#reset-config-custom-vibe {
-    font-size: 18px !important;
+#vibe-profile-manage #config-box-vibe-sel:hover,
+#vibe-profile-manage .config-box-vibe-sel:hover {
+    background-color: #0974f1;
 }
 
-#freedom-vibe>#freedom-vibe-custom-config>input {
-    font-size: 16px !important;
-    width: 85%;
-    outline: none;
-}
 
-#freedom-vibe>#freedom-vibe-custom-config>#close-custom-config {
+#vibe-profile-manage>#close-vibe-profile-manage {
     position: absolute;
     right: 1%;
     top: 1%;
+    font-size: 35px;
+    background-color: transparent;
+    border: none;
+}
+
+#vibe-profile-manage>#add-config-vibe {
+    position: absolute;
+    right: 1%;
+    bottom: 1%;
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 25px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    background-color: #0974f1;
 }
 
 /*#endregion */
@@ -816,7 +922,33 @@ h2 {
     flex-direction: column;
 }
 
+select {
+    background-color: transparent;
+    color: white;
+    font-size: 25px;
+    border: none;
+}
+
+select option {
+    color: black;
+}
+
+#HelpMess {
+    width: 30vw;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f1e9f2;
+    position: absolute;
+    border-radius: 15px;
+}
+
 @media only screen and (max-width: 600px) {
+    #HelpMess {
+        width: 70vw;
+        height: 10vh;
+    }
 
     #setting,
     #setting-vibe {
@@ -827,15 +959,4 @@ h2 {
         width: 50%;
         height: 10vh;
     }
-}
-
-select {
-    background-color: transparent;
-    color: white;
-    font-size: 25px;
-    border: none;
-}
-
-select option {
-    color: black;
 }

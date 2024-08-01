@@ -2,14 +2,14 @@
 <html>
 
 <head>
-    <!-- #region Head -->
+    4 <!-- #region Head -->
     <meta charset="UTF-8" />
     <meta name="theme-color" content="#ff7900" />
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Freedom Guard (Sarina Version) 1.2.8 </title>
+    <title>Freedom Guard (Mohsen Version) 1.2.9 </title>
     <link href="boxicons.min.css" rel="stylesheet" />
     <link href="./assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="./assets/css/vazir.css" rel="stylesheet" />
@@ -82,8 +82,8 @@
         </div>
     </div>
     <div id="setting">
-        <nav id="nav-top" style="position: sticky;  top: 2%;
-  left: 1%;background-color: rgba(0, 0, 0, 0.3);">
+        <nav id="nav-top" style="position: sticky;  top: 0%;
+  left: 0%;background-color: rgba(255, 255, 255, 0.3);width: 100%;min-height: 7.5vh;z-index: 10;">
             <button id="close-setting">
                 <i class='bx bx-arrow-back'></i>
             </button>
@@ -172,19 +172,35 @@
         <div id="logo-vibe">
             <img width="105px" height="105px" src="freedom-vibe.png" alt="">
         </div>
-        <div id="vibe-profile">
-        </div>
-        <p id="status-vibe">Auto</p>
         <div id="changeStatus-vibe">
             <i class='bx bx-power-off'></i>
         </div>
-        <p id="ip-ping-vibe">IP : x.x.x.x | Ping : ms</p>
         <p id="status-vibe-conn">Disconnected</p>
+        <p id="ip-ping-vibe">IP : x.x.x.x | Ping : ms</p>
+        <div id="vibe-profile">
+            <p id="status-vibe" style="width: 50vw;">Auto</p>
+            <i class="bx bx-chevron-right" style="margin-left: auto;font-size: 22px;padding: 0;"></i>
+        </div>
+        <div id="vibe-profile-manage">
+            <button id="close-vibe-profile" style="margin-top: 5px;font-size: 22px;border: none;background-color: transparent;color:rgb(63, 65, 173);margin:0;width:35px;height:35px;align-self: flex-start;"><i class='bx bx-arrow-back' style="color:black;"></i></button>
+            <p id="status-vibe-sel" class="config-box-vibe-sel" style="width: 95vw;background:rgba(35, 63, 105, 0.712)">Auto</p>
+            <div id="vibe-profile-list"></div>
+            <button id="add-config-vibe">Add Profile</button>
+        </div>
+        <div id="profile-add"  style="display: none;">
+            <button id="close-vibe-profile-add" style="margin:0;width:25px;height:25px;align-self: flex-start;">X</button>
+            <input type="text" id="add-config-vibe-name" placeholder="Name Config" class="input input-alt" style="width: 95vw;">
+            <input type="text" id="add-config-vibe-link" placeholder="Link url" class="input input-alt" style="width: 95vw;">
+            <button id="add-config-vibe-submit" class="add-config-vibe">Add</button>
+        </div>
         <button id="close-vibe"><i class='bx bx-arrow-back'></i></button>
         <div id="setting-vibe">
-            <button id="close-setting-vibe" style="position: sticky;">
-                <i class='bx bx-arrow-back'></i>
-            </button>
+            <nav id="nav-top" style="position: sticky;  top: 0%;
+  left: 0%;background-color: rgba(255, 255, 255, 0.3);width: 100%;min-height: 7.5vh;z-index: 10;">
+                <button id="close-setting-vibe" style="position: sticky;">
+                    <i class='bx bx-arrow-back'></i>
+                </button>
+            </nav>
             <b>Config URL vless,vmess,url file,...</b>
             <div id="config-vibe" class="form-control-c">
                 <input placeholder="config URL: https://|vless://" class="input input-alt" type="text"
@@ -412,10 +428,10 @@
     <!-- #region Other All -->
     <div id="about-app">
         <button id="close-about"><i class='bx bx-exit-fullscreen'></i></button>
-        <p> Freedom Guard 1.2.8 (Sarina Version)</p>
+        <p> Freedom Guard 1.2.9 (Mohsen Version)</p>
         <p> Developed By Fwldom 👩‍💻</p>
         <p>👇 Acknowledgements 👇</p>
-        <p> <a href="https://github.com/hiddify/hiddify-core/">hiddify-core 1.7.0</a> from Hiddify</p>
+        <p> <a href="https://github.com/hiddify/hiddify-core/">hiddify-core 2.0.4</a> from Hiddify</p>
         <p> <a href="https://github.com/bepass-org/warp-plus">warp-plus 1.2.3</a> from bepass-org</p>
         <p> <a href="https://www.sordum.org/7952/dns-jumper-v2-3/">Dns Jumper 2.3</a> from sordum</p>
         <p> <a href="https://github.com/fwldom/Freedom-GET">Freedom Get 1.5</a> from fwldom</p>
@@ -436,4 +452,5 @@
 <script src="./assets/js/slick-carousel_1.6.0.js"></script>
 <script src="./assets/js/script.js?v1.5"></script>
 <!-- #endregion Scripts -->
+
 </html>

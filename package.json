@@ -65,9 +65,10 @@
             "license": "./license.html"
         },
         "linux": {
-            "icon": "ico.ico",
+            "icon": "ico.png",
             "target": "tar.gz",
-            "category": "VPN"
+            "category": "VPN",
+            "publish": false
         },
         "publish": {
             "provider": "github",
@@ -76,6 +77,7 @@
         "files": [
             "assets/**/*",
             "!assets/bin/*",
+            "!dist/",
             "node_modules/boxicons/css/boxicons.min.css",
             "node_modules/**/*",
             "package.json",

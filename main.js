@@ -9,7 +9,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 400,
     height: 680,
-    icon: path.join(__dirname, 'ico.png'),
+    icon: path.join(__dirname, 'ico.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
@@ -38,8 +38,8 @@ if (!gotTheLock) {
       if (mainWindow.isMinimized()) mainWindow.restore()
       mainWindow.focus()
     }
-    dialog.showErrorBox(`You arrived from: ${commandLine.pop()}`);
-    url = commandLine.pop()
+    mainWindow.webContents.send('start-link', commandLine.pop()+"s");
+    var url = commandLine.pop()
     const urlParts = url.split("://")[1];
     const urlParams = urlParts.split("&");
     const urlInfo = {};

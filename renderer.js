@@ -198,10 +198,64 @@ function Onload() {
             write_file("one.one", "ok");
         }
         catch { };
+        HelpStart();
     }
 }
 // #endregion
 // #region Functions other
+function HelpStart(step = 1) {
+    var HelpStartElem = document.createElement("div");
+    HelpStartElem.dir = "rtl";
+    HelpStartElem.style.textAlign = "center";
+    HelpStartElem.id = "HelpMess";
+    if (step == 1) {
+        if (confirm("نیاز به راهنمایی داری؟")) {
+            HelpStartElem.innerHTML = `
+            اگر روی نماد تنظیمات بزنی میتونی تنظیمات وارپ رو تغییر بدی.
+            <br>
+            برای بعدی کلیک کنید.`;
+            HelpStartElem.style.top = "55px";
+            HelpStartElem.style.right = "55px";
+            HelpStartElem.style.borderTopRightRadius = "0px";
+            HelpStartElem.onclick = () => {
+                HelpStart(2);
+            };
+        }
+        document.body.appendChild(HelpStartElem);
+    }
+    else if (step == 2) {
+        HelpStartElem = document.getElementById("HelpMess");
+        HelpStartElem.innerHTML = `
+        از بخش منو میتونید به بخش های دیگر مثل Freedom Vibe و Freedom Get و Dns Changer دسترسی داشته باشید.
+        <br>
+        برای بعدی کلیک کنید.`
+        HelpStartElem.style.top = "55px";
+        HelpStartElem.style.left = "55px";
+        HelpStartElem.style.borderTopRightRadius = "15px";
+        HelpStartElem.style.borderTopLeftRadius = "0px";
+        HelpStartElem.onclick = () => {
+            HelpStart(3);
+        };
+    }
+    else if (step == 3) {
+        HelpStartElem = document.getElementById("HelpMess");
+        HelpStartElem.innerHTML = `
+        بر روی نماد وسط صفحه ضربه بزنید تا Freedom Warp متصل شود
+        <br>
+        برای پایان کلیک کنید.`;
+        HelpStartElem.style.top = "40vh";
+        HelpStartElem.style.left = "10vh";
+        HelpStartElem.style.borderTopRightRadius = "0px";
+        HelpStartElem.style.borderTopLeftRadius = "15px";
+        HelpStartElem.onclick = () => {
+            HelpStart(4);
+        };
+    }
+    else if (step == 4) {
+        HelpStartElem = document.getElementById("HelpMess");
+        HelpStartElem.style.display = "none";
+    }
+}
 function FindBestEndpointWarp(type = 'find') {
     if (process.platform == "linux") {
         Loading(100, "Searching For Endpoint ...");
@@ -281,7 +335,7 @@ async function testProxy() {
 function SetCfon(country) {
     settingWarp["cfon"] = true;
     settingWarp["cfonc"] = country;
-    document.getElementById("textOfCfon").innerHTML = PsicountryFullname[Psicountry.indexOf(country)];
+    document.getElementById("textOfCfon").innerHTML = PsicountryFullname[Psicountry.indexOf(country.toString().toUpperCase())];
     document.getElementById("imgOfCfonCustom").src = path.join(__dirname, "svgs", country.toString().toLowerCase() + ".svg");
     ResetArgsWarp();
     // Set Psiphon Country 
@@ -292,6 +346,8 @@ function CloseAllSections() {
     document.getElementById("menu").style.display = "none";
     document.getElementById("setting").style.display = "none";
     document.getElementById("setting-vibe").style.display = "none";
+    document.getElementById("vibe-profile-manage").style.display = "none";
+    document.getElementById("profile-add").style.display = "none";
 }
 function SetSettingWarp() {
     // Restore value setting section
@@ -502,13 +558,34 @@ var settingVibe = {
     "dns-remote": "",
     "tun": false
 }
+var configsVibeName = [
+    "Auto",
+    "TVC | MIX",
+    "Free | Sub V2ray",
+    "AzadNet | META IRAN",
+    "WARP | IRCF",
+    "TELEGRAM | V2RAY",
+    "TVC | VLESS"
+];
+var configsVibeLink = [
+    "auto",
+    "https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/xray/normal/mix",
+    "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/sub.txt",
+    "https://raw.githubusercontent.com/AzadNetCH/Clash/main/AzadNet_META_IRAN-Direct.yml",
+    "https://raw.githubusercontent.com/ircfspace/warpsub/main/export/warp",
+    "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
+    "https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/xray/base64/vless"
+];
 function LoadVibe() {
     document.getElementById("freedom-vibe").style.display = "flex";
     try {
         settingVibe = JSON.parse(read_file("vibe.json")); // Load Setting From File.json 
+        configsVibeName = JSON.parse(read_file("configsVibeName.json")); // Load Setting From File.json 
+        configsVibeLink = JSON.parse(read_file("configsVibeLink.json")); // Load Setting From File.json 
     }
     catch {
         saveSetting();
+        SaveConfigsVibe();
     }
     if (settingVibe["config"] == "") {
         settingVibe["config"] = "auto";
@@ -619,6 +696,41 @@ function disconnectVibe() {
     //Set the vibe setting to false
     settingVibe["status"] = false;
 }
+function LoadVibeProfileManager() {
+    document.getElementById("vibe-profile-manage").style.display = "flex";
+    document.getElementById("vibe-profile-list").innerHTML = "";
+    configsVibeName.forEach((config, index) => {
+        var configBox = document.createElement("div");
+        configBox.id = "config-box-vibe-sel";
+        configBox.title = config;
+        configBox.innerHTML = config;
+        configBox.addEventListener("click", () => {
+            settingVibe["config"] = configsVibeLink[index];
+            saveSetting();
+            SaveConfigsVibe();
+            document.getElementById("status-vibe").innerHTML = config;
+            document.getElementById("status-vibe-sel").innerHTML = config;
+
+            CloseAllSections();
+        });
+        configBox.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            if (confirm("Are you sure you want to delete this profile?")) {
+                configsVibeName.splice(index, 1);
+                configsVibeLink.splice(index, 1);
+                SaveConfigsVibe();
+                document.getElementById("vibe-profile-list").innerHTML = "";
+                LoadVibeProfileManager();
+            };
+        });
+        document.getElementById("vibe-profile-list").appendChild(configBox);
+        console.log(index);
+    });
+}
+function SaveConfigsVibe() {
+    write_file("configsVibeName.json", JSON.stringify(configsVibeName));
+    write_file("configsVibeLink.json", JSON.stringify(configsVibeLink));
+}
 document.getElementById("changeStatus-vibe").onclick = () => connectVibe();
 document.getElementById("close-vibe").onclick = () => document.getElementById("freedom-vibe").style.display = "none";
 document.getElementById("close-setting-vibe").onclick = () => {
@@ -635,6 +747,28 @@ document.getElementById("fragment-status-vibe").addEventListener("click", () => 
     }
     saveSetting();
     ResetArgsVibe();
+});
+document.getElementById("vibe-profile").addEventListener("click", () => {
+    LoadVibeProfileManager();
+});
+document.getElementById("close-vibe-profile").addEventListener("click", () => {
+    CloseAllSections();
+});
+document.getElementById("add-config-vibe").addEventListener("click", () => {
+    document.getElementById("profile-add").style.display = "flex";
+});
+document.getElementById("add-config-vibe-submit").addEventListener("click", () => {
+    if (document.getElementById("add-config-vibe-link").value.trim().lenght > 2) {
+        configsVibeName.push(document.getElementById("add-config-vibe-name").value);
+        configsVibeLink.push(document.getElementById("add-config-vibe-link").value);
+        document.getElementById("profile-add").style.display = "none";
+        SaveConfigsVibe();
+        CloseAllSections();
+        LoadVibeProfileManager();
+    }
+    else {
+        alert("Invalid link");
+    }
 });
 document.getElementById("fragment-vibe-size-text").addEventListener("change", () => {
     console.log(document.getElementById("fragment-vibe-size-text").value);
@@ -662,6 +796,9 @@ document.getElementById("vpn-type-selected-vibe").addEventListener("change", () 
     document.getElementById("vpn-type-selected-vibe").value == "tun" ? settingVibe["tun"] = true : settingVibe["tun"] = false;
     saveSetting();
     ResetArgsVibe();
+});
+document.getElementById("close-vibe-profile-add").addEventListener("click", () => {
+    document.getElementById("profile-add").style.display = "none";
 });
 function ResetArgsVibe(config = "auto") {
     argsVibe = [];
@@ -722,10 +859,15 @@ ipcRenderer.on('set-warp-true', (event, key) => {
     ResetArgsWarp();
     SetSettingWarp();
 });
+ipcRenderer.on('start-link', (event, link) => {
+    alert(link);
+});
 // #endregion
 // Interval Timers and Loads
 Onload();
+LoadVibe();
+Loading(1);
 setInterval(() => {
-    testProxy()
+    testProxy();
 }, 7500);
 
