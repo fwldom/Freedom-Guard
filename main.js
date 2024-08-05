@@ -9,7 +9,7 @@ const ipc = require('electron').ipcMain;
 const { initialize } = require('@aptabase/electron/main');
 
 initialize("A-EU-5072151346");
-
+var currentURL = "";
 var mainWindow = null
 var ViewBrowser = null;
 function createWindow() {
@@ -55,19 +55,25 @@ ipc.on("load-main-app", (event) => {
   mainWindow.loadFile("index.html");
   mainWindow.removeBrowserView(ViewBrowser);
 });
+ipc.on('hide-browser', (event, url) => {
+  mainWindow.removeBrowserView(ViewBrowser);
+});
+ipc.on('show-browser', (event, url) => {
+  mainWindow.setBrowserView(ViewBrowser);
+});
 var pageTitle = "";
 ipc.on('load-browser', (event) => {
   CreateViewBrowser("https://fwldom.github.io/freedom-site-browser/index.html");
   mainWindow.loadFile("browser.html");
   ViewBrowser.webContents.on("did-finish-load", (event) => {
-    var currentURL = ViewBrowser.webContents.getURL();
+    currentURL = ViewBrowser.webContents.getURL();
     pageTitle = ViewBrowser.webContents.getTitle();
     mainWindow.webContents.send('set-url', (currentURL));
     pageTitle = ViewBrowser.webContents.getTitle();
     mainWindow.webContents.send('set-title', (pageTitle));
   });
   ViewBrowser.webContents.on("did-navigate", (event, url) => {
-    var currentURL = ViewBrowser.webContents.getURL();
+    currentURL = ViewBrowser.webContents.getURL();
     pageTitle = ViewBrowser.webContents.getTitle();
     mainWindow.webContents.send('set-url', (url));
     // setTimeout(() => {
@@ -79,6 +85,17 @@ ipc.on('load-browser', (event) => {
 ipc.on('load-url-browser', (event, url) => {
   ViewBrowser.webContents.loadURL(url);
 });
+setInterval(() => {
+  try {
+    if (currentURL != ViewBrowser.webContents.getURL()) {
+      currentURL = ViewBrowser.webContents.getURL();
+      pageTitle = ViewBrowser.webContents.getTitle();
+      mainWindow.webContents.send('set-url', (currentURL));
+      mainWindow.webContents.send('set-title', (pageTitle));
+    }
+  }
+  catch { };
+}, 5000);
 const gotTheLock = app.requestSingleInstanceLock()
 
 if (!gotTheLock) {
