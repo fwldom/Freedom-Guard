@@ -68,7 +68,7 @@
         },
         "linux": {
             "icon": "ico.png",
-            "target": "tar.gz",
+            "target": "deb",
             "category": "VPN",
             "publish": false
         },
