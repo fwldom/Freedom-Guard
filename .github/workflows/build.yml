@@ -18,14 +18,33 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 20
+        
+        - name: Publish releases mac x64
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              if: matrix.os == 'macos-13'
+              run: npm exec electron-builder -- --mac dmg zip --x64 --publish onTagOrDraft
 
-      - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
-        with:
-          # GitHub token, automatically provided to the action
-          # (No need to define this secret in the repo settings)
-          github_token: ${{ secrets.github_token }}
+            - name: Publish releases mac arm64
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              if: matrix.os == 'macos-14'
+              run: npm exec electron-builder -- --mac dmg zip --arm64 --publish onTagOrDraft
 
-          # If the commit is tagged with a version (e.g. "v1.0.0"),
-          # release the app after building
-          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+            - name: Publish releases windows
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              if: matrix.os == 'windows-latest'
+              run: npm exec electron-builder -- --publish onTagOrDraft
+
+            - name: Publish releases GNU Linux x64
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              if: matrix.os == 'ubuntu-22.04'
+              run: npm exec electron-builder -- --linux deb rpm tar.xz --x64 --publish onTagOrDraft
+
+            - name: Publish releases GNU Linux arm64
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              if: matrix.os == 'ubuntu-24.04'
+              run: npm exec electron-builder -- --linux deb rpm tar.xz --arm64 --publish onTagOrDraft
