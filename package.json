@@ -57,7 +57,9 @@
         "win": {
             "icon": "ico.png",
             "target": "nsis",
-            "requestedExecutionLevel": "requireAdministrator"
+            "requestedExecutionLevel": "requireAdministrator",
+            "legalTrademarks": "(c) 2024 fwldom.github.io/Freedom",
+            "publisherName": "Freedom Guard (fwldom)"
         },
         "nsis": {
             "allowToChangeInstallationDirectory": true,
@@ -98,7 +100,10 @@
         ]
     },
     "dependencies": {
+        "@aptabase/electron": "^0.3.1",
         "axios": "^1.7.2",
+        "bootstrap-icons": "^1.11.3",
+        "electron-google-analytics": "^1.0.2",
         "geoip-lite": "^1.4.10",
         "node-gyp": "^10.1.0"
     },

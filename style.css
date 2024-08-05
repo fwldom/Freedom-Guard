@@ -185,7 +185,7 @@ h2 {
 }
 
 /* #endregion warp */
-/*#region Section Psiphon Selector */
+/* #region Section Psiphon Selector */
 .box-select-country {
     display: none;
     position: absolute;
@@ -297,7 +297,7 @@ h2 {
 }
 
 /*#endregion */
-/*#region Section Setting */
+/* #region Section Setting */
 #setting,
 #setting-vibe {
     display: none;
@@ -402,7 +402,7 @@ h2 {
 }
 
 /* #endregion */
-/*#region Section Menu */
+/* #region Section Menu */
 #menu {
     display: none;
     justify-content: center;
@@ -445,7 +445,7 @@ h2 {
 }
 
 /*#endregion
-/*#region Section Freedom-Vibe */
+/* #region Section Freedom-Vibe */
 #freedom-vibe {
     position: absolute;
     left: 0%;

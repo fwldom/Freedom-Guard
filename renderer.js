@@ -13,8 +13,9 @@ const { readFile } = require("fs/promises");
 const axios = require('axios'); // Import axios
 const { type, platform } = require("os");
 const geoip = require('geoip-lite');
-const versionapp = "1.2.9"
-    ;
+const versionapp = "1.2.9";
+const ipc = require('electron').ipcRenderer;
+const { trackEvent } = require('@aptabase/electron/renderer');
 // #endregion
 // #region Global Var
 __dirname = __dirname.replace("app.asar", "")
@@ -28,7 +29,7 @@ var settingWarp = {
     endpoint: "",
     cfon: false,
     cfonc: "IR",
-    ipver: "",
+    ipver: 4,
     warpver: "",
     warpkey: "",
     scanrtt: "",
@@ -38,7 +39,8 @@ var settingWarp = {
     config: "",
     reserved: "",
     dns: "",
-    tun: false
+    tun: false,
+    startup: "warp"
 };
 var argsWarp = [""];
 var argsVibe = [""];
@@ -99,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function ConnectWarp() {
     // Function Connect To Warp
     if (StatusGuard == false) {
+        trackEvent("conn-warp");
         console.log("Starting Warp ...");
         document.getElementById("ChangeStatus").style.animation = "Connect 7s infinite";
         // Start warp plus
@@ -190,17 +193,25 @@ function Onload() {
     catch {
         try {
             if (process.platform == "win32") {
-                exec("start http://fg.mywebcommunity.org/reg.php")
-            }
-            else if (process.platform == "linux") {
-                exec("wget http://fg.mywebcommunity.org/reg.php")
+                exec("start https://fwldom.github.io/Freedom")
             }
             write_file("one.one", "ok");
         }
         catch { };
         HelpStart();
     }
-}
+    if (settingWarp["startup"] !== "warp") {
+        if (settingWarp["startup"] == "vibe") {
+            LoadVibe();
+        }
+        else if (settingWarp["startup"] == "browser") {
+            setTimeout(() => {
+                ipc.send("load-browser", "");
+            }, 3500);
+        }
+    }
+    trackEvent("start-warp");
+};
 // #endregion
 // #region Functions other
 function HelpStart(step = 1) {
@@ -289,7 +300,7 @@ function FindBestEndpointWarp(type = 'find') {
 }
 var testproxystat = false;
 var countryIP = "";
-filterBypassStat = false;
+var filterBypassStat = false;
 async function testProxy() {
     var startTime = Date.now();
     try {
@@ -318,12 +329,12 @@ async function testProxy() {
                 timeout: 5000, // Timeout in ms
             });
             filterBypassStat = true;
+            return true;
         }
         catch {
             filterBypassStat = false;
             return false;
         }
-        return true;
     } catch (error) {
         console.error('Error Test Connection:', error.message);
         document.getElementById("ip-ping-vibe").innerHTML = " " + "Not Connected To Internet";
@@ -353,6 +364,7 @@ function SetSettingWarp() {
     // Restore value setting section
     SetValueInput("selector-ip-version", "IPV" + settingWarp['ipver'])
     SetValueInput("vpn-type-selected", settingWarp["tun"] ? "tun" : "system")
+    SetValueInput("start-up-at", settingWarp["startup"])
     SetValueInput("end-point-address", settingWarp["endpoint"]);
     SetValueInput("bind-address-text", settingWarp["proxy"]);
     SetValueInput("warp-key-text", settingWarp["warpkey"]);
@@ -397,7 +409,7 @@ function ResetArgsWarp() {
         argsWarp.push(settingWarp["endpoint"]);
 
     }
-    if (settingWarp["ipver"] != "") {
+    if (settingWarp["ipver"] != "" && settingWarp["ipver"] != 4) {
         argsWarp.push("-" + settingWarp["ipver"]);
     }
     if (settingWarp["warpkey"] != "") {
@@ -503,6 +515,9 @@ document.getElementById("vpn-type-selected").addEventListener("change", () => {
         SetServiceWarp("tun", true);
     } else SetServiceWarp("tun", false);
 });
+document.getElementById("start-up-at").addEventListener("change", () => {
+    SetServiceWarp("startup", document.getElementById("start-up-at").value);
+});
 document.getElementById("verbose-status").addEventListener("change", () => {
     if (document.getElementById("verbose-status").checked) SetServiceWarp("verbose", true);
     else SetServiceWarp("verbose", false);
@@ -538,12 +553,8 @@ document.getElementById("menu-freedom-vibe").onclick = () => {
     Loading("");
     LoadVibe();
 };
-document.getElementById("menu-freedom-get").onclick = () => {
-    Loading("");
-    document.getElementById("freedom-get").style.display = "block"
-    elements.forEach(element => {
-        element.style.display = '';
-    });
+document.getElementById("menu-freedom-browser").onclick = () => {
+    ipc.send("load-browser", "")
 };
 document.getElementById("menu-dns").onclick = () => { document.getElementById("dns-set").style.display = "flex" };
 document.getElementById("menu-exit").onclick = () => (document.getElementById("menu").style.display = "");
@@ -597,6 +608,7 @@ function LoadVibe() {
     document.getElementById("dns-remote-address").value = settingVibe["dns-remote"];
     document.getElementById("fragment-status-vibe").checked = settingVibe["fragment"];
     document.getElementById("fragment-vibe-size-text").value = settingVibe["fragment-size"];
+    trackEvent("start-vibe");
 }
 async function connectVibe() {
     // this is For Connect To Freedom-Vibe
@@ -637,6 +649,7 @@ async function connectVibe() {
         for (var config of configs) {
             ResetArgsVibe(config);
             Run("HiddifyCli.exe", argsVibe);
+            trackEvent("conn-vibe");
             await sleep(25000);
             if (settingVibe["status"] == true) {
                 await sleep(5000);
@@ -823,13 +836,6 @@ function ResetArgsVibe(config = "auto") {
 
 }
 //#endregion
-// #region Section Freedom-Get
-var parent = document.getElementById('freedom-get');
-var elements = parent.querySelectorAll('*');
-elements.forEach(element => {
-    element.style.display = 'none';
-});
-//#endregion
 // #region Section Set Dns
 document.getElementById("close-dns").onclick = () => (document.getElementById("dns-set").style.display = "");
 document.getElementById("submit-dns").onclick = () => SetDNS(document.getElementById("dns1-text").value, document.getElementById("dns2-text").value);
@@ -865,8 +871,6 @@ ipcRenderer.on('start-link', (event, link) => {
 // #endregion
 // Interval Timers and Loads
 Onload();
-LoadVibe();
-Loading(1);
 setInterval(() => {
     testProxy();
 }, 7500);

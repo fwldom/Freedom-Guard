@@ -1,14 +1,21 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } = require('electron');
-const { net, protocol, session } = require('electron')
+const { net, protocol, session, BrowserView } = require('electron')
 const { dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const { exec } = require("child_process")
+const { exec } = require("child_process");
+const { eventNames } = require('process');
+const ipc = require('electron').ipcMain;
+const { initialize } = require('@aptabase/electron/main');
+
+initialize("A-EU-5072151346");
+
 var mainWindow = null
+var ViewBrowser = null;
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 400,
-    height: 680,
+    width: 800,  // تنظیم عرض پنجره
+    height: 600, // تنظیم ارتفاع پنجره
     icon: path.join(__dirname, 'ico.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -16,9 +23,26 @@ function createWindow() {
       contextIsolation: false
     },
     autoHideMenuBar: true,
-    titleBarOverlay: "Freedom Guard"
+    titleBarOverlay: "Freedom Guard",
+    title: "Freedom Guard",
   });
-  mainWindow.loadFile('index.html');
+  mainWindow.loadFile("index.html");
+  mainWindow.on('resize', function () {
+    try {
+      ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width, height: mainWindow.getBounds().height / 1.3 });
+    }
+    catch { };
+  });
+}
+function CreateViewBrowser(url) {
+  ViewBrowser = new BrowserView();
+  mainWindow.setBrowserView(ViewBrowser);
+  ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width, height: mainWindow.getBounds().height / 1.3 });
+  ViewBrowser.setAutoResize({ width: true, height: true });
+  ViewBrowser.webContents.loadURL(url);
+  setTimeout(() => {
+    mainWindow.setSize(800, 600);
+  }, 1000);
 }
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
@@ -26,7 +50,35 @@ if (process.defaultApp) {
   }
 } else {
   app.setAsDefaultProtocolClient('freedom-guard')
-}
+};
+ipc.on("load-main-app", (event) => {
+  mainWindow.loadFile("index.html");
+  mainWindow.removeBrowserView(ViewBrowser);
+});
+var pageTitle = "";
+ipc.on('load-browser', (event) => {
+  CreateViewBrowser("https://fwldom.github.io/freedom-site-browser/index.html");
+  mainWindow.loadFile("browser.html");
+  ViewBrowser.webContents.on("did-finish-load", (event) => {
+    var currentURL = ViewBrowser.webContents.getURL();
+    pageTitle = ViewBrowser.webContents.getTitle();
+    mainWindow.webContents.send('set-url', (currentURL));
+    pageTitle = ViewBrowser.webContents.getTitle();
+    mainWindow.webContents.send('set-title', (pageTitle));
+  });
+  ViewBrowser.webContents.on("did-navigate", (event, url) => {
+    var currentURL = ViewBrowser.webContents.getURL();
+    pageTitle = ViewBrowser.webContents.getTitle();
+    mainWindow.webContents.send('set-url', (url));
+    // setTimeout(() => {
+    //   pageTitle = ViewBrowser.webContents.getTitle();
+    //   mainWindow.webContents.send('set-title', (pageTitle));
+    // }, 3000);
+  });
+});
+ipc.on('load-url-browser', (event, url) => {
+  ViewBrowser.webContents.loadURL(url);
+});
 const gotTheLock = app.requestSingleInstanceLock()
 
 if (!gotTheLock) {
@@ -38,7 +90,7 @@ if (!gotTheLock) {
       if (mainWindow.isMinimized()) mainWindow.restore()
       mainWindow.focus()
     }
-    mainWindow.webContents.send('start-link', commandLine.pop()+"s");
+    mainWindow.webContents.send('start-link', commandLine.pop() + "s");
     var url = commandLine.pop()
     const urlParts = url.split("://")[1];
     const urlParams = urlParts.split("&");

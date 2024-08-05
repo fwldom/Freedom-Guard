@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    4 <!-- #region Head -->
+    <!-- #region Head -->
     <meta charset="UTF-8" />
     <meta name="theme-color" content="#ff7900" />
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
@@ -103,6 +103,14 @@
                 <option value="tun">VPN Mode (Tun)</option>
             </select>
         </div>
+        <b style="margin-top: 2vh;">Startup at</b>
+        <div id="start-up">
+            <select value="warp" id="start-up-at">
+                <option value="warp">Freedom Warp (main)</option>
+                <option value="vibe">Freedom Vibe</option>
+                <option value="browser">Freedom Browser</option>
+            </select>
+        </div>
         <b>Endpoint</b>
         <div id="end-point" class="form-control-c">
             <input placeholder="IP : 192.x.x.x" class="input input-alt" type="text" id="end-point-address">
@@ -162,7 +170,7 @@
     <div id="menu">
         <div id="menu-dns" class="bx-tada-hover">Set DNS</div>
         <div id="menu-freedom-vibe" class="bx-tada-hover bx-spin-click">Freedom Vibe</div>
-        <div id="menu-freedom-get" class="bx-tada-hover bx-spin-click">Freedom Get</div>
+        <div id="menu-freedom-browser" class="bx-tada-hover bx-spin-click">Freedom Browser</div>
         <div id="menu-exit" class="bx-tada-hover bx-spin-click">Exit Menu</div>
     </div>
     <!-- #endregion Loading -->
@@ -182,15 +190,21 @@
             <i class="bx bx-chevron-right" style="margin-left: auto;font-size: 22px;padding: 0;"></i>
         </div>
         <div id="vibe-profile-manage">
-            <button id="close-vibe-profile" style="margin-top: 5px;font-size: 22px;border: none;background-color: transparent;color:rgb(63, 65, 173);margin:0;width:35px;height:35px;align-self: flex-start;"><i class='bx bx-arrow-back' style="color:black;"></i></button>
-            <p id="status-vibe-sel" class="config-box-vibe-sel" style="width: 95vw;background:rgba(35, 63, 105, 0.712)">Auto</p>
+            <button id="close-vibe-profile"
+                style="margin-top: 5px;font-size: 22px;border: none;background-color: transparent;color:rgb(63, 65, 173);margin:0;width:35px;height:35px;align-self: flex-start;"><i
+                    class='bx bx-arrow-back' style="color:black;"></i></button>
+            <p id="status-vibe-sel" class="config-box-vibe-sel" style="width: 95vw;background:rgba(35, 63, 105, 0.712)">
+                Auto</p>
             <div id="vibe-profile-list"></div>
             <button id="add-config-vibe">Add Profile</button>
         </div>
-        <div id="profile-add"  style="display: none;">
-            <button id="close-vibe-profile-add" style="margin:0;width:25px;height:25px;align-self: flex-start;">X</button>
-            <input type="text" id="add-config-vibe-name" placeholder="Name Config" class="input input-alt" style="width: 95vw;">
-            <input type="text" id="add-config-vibe-link" placeholder="Link url" class="input input-alt" style="width: 95vw;">
+        <div id="profile-add" style="display: none;">
+            <button id="close-vibe-profile-add"
+                style="margin:0;width:25px;height:25px;align-self: flex-start;">X</button>
+            <input type="text" id="add-config-vibe-name" placeholder="Name Config" class="input input-alt"
+                style="width: 95vw;">
+            <input type="text" id="add-config-vibe-link" placeholder="Link url" class="input input-alt"
+                style="width: 95vw;">
             <button id="add-config-vibe-submit" class="add-config-vibe">Add</button>
         </div>
         <button id="close-vibe"><i class='bx bx-arrow-back'></i></button>
@@ -240,183 +254,6 @@
         </div>
     </div>
     <!-- #endregion Freedom Vibe -->
-    <!-- #region Freedom Get => main & all-->
-    <div id="freedom-get" style="display: none !important;">
-        <nav class="navbar navbar-inverse">
-            <div class="container">
-                <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 col-centered">
-                    <a>
-                        <img src="./ico.png" alt="logo" />
-                        <h1>اینترنت آزاد برای همه!</h1>
-                    </a>
-                </div>
-            </div>
-        </nav>
-        <div class="clearfix"></div>
-        <div class="container">
-            <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 col-centered">
-                <ul class="nav nav-tabs justify-content-center">
-                    <li class="active"><a href="">کانفیگ رایگان</a></li>
-                    <li class="pull-right"><a href="./index.html">خروج</a></li>
-                </ul>
-                <div class="clearfix"></div>
-                <div class="alert alert-info" id="defAlert" dir="rtl">
-                    <p>توسط این‌ابزار می‌تونین به کانفیگ‌های رایگان گردآوری‌شده از طریق <a
-                            href="https://github.com/yebekhe/TVC" target="_blank">TVC</a> دسترسی داشته باشین.
-                        این‌کانفیگ‌ها به‌صورت خودکار و منظم، بدون دخل‌وتصرف از یه‌سری <a
-                            href="https://raw.githubusercontent.com/yebekhe/TVC/main/channelsData/channelsAssets.json"
-                            target="_blank">کانال تلگرامی</a> جمع‌آوری میشن و برای رعایت مسائل امنیتی توصیه میشه
-                        تنها
-                        برای مصارف عادی ازشون استفاده کنین.</p>
-                </div>
-                <div class="form-group">
-                    <select class="form-control" id="type">
-                        <option value="mix">همه‌نوع کانفیگ</option>
-                        <option value="reality">کانفیگ REALITY</option>
-                        <option value="vless">کانفیگ VLESS</option>
-                        <option value="vmess">کانفیگ VMESS</option>
-                        <option value="ss">کانفیگ SHADOWSOCKS</option>
-                        <option value="hy2">کانفیگ HYSTERIA2</option>
-                        <option value="trojan">کانفیگ TROJAN</option>
-                        <option value="tuic">کانفیگ TUIC</option>
-                        <option value="warp">کانفیگ WARP</option>
-                    </select>
-                    <select class="form-control" id="total">
-                        <option value="10">حداکثر ۱۰ مورد</option>
-                        <option value="25" selected>حداکثر ۲۵ مورد</option>
-                        <option value="50">حداکثر ۵۰ مورد</option>
-                        <option value="all">همه موارد</option>
-                    </select>
-                    <select class="form-control none" id="limit">
-                        <option value="lite">نسخه سبک</option>
-                        <option value="full" selected>نسخه کامل</option>
-                    </select>
-                </div>
-                <div class="betaVersion rangeSelector">
-                    <input type="radio" name="export" id="normal" value="1" checked />
-                    <label for="normal">به‌صورت عادی</label>
-                    <div class="clearfix"></div>
-                    <input type="radio" name="export" id="sub" value="1" />
-                    <label for="sub">لینک ساب</label>
-                </div>
-                <div class="clearfix"></div>
-                <div class="btn btn-block btn-default" id="get">دریافت کانفیگ</div>
-                <div class="clearfix"></div>
-                <div class="fullBox none" id="result">
-                    <textarea class="form-control dirLeft"></textarea>
-                    <div class="clearfix"></div>
-                    <div class="btn btn-link btn-xs" id="copy">کپی کانفیگ</div>
-                    <div class="clearfix"></div>
-                    <div class="alert alert-warning customers" id="customers">
-                        <small class="label label-warning">تامین‌کنندگان</small>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <br>
-                <div id="donate" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">دونیت</h4>
-                            </div>
-                            <div class="modal-body modalBodyOverflow" dir="auto">
-                                <p>به دلیل مسائل امنیتی این قابلیت برای کمک به Fwldom برداشته شده است</p>
-                                <div class="dirLeft">
-
-                                </div>
-                                <p>کمک به IRCF</p>
-                                <div class="dirLeft">
-                                    <small>Buy me a coffee:</small>
-                                    <br>
-                                    <a href="https://buymeacoffee.com/ircf" class="btn btn-default btn-block"
-                                        target="_blank">buymeacoffee.com/ircf</a>
-                                    <br>
-                                    <small>Tether (TRC20):</small>
-                                    <br>
-                                    <input type="text" class="form-control text-center"
-                                        value="TF5cT8fQMuajHGGH141U9JbTygFojkrFdB" />
-                                    <br>
-                                    <small>Bitcoin:</small>
-                                    <br>
-                                    <input type="text" class="form-control text-center"
-                                        value="bc1qyhx0qn9722vdvlz4s64g4sxq3yne0f5ryz3jyd" />
-                                    <br>
-                                    <small>Tron (TRX):</small>
-                                    <br>
-                                    <input type="text" class="form-control text-center"
-                                        value="TF5cT8fQMuajHGGH141U9JbTygFojkrFdB" />
-                                    <br>
-                                    <small>Ethereum:</small>
-                                    <br>
-                                    <input type="text" class="form-control text-center"
-                                        value="0x2A72777912A15A6387a1116f9bDDFe1Cb9474BF1" />
-                                    <br>
-                                    <small>Litecoin:</small>
-                                    <br>
-                                    <input type="text" class="form-control text-center"
-                                        value="ltc1q5d4u366xef336pjvccn7akn02upavmk45fhtdw" />
-                                    <br>
-                                    <small>TON (ERC20):</small>
-                                    <br>
-                                    <input type="text" class="form-control text-center"
-                                        value="0x2A72777912A15A6387a1116f9bDDFe1Cb9474BF1" />
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">حله</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="qrModal" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close pull-right" data-dismiss="modal"
-                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title dirLeft">QRCode</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="qrcode" id="qrcode">
-                                    <a href="javascript:;" id="copyFromQR">
-                                        <img src="" alt="qrcode" />
-                                    </a>
-                                    <input id="subUrl" class="form-control dirLeft" value="" />
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" id="copyUrl">کپی آدرس</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <footer>
-                    <p class="text-center">
-                        © توسط
-                        <a href="https://github.com/ircfspace/tconfig" target="_blank">IRCF</a>،
-                        به کمک
-                        <a href="https://github.com/yebekhe/TVC" target="_blank">YeBeKhe</a>
-                        <br />
-                        و آپدیت توسط
-                        <a href="https://github.com/fwldom" target="_blank">fwldom</a>
-                        <br />
-                        <span dir="ltr">
-                            <a class="github-button" href="https://github.com/fwldom/Freedom-GET"
-                                data-color-scheme="no-preference: light; light: light; dark: dark;"
-                                data-icon="octicon-star" data-show-count="true"
-                                aria-label="Star ircfspace/tconfig on GitHub">Star</a>
-                        </span>
-                    </p>
-                    <div class="text-center">
-                        <a href="#" class="btn btn-link btn-normal btn-lg btn-outline donateLink" data-toggle="modal"
-                            data-target="#donate">☕</a>
-                    </div>
-                    <script async defer src="https://buttons.github.io/buttons.js"></script>
-                </footer>
-            </div>
-        </div>
-    </div>
-    <!-- #endregion Freedom Get => main & setting-->
     <!-- #region Set DNS | Dns Chnager => main -->
     <div id="dns-set">
         <button id="close-dns"><i class='bx bx-exit-fullscreen'></i></button>
@@ -445,7 +282,7 @@
     </div>
     <!-- #endregion Other All -->
 </body>
-<!-- #region Scripts -->
+    <!-- #region Scripts -->
 <script src="./renderer.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
 <script src="./assets/js/bootstrap.min.js"></script>
