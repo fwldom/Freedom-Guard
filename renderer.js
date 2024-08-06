@@ -147,7 +147,10 @@ function SetAttr(id,attr,value) {
 }
 function SetHTML(id,value){
     document.getElementById(id).innerHTML = value;
-}
+};
+function SetBorderColor(id,value){
+    document.getElementById(id).style.borderColor = value;
+};
 function HelpStart(step = 1) {
     var HelpStartElem = document.createElement("div");
     HelpStartElem.dir = "rtl";

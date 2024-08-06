@@ -47,7 +47,7 @@ function Run(nameFile, args, runa = "user") {
 
     childProcess.on('close', (code) => {
         console.log(`child process exited with code ${code}`);
-        sect == "main" ? disconnectVibe(): disconnectVPN();
+        sect == "main" && testProxy() ? disconnectVibe(): disconnectVPN();
     });
 };
 function isValidURL(url) {
@@ -235,10 +235,10 @@ async function connectWarp() {
         await sleep(15000);
         testProxy();
         await sleep(10000);
-        if (testproxystat && filterBypassStat) {
+        if (testProxy()) {
             Showmess(5000, "Connected Warp")
-            sect == "main" ? SetAnim("ChangeStatus","s"):("");
-            sect == "main" ? SetAttr("ChangeStatus","style","border-color:#15ff00;") :("");
+            sect == "main" ? SetAnim("ChangeStatus","Load"):("");
+            sect == "main" ? SetBorderColor("ChangeStatus","#15ff00") :("");
         }
         else {
             if (StatusGuard == true) {
