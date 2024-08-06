@@ -301,7 +301,6 @@ write_file = function (path, output) {
     fs.writeFileSync(path, output);
 }
 function ResetArgsWarp() {
-    savesett
     argsWarp = [];
     if (settingWarp["proxy"] != "127.0.0.1:8086" & settingWarp["proxy"] != "") {
         argsWarp.push("--bind");
