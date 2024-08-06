@@ -7,6 +7,7 @@ const { exec } = require("child_process");
 const { eventNames } = require('process');
 const ipc = require('electron').ipcMain;
 const { initialize } = require('@aptabase/electron/main');
+const { setInterval } = require('timers/promises');
 
 initialize("A-EU-5072151346");
 var currentURL = "";
@@ -33,7 +34,13 @@ function createWindow() {
     }
     catch { };
   });
-}
+};
+setInterval(() => {
+  try {
+    ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width, height: mainWindow.getBounds().height / 1.3 });
+  }
+  catch { };
+},5000)
 function CreateViewBrowser(url) {
   ViewBrowser = new BrowserView();
   mainWindow.setBrowserView(ViewBrowser);

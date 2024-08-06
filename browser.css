@@ -1,12 +1,8 @@
 body {
     background-color: #1A1A22 !important;
-<<<<<<< Updated upstream
-} 
-=======
     overflow: hidden;
 }
 
->>>>>>> Stashed changes
 .tab.active {
     background-color: #2a2a4d !important;
 }
@@ -151,8 +147,6 @@ body {
         transform: scale(1);
     }
 }
-<<<<<<< Updated upstream
-=======
 
 #menu {
     width: 95vw;
@@ -232,4 +226,3 @@ body {
     width: 50vw;
     padding-top: 50px;
 }
->>>>>>> Stashed changes
