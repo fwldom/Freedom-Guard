@@ -16,34 +16,11 @@ const geoip = require('geoip-lite');
 const versionapp = "1.2.9";
 const ipc = require('electron').ipcRenderer;
 const { trackEvent } = require('@aptabase/electron/renderer');
+var sect = "main";
+var {connectVibe,connectWarp,settingWarp,settingVibe,AssetsPath,ResetArgsVibe,ResetArgsWarp,testProxy} = require('./connect.js');
 // #endregion
 // #region Global Var
 __dirname = __dirname.replace("app.asar", "")
-var childProcess = null;
-var StatusGuard = false;
-var AssetsPath = path.join(__dirname, "assets");
-var settingWarp = {
-    proxy: "127.0.0.1:8086",
-    gool: false,
-    scan: false,
-    endpoint: "",
-    cfon: false,
-    cfonc: "IR",
-    ipver: 4,
-    warpver: "",
-    warpkey: "",
-    scanrtt: "",
-    verbose: false,
-    cache: "",
-    wgconf: "",
-    config: "",
-    reserved: "",
-    dns: "",
-    tun: false,
-    startup: "warp"
-};
-var argsWarp = [""];
-var argsVibe = [""];
 var Psicountry = ["IR", "AT", "BE", "BG", "BR", "CA", "CH", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GB", "HU", "HR", "IE", "IN", "IT", "JP", "LV", "NL", "NO", "PL", "PT", "RO", "RS", "SE", "SG", "SK", "UA", "US"];
 var PsicountryFullname = ["disable", "Austria", "Belgium", "Bulgaria", "Brazil", "Canada", "Switzerland", "Czech Republic", "Germany", "Denmark", "Estonia", "Spain", "Finland", "France", "United Kingdom", "Hungary", "Croatia", "Ireland", "India", "Italy", "Japan", "Latvia", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Serbia", "Sweden", "Singapore", "Slovakia", "Ukraine", "United States"];
 // #endregion
@@ -52,10 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Onclick Button and Onchange inputs
     ChangeStatusbtn = document.getElementById("ChangeStatus");
     ChangeStatusbtn.onclick = () => {
-        ConnectWarp();
-    };
-    document.body.onload = () => {
-        Onload();
+        connectWarp();
     };
     document.getElementById("Gool").onclick = () => {
         if (document.getElementById("Gool").checked) SetServiceWarp("gool", true);
@@ -98,55 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 // #endregion
 // #region For Connections Warp
-async function ConnectWarp() {
-    // Function Connect To Warp
-    if (StatusGuard == false) {
-        trackEvent("conn-warp");
-        console.log("Starting Warp ...");
-        document.getElementById("ChangeStatus").style.animation = "Connect 7s infinite";
-        // Start warp plus
-        Run("warp-plus.exe", argsWarp, (settingWarp["tun"]) ? "admin" : "user");
-        // Set System Proxy
-        if (process.platform == "linux" & !settingWarp["tun"]) {
-            exec("bash " + path.join(__dirname, "assets", "bash", "set_proxy.sh") + ` ${settingWarp["proxy"].replace(":", " ")}`);
-        }
-        else if (process.platform == "win32" & !settingWarp["tun"]) {
-            exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /F');
-            exec(`reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyServer /t REG_SZ /d ${settingWarp["proxy"]} /F`);
-        }
-        StatusGuard = true;
-        await sleep(15000);
-        testProxy();
-        await sleep(10000);
-        if (testproxystat && filterBypassStat) {
-            Showmess(5000, "Connected Warp")
-            document.getElementById("ChangeStatus").style.animation = "s";
-            document.getElementById("ChangeStatus").style.borderColor = "#15ff00";
-        }
-        else {
-            if (StatusGuard == true) {
-                FindBestEndpointWarp("conn");
-                Showmess(5000, "Finding Endpoint Warp ...")
-            }
-        }
-    } else {
-        KillProcess();
-        document.getElementById("ChangeStatus").style.animation = "Connect 7s ease-in-out";
-        document.getElementById("ChangeStatus").style.borderColor = "";
-        if (process.platform == "linux") {
-            exec("bash " + path.join(__dirname, "assets", "bash", "reset_proxy.sh"));
-        }
-        else {
-            exec("pkill warp-plus");
-            exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
-        }
-        document.getElementById("ChangeStatus").style.animation = "Connect 5s";
-        setTimeout(() => {
-            document.getElementById("ChangeStatus").style.animation = "";
-        }, 3500);
-        StatusGuard = false;
-    }
-}
 
 // #endregion
 // #region Functions For Load
@@ -214,6 +139,15 @@ function Onload() {
 };
 // #endregion
 // #region Functions other
+function SetAnim(id, anim) {
+    document.getElementById(id).style.animation = anim;
+}
+function SetAttr(id,attr,value) {
+    document.getElementById(id).setAttribute(attr, value);
+}
+function SetHTML(id,value){
+    document.getElementById(id).innerHTML = value;
+}
 function HelpStart(step = 1) {
     var HelpStartElem = document.createElement("div");
     HelpStartElem.dir = "rtl";
@@ -267,82 +201,7 @@ function HelpStart(step = 1) {
         HelpStartElem.style.display = "none";
     }
 }
-function FindBestEndpointWarp(type = 'find') {
-    if (process.platform == "linux") {
-        Loading(100, "Searching For Endpoint ...");
-        alert("Scanner IP Endpoint not support in linux");
-        return;
-    }
-    if (settingWarp["ipver"] == "") settingWarp["ipver"] = 4;
-    Run("win_scanner.bat", ["-" + settingWarp["ipver"]]);
-    if (type != "conn") {
-        Loading(25000, "Searching Endpoint ...");
-    }
-    childProcess.on('exit', () => {
-        document.getElementById("end-point-address").value = read_file(path.join(AssetsPath, "bin", "bestendpoint.txt"));
-        var event = new Event('change', {
-            bubbles: true,
-            cancelable: false,
-        });
-        document.getElementById("end-point-address").dispatchEvent(event);
-        if (type == "conn" && StatusGuard == true) {
-            StatusGuard = false;
-            ConnectWarp();
-        }
-        if (type != "conn") {
-            alert("Finded Best Endpoint");
-            Loading(1, "Searching Endpoint ...");
-        }
-        else {
-            Showmess(3000, "Finded Best Endpoint. Reconnecting")
-        }
-    });
-}
-var testproxystat = false;
-var countryIP = "";
-var filterBypassStat = false;
-async function testProxy() {
-    var startTime = Date.now();
-    try {
-        const testConnection = await axios.get('https://api.ipify.org?format=json', {
-            timeout: 5000, // Timeout in ms
-        });
-        console.log('IP :', testConnection.data.ip);
-        var endTime = Date.now(); // Capture the end time
-        var pingTime = endTime - startTime; // Calculate the ping time
-        if (pingTime < 1500) { pingTime = `<font color='green'>${pingTime}ms</font>`; } else { pingTime = `<font color='red'>${pingTime}ms</font>` };
-        function getCountryFromIP(ip) {
-            var geo = geoip.lookup(ip);
-            if (geo) {
-                countryIP = geo.country;
-                return `<img src="${path.join(__dirname, "svgs", countryIP.toLowerCase() + ".svg")}" width="40rem" style='margin:1rem'>`
-            } else {
-                return '❓';
-            }
-        }
-        var countryEmoji = getCountryFromIP(testConnection.data.ip);
-        document.getElementById("ip-ping-vibe").innerHTML = "" + countryEmoji + testConnection.data.ip + " | " + pingTime + "";
-        document.getElementById("ip-ping-warp").innerHTML = "" + countryEmoji + testConnection.data.ip + " | " + pingTime + "";
-        testproxystat = true;
-        try {
-            const testBypass = await axios.get('https://ircf.space', {
-                timeout: 5000, // Timeout in ms
-            });
-            filterBypassStat = true;
-            return true;
-        }
-        catch {
-            filterBypassStat = false;
-            return false;
-        }
-    } catch (error) {
-        console.error('Error Test Connection:', error.message);
-        document.getElementById("ip-ping-vibe").innerHTML = " " + "Not Connected To Internet";
-        document.getElementById("ip-ping-warp").innerHTML = " " + "Not Connected To Internet";
-        testproxystat = false;
-        return false;
-    }
-}
+
 function SetCfon(country) {
     settingWarp["cfon"] = true;
     settingWarp["cfonc"] = country;
@@ -387,65 +246,6 @@ function SetServiceWarp(para, status) {
     settingWarp[para] = status;
     ResetArgsWarp();
     saveSetting();
-}
-function ResetArgsWarp() {
-    argsWarp = [];
-    if (settingWarp["proxy"] != "127.0.0.1:8086" & settingWarp["proxy"] != "") {
-        argsWarp.push("--bind");
-        argsWarp.push(settingWarp["proxy"]);
-    }
-    if (settingWarp["gool"]) {
-        argsWarp.push("--gool");
-    }
-    if (settingWarp["scan"]) {
-        argsWarp.push("--scan");
-    }
-    if (settingWarp["cfon"] && settingWarp["cfonc"] != "IR" && settingWarp["cfonc"] != "") {
-        argsWarp.push("--cfon");
-        argsWarp.push(settingWarp["cfonc"]);
-    }
-    if (settingWarp["endpoint"] != "") {
-        argsWarp.push("--endpoint");
-        argsWarp.push(settingWarp["endpoint"]);
-
-    }
-    if (settingWarp["ipver"] != "" && settingWarp["ipver"] != 4) {
-        argsWarp.push("-" + settingWarp["ipver"]);
-    }
-    if (settingWarp["warpkey"] != "") {
-        argsWarp.push("--key");
-        argsWarp.push(settingWarp["warpkey"]);
-
-    }
-    if (settingWarp["scanrtt"] != "") {
-        argsWarp.push("--rtt");
-        argsWarp.push(settingWarp["scanrtt"] + "s");
-    }
-    if (settingWarp["verbose"]) {
-        argsWarp.push("--verbose");
-    }
-    if (settingWarp["cache"] != "") {
-        argsWarp.push("--cache-dir");
-        argsWarp.push(settingWarp["cache"]);
-    }
-    if (settingWarp["wgconf"] != "") {
-        argsWarp.push("--wgconf");
-        argsWarp.push(settingWarp["wgconf"]);
-    }
-    if (settingWarp["config"] != "") {
-        argsWarp.push("--config");
-        argsWarp.push(settingWarp["config"]);
-    }
-    if (settingWarp["reserved"]) {
-        argsWarp.push("--reserved");
-    }
-    if (settingWarp["dns"] != "") {
-        argsWarp.push("--dns");
-        argsWarp.push(settingWarp["dns"]);
-    }
-    if (settingWarp["tun"]) {
-        argsWarp.push("--tun-experimental");
-    }
 }
 function KillProcess() {
     if (childProcess != null) {
@@ -560,15 +360,7 @@ document.getElementById("menu-dns").onclick = () => { document.getElementById("d
 document.getElementById("menu-exit").onclick = () => (document.getElementById("menu").style.display = "");
 //#endregion
 // #region Section Freedom-Vibe
-var settingVibe = {
-    "status": false,
-    "config": "auto",
-    "fragment": false,
-    "fragment-size": "",
-    "dns-direct": "",
-    "dns-remote": "",
-    "tun": false
-}
+
 var configsVibeName = [
     "Auto",
     "TVC | MIX",
@@ -610,64 +402,6 @@ function LoadVibe() {
     document.getElementById("fragment-vibe-size-text").value = settingVibe["fragment-size"];
     trackEvent("start-vibe");
 }
-async function connectVibe() {
-    // this is For Connect To Freedom-Vibe
-    if (settingVibe["status"] == false) {
-        document.getElementById("changeStatus-vibe").style.animation = "changeStatus-vibe-animation 5s infinite";
-        if (settingVibe["config"] == "auto" || settingVibe["config"] == "") {
-            var configs = [
-                "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/sub.txt",
-                "https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/xray/normal/mix",
-                "https://raw.githubusercontent.com/AzadNetCH/Clash/main/AzadNet_META_IRAN-Direct.yml",
-                "https://raw.githubusercontent.com/ircfspace/warpsub/main/export/warp",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Warp_sub.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub1.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub2.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub3.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub4.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub5.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub6.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub7.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub8.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub9.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub10.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub11.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub12.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub13.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub14.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub15.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub16.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub17.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub18.txt",
-                "https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Splitted-By-Protocol/vless.txt",
-            ]
-        }
-        else {
-            var configs = [settingVibe["config"]];
-        }
-        settingVibe["status"] = true;
-        for (var config of configs) {
-            ResetArgsVibe(config);
-            Run("HiddifyCli.exe", argsVibe);
-            trackEvent("conn-vibe");
-            await sleep(25000);
-            if (settingVibe["status"] == true) {
-                await sleep(5000);
-                if (testProxy()) {
-                    Connected();
-                    break;
-                }
-                else {
-                    Showmess(5000, "Next Config...")
-                }
-            }
-            else break;
-        }
-    }
-    else {
-        disconnectVibe();
-    }
-}
 async function saveSetting() {
     // Save setting vibe & setting warp In vibe.json & warp.json
     write_file("vibe.json", JSON.stringify(settingVibe));
@@ -681,33 +415,6 @@ read_file = function (path) {
 }
 write_file = function (path, output) {
     fs.writeFileSync(path, output);
-}
-function Connected() {
-    // function runed when the proxy is connected
-    document.getElementById("changeStatus-vibe").style.boxShadow = "0px 0px 50px 10px rgba(98, 255, 0, 0.7)";
-    document.getElementById("changeStatus-vibe").style.animation = "";
-    document.getElementById("status-vibe-conn").innerHTML = "🚀 Connected";
-    Showmess(5000, "Connected To Vibe!")
-}
-function disconnectVibe() {
-    // function runed when the proxy is disconnected
-    //Kill the HiddifyCli.exe process
-    KillProcess();
-    if (process.platform == "linux") {
-        exec("pkill HiddifyCli");
-    }
-    else {
-        exec("taskkill /IM " + "HiddifyCli.exe" + " /F");
-    }
-    //Disable the proxy settings
-    exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
-    //Remove the box shadow and animation from the vibe status element
-    document.getElementById("changeStatus-vibe").style.boxShadow = "";
-    document.getElementById("changeStatus-vibe").style.animation = "";
-    //Set the vibe status to disconnected
-    document.getElementById("status-vibe-conn").innerHTML = "Disconnected";
-    //Set the vibe setting to false
-    settingVibe["status"] = false;
 }
 function LoadVibeProfileManager() {
     document.getElementById("vibe-profile-manage").style.display = "flex";
@@ -813,28 +520,6 @@ document.getElementById("vpn-type-selected-vibe").addEventListener("change", () 
 document.getElementById("close-vibe-profile-add").addEventListener("click", () => {
     document.getElementById("profile-add").style.display = "none";
 });
-function ResetArgsVibe(config = "auto") {
-    argsVibe = [];
-    argsVibe.push("run");
-    argsVibe.push("--config");
-    argsVibe.push(config);
-    if (settingVibe["fragment"] & settingVibe["fragment-size"] != "") {
-        argsVibe.push("--fragment");
-        argsVibe.push(settingVibe["fragment-size"]);
-    }
-    if (settingVibe["dns-direct"] != "") {
-        argsVibe.push("--dns-direct");
-        argsVibe.push(settingVibe["dns-direct"]);
-    }
-    if (settingVibe["dns-remote"] != "") {
-        argsVibe.push("--dns-remote");
-        argsVibe.push(settingVibe["dns-remote"]);
-    }
-    if (settingVibe["tun"]) {
-        argsVibe.push("--tun");
-    } else argsVibe.push("--system-proxy");
-
-}
 //#endregion
 // #region Section Set Dns
 document.getElementById("close-dns").onclick = () => (document.getElementById("dns-set").style.display = "");
@@ -855,7 +540,7 @@ ipcRenderer.on('start-vibe', (event, ev) => {
 });
 ipcRenderer.on('start-warp', (event, ev) => {
     ResetArgsWarp();
-    ConnectWarp();
+    connectWarp();
 });
 ipcRenderer.on('start-get', (event, key, value) => {
 
