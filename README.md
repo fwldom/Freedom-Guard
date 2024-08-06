@@ -51,7 +51,7 @@
 ### features
 - Freedom Guard (with Warp Plus , Main)
 - Freedom Vibe (With Hiddify Core)
-- Freedom GET (V2RAY Proxy List)
+- Freedom Browser (Private & With Vpn & fast)
 - Dns Changer (With Dns Jumper)
 - Settings For Warp Plus (endpoint, bind address,...)
 - Auto Config Freedom Vibe
@@ -62,9 +62,10 @@
 > Freedom Vibe
 
 ![image](https://github.com/fwldom/Freedom-Guard-Electron/assets/111840687/b4bfd007-6ff3-4720-8ee9-48e0520b26ca)
-> Freedom Get
+> Freedom Browser
+![image](https://github.com/user-attachments/assets/a6c01de3-f214-45be-8dfc-c78ed43f0d40)
 
-![image](https://github.com/fwldom/Freedom-Guard-Electron/assets/111840687/7dd3a549-f0a5-4efa-bf4e-d0389675c300)
+
 > Freedom Guard (Warp)
 
 ![image](https://github.com/fwldom/Freedom-Guard-Electron/assets/111840687/2bfdffbd-c70f-4c05-b291-9ca252f0b08d)
