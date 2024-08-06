@@ -132,7 +132,7 @@ function Onload() {
         else if (settingWarp["startup"] == "browser") {
             setTimeout(() => {
                 ipc.send("load-browser", "");
-            }, 3500);
+            }, 1500);
         }
     }
     trackEvent("start-warp");

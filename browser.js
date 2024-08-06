@@ -6,7 +6,7 @@ var fs = require("fs");
 const path = require("path");
 var sect = "browser";
 const { trackEvent } = require('@aptabase/electron/renderer');
-var { StatusGuard, connectVibe, connectWarp, settingWarp, settingVibe, AssetsPath, ResetArgsVibe, ResetArgsWarp, testProxy, KillProcess, disconnectVibe } = require('./connect.js');
+var { StatusGuard, connectVibe, connectWarp, settingWarp, settingVibe, AssetsPath, ResetArgsVibe, ResetArgsWarp, testProxy, KillProcess, disconnectVibe, saveSetting } = require('./connect.js');
 // #endregion
 // #region functions for public 
 function TabClose(idtab) {
@@ -153,26 +153,6 @@ document.getElementById("refresh-btn-header").addEventListener("click", function
     ipc.send("load-url-browser", urlInput)
 });
 document.getElementById("close-browser").addEventListener("click", function () {
-    var settingWarp = {
-        proxy: "127.0.0.1:8086",
-        gool: false,
-        scan: false,
-        endpoint: "",
-        cfon: false,
-        cfonc: "IR",
-        ipver: 4,
-        warpver: "",
-        warpkey: "",
-        scanrtt: "",
-        verbose: false,
-        cache: "",
-        wgconf: "",
-        config: "",
-        reserved: "",
-        dns: "",
-        tun: false,
-        startup: "warp"
-    };
     settingWarp = JSON.parse(read_file("warp.json"));
     settingWarp["startup"] = "warp";
     write_file("warp.json", JSON.stringify(settingWarp));
@@ -217,7 +197,11 @@ document.getElementById("core-vpn-selector").addEventListener("change", function
 document.getElementById("config-vibe").addEventListener("change", function () {
     settingBrowser["configVibe"] = document.getElementById("config-vibe").value;
     settingVibe["config"] = document.getElementById("config-vibe").value;
-    ResetArgsVibe();
+    saveSetting();
+});
+document.getElementById("config-vibe").addEventListener("change", function () {
+    settingWarp["endpoint"] = document.getElementById("endpoint-warp").value;
+    saveSetting();
 });
 // #endregion
 // #region define variables
@@ -272,5 +256,8 @@ ipc.on("set-title", (event, title) => {
     document.getElementById("tab-title-" + currentTab).innerHTML = title.toString().length >= 15 ? title.slice(0, 20) : title;
 });
 // #endregion
+setInterval(() => {
+    testProxy();
+}, 10000);
 testProxy();
 trackEvent("start-browser");

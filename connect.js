@@ -287,7 +287,21 @@ function ResetArgsVibe(config = "auto") {
         argsVibe.push("--tun");
     } else argsVibe.push("--system-proxy");
 };
+async function saveSetting() {
+    // Save setting vibe & setting warp In vibe.json & warp.json
+    write_file("vibe.json", JSON.stringify(settingVibe));
+    write_file("warp.json", JSON.stringify(settingWarp));
+    ResetArgsVibe();
+    ResetArgsWarp();
+};
+read_file = function (path) {
+    return fs.readFileSync(path, 'utf8');
+}
+write_file = function (path, output) {
+    fs.writeFileSync(path, output);
+}
 function ResetArgsWarp() {
+    savesett
     argsWarp = [];
     if (settingWarp["proxy"] != "127.0.0.1:8086" & settingWarp["proxy"] != "") {
         argsWarp.push("--bind");
@@ -344,7 +358,8 @@ function ResetArgsWarp() {
     }
     if (settingWarp["tun"]) {
         argsWarp.push("--tun-experimental");
-    }
+    };
+    
 };
 // #endregion
 // #region vars
@@ -400,5 +415,6 @@ module.exports = {
     ResetArgsWarp,
     KillProcess,
     StatusGuard: StatusGuard,
-    disconnectVibe
+    disconnectVibe,
+    saveSetting
 };
