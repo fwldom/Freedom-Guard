@@ -30,21 +30,21 @@ function createWindow() {
   mainWindow.loadFile("index.html");
   mainWindow.on('resize', function () {
     try {
-      ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width, height: mainWindow.getBounds().height / 1.3 });
+      ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width/1.3, height: mainWindow.getBounds().height / 1.5 });
     }
     catch { };
   });
 };
 setInterval(() => {
   try {
-    ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width, height: mainWindow.getBounds().height / 1.3 });
+    ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width /1.3, height: mainWindow.getBounds().height / 1.5 });
   }
   catch { };
 },5000)
 function CreateViewBrowser(url) {
   ViewBrowser = new BrowserView();
   mainWindow.setBrowserView(ViewBrowser);
-  ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width, height: mainWindow.getBounds().height / 1.3 });
+  ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width / 1.3, height: mainWindow.getBounds().height / 1.5 });
   ViewBrowser.setAutoResize({ width: true, height: true });
   ViewBrowser.webContents.loadURL(url);
   setTimeout(() => {
@@ -83,11 +83,8 @@ ipc.on('load-browser', (event) => {
     currentURL = ViewBrowser.webContents.getURL();
     pageTitle = ViewBrowser.webContents.getTitle();
     mainWindow.webContents.send('set-url', (url));
-    // setTimeout(() => {
-    //   pageTitle = ViewBrowser.webContents.getTitle();
-    //   mainWindow.webContents.send('set-title', (pageTitle));
-    // }, 3000);
   });
+  mainWindow.maximize();
 });
 ipc.on('load-url-browser', (event, url) => {
   ViewBrowser.webContents.loadURL(url);

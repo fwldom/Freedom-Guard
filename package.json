@@ -55,7 +55,6 @@
             "output": "dist"
         },
         "win": {
-            "publish":"always",
             "icon": "ico.png",
             "target": "nsis",
             "requestedExecutionLevel": "requireAdministrator",
@@ -71,7 +70,7 @@
             "icon": "ico.png",
             "target": "deb",
             "category": "VPN",
-            "publish": "always"
+            "publish": false
         },
         "publish": {
             "provider": "github",
