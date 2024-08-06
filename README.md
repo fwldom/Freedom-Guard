@@ -39,7 +39,7 @@
         <tr>
             <td>Linux</td>
             <td>
-                <a href="https://github.com/fwldom/Freedom-Guard/releases/latest/download/freedom-guard-linux.tar.gz"><img src="https://img.shields.io/badge/tar.gz-x64-f84e29.svg?logo=linux"> </a><br>
+                <a href="https://github.com/fwldom/Freedom-Guard/releases/latest/download/freedom-guard-linux.deb"><img src="https://img.shields.io/badge/deb-x64-f84e29.svg?logo=linux"> </a><br>
             </td>
         </tr>
     </tbody>
