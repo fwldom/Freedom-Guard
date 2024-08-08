@@ -70,7 +70,7 @@ function KillWarp() {
 }
 async function connectWarp(argsWarp,os) {
     if (fileExits(path.join(__dirname,"/cores/warp/warp-plus"+os == "windows"?".exe":""))) {
-        var process_warp = spawn("", args, { shell: true, runAsAdmin: true })
+        var process_warp = spawn(path.join(__dirname,"/cores/warp/warp-plus"+os == "windows"?".exe":""), argsWarp, { shell: true, runAsAdmin: true })
     }
     else {
         await Download("")
