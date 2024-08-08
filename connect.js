@@ -47,7 +47,7 @@ function Run(nameFile, args, runa = "user") {
 
     childProcess.on('close', (code) => {
         console.log(`child process exited with code ${code}`);
-        sect == "main" && testProxy() ? disconnectVibe(): disconnectVPN();
+        sect == "main" && testProxy() ? disconnectVibe() : disconnectVPN();
     });
 };
 function isValidURL(url) {
@@ -56,32 +56,28 @@ function isValidURL(url) {
 };
 function FindBestEndpointWarp(type = 'find') {
     if (process.platform == "linux") {
-        Loading(100, "Searching For Endpoint ...");
+        sect == "main" ? Loading(100, "Searching Endpoint ...") : ("");
         alert("Scanner IP Endpoint not support in linux");
         return;
     }
     if (settingWarp["ipver"] == "") settingWarp["ipver"] = 4;
     Run("win_scanner.bat", ["-" + settingWarp["ipver"]]);
     if (type != "conn") {
-        Loading(25000, "Searching Endpoint ...");
+        sect == "main" ? Loading(25000, "Searching Endpoint ...") : ("");
     }
     childProcess.on('exit', () => {
-        document.getElementById("end-point-address").value = read_file(path.join(AssetsPath, "bin", "bestendpoint.txt"));
-        var event = new Event('change', {
-            bubbles: true,
-            cancelable: false,
-        });
-        document.getElementById("end-point-address").dispatchEvent(event);
+        sect == "main" ? SetValueInput("end-point-address", read_file(path.join(AssetsPath, "bin", "bestendpoint.txt"))) : ("");
+        OnEvent("end-point-address", "change");
         if (type == "conn" && StatusGuard == true) {
             StatusGuard = false;
             connectWarp();
         }
         if (type != "conn") {
             alert("Finded Best Endpoint");
-            Loading(1, "Searching Endpoint ...");
+            sect == "main" ? Loading(1, "Searching Endpoint ...") : ("");
         }
         else {
-            Showmess(3000, "Finded Best Endpoint. Reconnecting")
+            sect == "main" ? Showmess(3000, "Finded Best Endpoint. Reconnecting") : ("");
         }
     });
 }
@@ -105,8 +101,8 @@ async function testProxy() {
             }
         }
         var countryEmoji = getCountryFromIP(testConnection.data.ip);
-        sect == "main" ? SetHTML("ip-ping-vibe","" + countryEmoji + testConnection.data.ip + " | " + pingTime + ""):("");
-        sect == "main" ? SetHTML("ip-ping-warp","" + countryEmoji + testConnection.data.ip + " | " + pingTime + ""):("");
+        sect == "main" ? SetHTML("ip-ping-vibe", "" + countryEmoji + testConnection.data.ip + " | " + pingTime + "") : ("");
+        sect == "main" ? SetHTML("ip-ping-warp", "" + countryEmoji + testConnection.data.ip + " | " + pingTime + "") : ("");
         testproxystat = true;
         try {
             const testBypass = await axios.get('https://ircf.space', {
@@ -122,8 +118,8 @@ async function testProxy() {
         }
     } catch (error) {
         console.error('Error Test Connection:', error.message);
-        sect == "main" ? SetHTML("ip-ping-vibe","Not Connected To Internet"):("");
-        sect == "main" ? SetHTML("ip-ping-vibe","Not Connected To Internet"):("");
+        sect == "main" ? SetHTML("ip-ping-vibe", "Not Connected To Internet") : ("");
+        sect == "main" ? SetHTML("ip-ping-vibe", "Not Connected To Internet") : ("");
         testproxystat = false;
         return false;
     }
@@ -132,10 +128,11 @@ async function testProxy() {
 // #region Connection
 function ConnectedVibe() {
     // function runed when the proxy is connected
-    document.getElementById("changeStatus-vibe").style.boxShadow = "0px 0px 50px 10px rgba(98, 255, 0, 0.7)";
-    document.getElementById("changeStatus-vibe").style.animation = "";
-    document.getElementById("status-vibe-conn").innerHTML = "🚀 Connected";
-    Showmess(5000, "Connected To Vibe!")
+    sect == "main" ? SetAttr("changeStatus-vibe", "style", "box-shadow:0px 0px 50px 10px rgba(98, 255, 0, 0.7);") : ("")
+    sect == "main" ? SetAttr("changeStatus-vibe", "style", "animation:;") : ("")
+    sect == "main" ? SetHTML("status-vibe-conn", "🚀 Connected") : ('');
+    sect == "main" ? Showmess(5000, "Connected To Vibe!") : ("");
+    trackEvent("connected-vibe");
 }
 function disconnectVibe() {
     // function runed when the proxy is disconnected
@@ -150,17 +147,17 @@ function disconnectVibe() {
     //Disable the proxy settings
     exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
     //Remove the box shadow and animation from the vibe status element
-    sect == "main" ?SetAttr("changeStatus-vibe","style","box-shadow:;"):("")
-    sect == "main" ?SetAttr("changeStatus-vibe","style","animation:;"):("")
+    sect == "main" ? SetAttr("changeStatus-vibe", "style", "box-shadow:;") : ("")
+    sect == "main" ? SetAttr("changeStatus-vibe", "style", "animation:;") : ("")
     //Set the vibe status to disconnected
-    sect == "main" ? SetHTML("status-vibe-conn","Disconnected") : ('');
+    sect == "main" ? SetHTML("status-vibe-conn", "Disconnected") : ('');
     //Set the vibe setting to false
     settingVibe["status"] = false;
 }
 async function connectVibe() {
     // this is For Connect To Freedom-Vibe
     if (settingVibe["status"] == false) {
-        sect == "main" ? SetAnim("changeStatus-vibe","changeStatus-vibe-animation 5s infinite") :("");
+        sect == "main" ? SetAnim("changeStatus-vibe", "changeStatus-vibe-animation 5s infinite") : ("");
         if (settingVibe["config"] == "auto" || settingVibe["config"] == "") {
             var configs = [
                 "https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/sub.txt",
@@ -218,9 +215,8 @@ async function connectVibe() {
 async function connectWarp() {
     // Function Connect To Warp
     if (StatusGuard == false) {
-        trackEvent("conn-warp");
         console.log("Starting Warp ...");
-        sect == "main" ? SetAnim("ChangeStatus","Connect 7s infinite"):("");
+        sect == "main" ? SetAnim("ChangeStatus", "Connect 7s infinite") : ("");
         // Start warp plus
         Run("warp-plus.exe", argsWarp, (settingWarp["tun"]) ? "admin" : "user");
         // Set System Proxy
@@ -236,9 +232,10 @@ async function connectWarp() {
         testProxy();
         await sleep(10000);
         if (testProxy()) {
-            Showmess(5000, "Connected Warp")
-            sect == "main" ? SetAnim("ChangeStatus","Load"):("");
-            sect == "main" ? SetBorderColor("ChangeStatus","#15ff00") :("");
+            Showmess(5000, "Connected Warp");
+            trackEvent("connected-warp");
+            sect == "main" ? SetAnim("ChangeStatus", "Load") : ("");
+            sect == "main" ? SetBorderColor("ChangeStatus", "#15ff00") : ("");
         }
         else {
             if (StatusGuard == true) {
@@ -248,8 +245,8 @@ async function connectWarp() {
         }
     } else {
         KillProcess();
-        sect == "main" ? SetAnim("ChangeStatus","Connect 7s ease-in-out"):("");
-        sect == "main" ? SetAttr("ChangeStatus","style","border-color:;"):("");
+        sect == "main" ? SetAnim("ChangeStatus", "Connect 7s ease-in-out") : ("");
+        sect == "main" ? SetAttr("ChangeStatus", "style", "border-color:;") : ("");
         if (process.platform == "linux") {
             exec("bash " + path.join(__dirname, "assets", "bash", "reset_proxy.sh"));
         }
@@ -257,9 +254,9 @@ async function connectWarp() {
             exec("pkill warp-plus");
             exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
         };
-        sect == "main" ? SetAnim("ChangeStatus","Connect 5s"):("");
+        sect == "main" ? SetAnim("ChangeStatus", "Connect 5s") : ("");
         setTimeout(() => {
-            sect == "main" ? SetAnim("ChangeStatus",""):("");
+            sect == "main" ? SetAnim("ChangeStatus", "") : ("");
         }, 3500);
         StatusGuard = false;
     }
@@ -358,7 +355,7 @@ function ResetArgsWarp() {
     if (settingWarp["tun"]) {
         argsWarp.push("--tun-experimental");
     };
-    
+
 };
 // #endregion
 // #region vars
@@ -410,7 +407,7 @@ module.exports = {
     testproxyStat: testproxystat,
     countryIP: countryIP,
     filterBypassStat: filterBypassStat.
-    ResetArgsVibe,
+        ResetArgsVibe,
     ResetArgsWarp,
     KillProcess,
     StatusGuard: StatusGuard,

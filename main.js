@@ -15,8 +15,8 @@ var mainWindow = null
 var ViewBrowser = null;
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,  // تنظیم عرض پنجره
-    height: 600, // تنظیم ارتفاع پنجره
+    width: 400,  // تنظیم عرض پنجره
+    height: 800, // تنظیم ارتفاع پنجره
     icon: path.join(__dirname, 'ico.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -27,7 +27,7 @@ function createWindow() {
     titleBarOverlay: "Freedom Guard",
     title: "Freedom Guard",
   });
-  mainWindow.loadFile("index.html");
+  mainWindow.loadFile("./main/index.html");
   mainWindow.on('resize', function () {
     try {
       ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width / 1.3, height: mainWindow.getBounds().height / 1.3 });
@@ -40,7 +40,7 @@ setInterval(() => {
     ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width / 1.3, height: mainWindow.getBounds().height / 1.3 });
   }
   catch { };
-},5000)
+}, 5000)
 function CreateViewBrowser(url) {
   ViewBrowser = new BrowserView();
   mainWindow.setBrowserView(ViewBrowser);
@@ -132,6 +132,8 @@ app.whenReady().then(() => {
       label: 'Connect to Freedom Vibe',
       type: 'normal',
       click: () => {
+        mainWindow.loadFile("index.html");
+        mainWindow.removeBrowserView(ViewBrowser);
         mainWindow.webContents.send('start-vibe', '');
         mainWindow.focus()
       }
@@ -140,8 +142,32 @@ app.whenReady().then(() => {
       label: 'Connect to Freedom Warp',
       type: 'normal',
       click: () => {
+        mainWindow.loadFile("index.html");
+        mainWindow.removeBrowserView(ViewBrowser);
         mainWindow.webContents.send('start-warp', '');
         mainWindow.focus()
+      }
+    },
+    {
+      label: 'Open Freedom Browser',
+      type: 'normal',
+      click: () => {
+        CreateViewBrowser("https://fwldom.github.io/freedom-site-browser/index.html");
+        mainWindow.loadFile("browser.html");
+        ViewBrowser.webContents.on("did-finish-load", (event) => {
+          currentURL = ViewBrowser.webContents.getURL();
+          pageTitle = ViewBrowser.webContents.getTitle();
+          mainWindow.webContents.send('set-url', (currentURL));
+          pageTitle = ViewBrowser.webContents.getTitle();
+          mainWindow.webContents.send('set-title', (pageTitle));
+        });
+        ViewBrowser.webContents.on("did-navigate", (event, url) => {
+          currentURL = ViewBrowser.webContents.getURL();
+          pageTitle = ViewBrowser.webContents.getTitle();
+          mainWindow.webContents.send('set-url', (url));
+        });
+        mainWindow.maximize();
+        ViewBrowser.setBounds({ x: 10, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width, height: mainWindow.getBounds().height / 1.3 });
       }
     },
     {

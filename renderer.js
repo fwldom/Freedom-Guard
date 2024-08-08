@@ -13,7 +13,7 @@ const { readFile } = require("fs/promises");
 const axios = require('axios'); // Import axios
 const { type, platform } = require("os");
 const geoip = require('geoip-lite');
-const versionapp = "1.2.9";
+const versionapp = "1.3.0";
 const ipc = require('electron').ipcRenderer;
 const { trackEvent } = require('@aptabase/electron/renderer');
 var sect = "main";
@@ -221,6 +221,13 @@ function CloseAllSections() {
     document.getElementById("setting-vibe").style.display = "none";
     document.getElementById("vibe-profile-manage").style.display = "none";
     document.getElementById("profile-add").style.display = "none";
+}
+function OnEvent(id,event) {
+    var event = new Event(event, {
+        bubbles: true,
+        cancelable: false,
+    });
+    document.getElementById(id).dispatchEvent(event);
 }
 function SetSettingWarp() {
     // Restore value setting section
