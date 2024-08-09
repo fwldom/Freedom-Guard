@@ -5,13 +5,15 @@ const geoip = require('geoip-lite');
 const versionapp = "1.2.9";
 const ipc = require('electron').ipcRenderer;
 const { trackEvent } = require('@aptabase/electron/renderer');
+const { spawn, exec } = require("child_process");
+const { config } = require('process');
 // #endregion
 //#region Functions
 var childProcess = null;
-function KillProcess() {
+function KillProcess(core = "warp") {
     if (childProcess != null) {
         if (process.platform === 'win32') {
-            spawn('taskkill', ['/PID', childProcess.pid, '/F', '/T']); // Windows
+            exec('taskkill /IM ' + (core == "warp" ? "warp-plus.exe" : "HiddifyCli.exe") + ' /F /T'); // Windows
         } else {
             childProcess.kill('SIGTERM'); // POSIX systems
         };
@@ -19,11 +21,18 @@ function KillProcess() {
         childProcess = null;
     }
 }
-function Run(nameFile, args, runa = "user") {
-    KillProcess();
-    var exePath = `"${path.join(__dirname, "assets", "bin", nameFile)}"`; // Adjust the path to your .exe file
+function changeISP(newisp) {
+    console.log("NEW ISP IS:" + newisp)
+    settingWarp["isp"] = newisp;
+    saveSetting();
+    Onloading();
+}
+function Run(nameFile, args, runa, core) {
+    KillProcess(core = core);
+    console.log(path.join(__dirname, "main", "cores", core, nameFile));
+    var exePath = `"${path.join(__dirname, "main", "cores", core, nameFile)}"`; // Adjust the path to your .exe file
     if (process.platform == "linux") {
-        exePath = `"${path.join(__dirname, "assets", "bin", nameFile.replace(".exe", ""))}"`; // Adjust the path to your .exe file
+        exePath = `"${path.join(__dirname, "main", "cores", core, nameFile.replace(".exe", ""))}"`; // Adjust the path to your .exe file
         exec("chmod +x " + exePath);
         if (runa == "admin") {
             childProcess = spawn(exePath, args, { shell: true, runAsAdmin: true });
@@ -61,7 +70,7 @@ function FindBestEndpointWarp(type = 'find') {
         return;
     }
     if (settingWarp["ipver"] == "") settingWarp["ipver"] = 4;
-    Run("win_scanner.bat", ["-" + settingWarp["ipver"]]);
+    Run("win_scanner.bat", ["-" + settingWarp["ipver"]], "admin", "scanner");
     if (type != "conn") {
         sect == "main" ? Loading(25000, "Searching Endpoint ...") : ("");
     }
@@ -81,6 +90,9 @@ function FindBestEndpointWarp(type = 'find') {
         }
     });
 }
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 async function testProxy() {
     var startTime = Date.now();
     try {
@@ -95,6 +107,7 @@ async function testProxy() {
             var geo = geoip.lookup(ip);
             if (geo) {
                 countryIP = geo.country;
+                console.log(geo.org);
                 return `<img src="${path.join(__dirname, "svgs", countryIP.toLowerCase() + ".svg")}" width="40rem" style='margin:1rem'>`
             } else {
                 return '❓';
@@ -109,7 +122,10 @@ async function testProxy() {
                 timeout: 5000, // Timeout in ms
             });
             filterBypassStat = true;
-            ConnectedVPN();
+            try {
+                ConnectedVibe(stat = "start");
+                ConnectedVPN();
+            } catch { }
             return true;
         }
         catch {
@@ -126,18 +142,24 @@ async function testProxy() {
 }
 //#endregion
 // #region Connection
-function ConnectedVibe() {
+function ConnectedVibe(stat = "normal") {
     // function runed when the proxy is connected
     sect == "main" ? SetAttr("changeStatus-vibe", "style", "box-shadow:0px 0px 50px 10px rgba(98, 255, 0, 0.7);") : ("")
     sect == "main" ? SetAttr("changeStatus-vibe", "style", "animation:;") : ("")
     sect == "main" ? SetHTML("status-vibe-conn", "🚀 Connected") : ('');
-    sect == "main" ? Showmess(5000, "Connected To Vibe!") : ("");
-    trackEvent("connected-vibe");
+    sect == "main" ? SetAnim("ChangeStatus", "Load") : ("");
+    sect == "main" ? SetBorderColor("ChangeStatus", "#15ff00") : ("");
+    if (stat == "normal") {
+        sect == "main" ? Showmess(5000, "Connected To Vibe!") : ("");
+        trackEvent("connected-vibe");
+    }
 }
 function disconnectVibe() {
     // function runed when the proxy is disconnected
     //Kill the HiddifyCli.exe process
-    KillProcess();
+    KillProcess(core = "warp");
+    KillProcess(core = "vibe");
+
     if (process.platform == "linux") {
         exec("pkill HiddifyCli");
     }
@@ -153,10 +175,65 @@ function disconnectVibe() {
     sect == "main" ? SetHTML("status-vibe-conn", "Disconnected") : ('');
     //Set the vibe setting to false
     settingVibe["status"] = false;
+    sect == "main" ? SetAnim("ChangeStatus", "Connect 7s ease-in-out") : ("");
+    sect == "main" ? SetAttr("ChangeStatus", "style", "border-color:;") : ("");
+    if (process.platform == "linux") {
+        exec("bash " + path.join(__dirname, "assets", "bash", "reset_proxy.sh"));
+    }
+    else {
+        exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
+    };
+    sect == "main" ? SetAnim("ChangeStatus", "Connect 5s") : ("");
+    setTimeout(() => {
+        sect == "main" ? SetAnim("ChangeStatus", "") : ("");
+    }, 3500);
+    StatusGuard = false;
+}
+async function connect(core = 'warp', config = 'auto', os = process.platform) {
+    if (core == "warp") await connectWarp();
+    else if (core == "vibe") await connectVibe();
+    else if (core == "auto") await connectAuto();
+}
+async function connectAuto() {
+    if (settingWarp["isp"] == "MCI") {
+        console.log("ISP IS MCI")
+        const configType = links["MCI"][0].split(",")[0];
+        if (configType == "warp") {
+            settingWarp[links["MCI"][0].split(",")[1]] = true;
+        } else if (configType == "vibe") {
+            settingVibe["config"] = links["MCI"][0].split(",")[1];
+        }
+        ResetArgsVibe();
+        ResetArgsWarp();
+        await connect(configType);
+    }
+    else if (settingWarp["isp"] == ("IRANCELL")) {
+        const configType = links["IRANCELL"][0].split(",")[0];
+        if (configType == "warp") {
+            settingWarp[links["IRANCELL"][0].split(",")[1]] = true;
+        } else if (configType == "vibe") {
+            settingVibe["config"] = links["IRANCELL"][0].split(",")[1];
+        }
+        ResetArgsVibe();
+        ResetArgsWarp();
+        await connect(configType);
+    }
+    else {
+        const configType = links["other"][0].split(",")[0];
+        if (configType == "warp") {
+            settingWarp[links["other"][0].split(",")[1]] = true;
+        } else if (configType == "vibe") {
+            settingVibe["config"] = links["other"][0].split(",")[1];
+        }
+        ResetArgsVibe();
+        ResetArgsWarp();
+        await connect(configType);
+    }
 }
 async function connectVibe() {
     // this is For Connect To Freedom-Vibe
     if (settingVibe["status"] == false) {
+        sect == "main" ? SetAnim("ChangeStatus", "Connect 7s infinite") : ("");
         sect == "main" ? SetAnim("changeStatus-vibe", "changeStatus-vibe-animation 5s infinite") : ("");
         if (settingVibe["config"] == "auto" || settingVibe["config"] == "") {
             var configs = [
@@ -192,12 +269,12 @@ async function connectVibe() {
         settingVibe["status"] = true;
         for (var config of configs) {
             ResetArgsVibe(config);
-            Run("HiddifyCli.exe", argsVibe);
+            Run("HiddifyCli.exe", argsVibe, "admin", core = "vibe");
             trackEvent("conn-vibe");
             await sleep(25000);
             if (settingVibe["status"] == true) {
                 await sleep(5000);
-                if (testProxy()) {
+                if (await testProxy()) {
                     ConnectedVibe();
                     break;
                 }
@@ -218,7 +295,7 @@ async function connectWarp() {
         console.log("Starting Warp ...");
         sect == "main" ? SetAnim("ChangeStatus", "Connect 7s infinite") : ("");
         // Start warp plus
-        Run("warp-plus.exe", argsWarp, (settingWarp["tun"]) ? "admin" : "user");
+        Run("warp-plus.exe", argsWarp, (settingWarp["tun"]) ? "admin" : "user", "warp");
         // Set System Proxy
         if (process.platform == "linux" & !settingWarp["tun"]) {
             exec("bash " + path.join(__dirname, "assets", "bash", "set_proxy.sh") + ` ${settingWarp["proxy"].replace(":", " ")}`);
@@ -231,11 +308,12 @@ async function connectWarp() {
         await sleep(15000);
         testProxy();
         await sleep(10000);
-        if (testProxy()) {
+        if (await testProxy() == true) {
             Showmess(5000, "Connected Warp");
             trackEvent("connected-warp");
             sect == "main" ? SetAnim("ChangeStatus", "Load") : ("");
             sect == "main" ? SetBorderColor("ChangeStatus", "#15ff00") : ("");
+            return true;
         }
         else {
             if (StatusGuard == true) {
@@ -244,7 +322,7 @@ async function connectWarp() {
             }
         }
     } else {
-        KillProcess();
+        KillProcess(core = "warp");
         sect == "main" ? SetAnim("ChangeStatus", "Connect 7s ease-in-out") : ("");
         sect == "main" ? SetAttr("ChangeStatus", "style", "border-color:;") : ("");
         if (process.platform == "linux") {
@@ -259,9 +337,10 @@ async function connectWarp() {
             sect == "main" ? SetAnim("ChangeStatus", "") : ("");
         }, 3500);
         StatusGuard = false;
+        disconnectVibe()
     }
 };
-//#endregion
+// #endregion
 // #region Reset Args
 function ResetArgsVibe(config = "auto") {
     argsVibe = [];
@@ -360,6 +439,7 @@ function ResetArgsWarp() {
 // #endregion
 // #region vars
 var childProcess = null;
+var isp = "other";
 var StatusGuard = false;
 var AssetsPath = path.join(__dirname, "assets");
 var settingWarp = {
@@ -380,7 +460,8 @@ var settingWarp = {
     reserved: "",
     dns: "",
     tun: false,
-    startup: "warp"
+    startup: "warp",
+    isp: "other"
 };
 var argsWarp = [""];
 var argsVibe = [""];
@@ -396,7 +477,50 @@ var settingVibe = {
 var testproxystat = false;
 var countryIP = "";
 var filterBypassStat = false;
+var links = {
+    MCI: {
+        0: "vibe,https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/xray/normal/mix",
+        1: "vibe,https://raw.githubusercontent.com/ALIILAPRO/v2rayNG-Config/main/sub.txt",
+        2: "vibe,https://raw.githubusercontent.com/AzadNetCH/Clash/main/AzadNet_META_IRAN-Direct.yml",
+        3: "vibe,https://raw.githubusercontent.com/ircfspace/warpsub/main/export/warp",
+        4: "vibe,https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
+        5: "vibe,https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/xray/base64/vless"
+    },
+    IRANCELL: {
+        0: "warp,gool",
+        1: "warp,gool",
+        2: "warp,scan"
+    },
+    other: {
+        0: "warp,auto",
+        1: "warp,gool",
+        2: "vibe,https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/xray/normal/mix",
+        3: "vibe,https://raw.githubusercontent.com/AzadNetCH/Clash/main/AzadNet_META_IRAN-Direct.yml",
+        4: "vibe,https://raw.githubusercontent.com/ircfspace/warpsub/main/export/warp",
+    }
+}
 //#endregion
+function Onloading() {
+    try {
+        // Restore var settingWarp  from json
+        settingWarp = JSON.parse(read_file("warp.json"));
+    }
+    catch {
+        saveSetting()
+    }
+    try {
+        settingVibe = JSON.parse(read_file("vibe.json")); // Load Setting From File.json 
+        configsVibeName = JSON.parse(read_file("configsVibeName.json")); // Load Setting From File.json 
+        configsVibeLink = JSON.parse(read_file("configsVibeLink.json")); // Load Setting From File.json 
+    }
+    catch {
+        saveSetting();
+    }
+    if (settingVibe["config"] == "") {
+        settingVibe["config"] = "auto";
+    }
+}
+Onloading();
 module.exports = {
     connectVibe,
     connectWarp,
@@ -406,11 +530,14 @@ module.exports = {
     testProxy,
     testproxyStat: testproxystat,
     countryIP: countryIP,
-    filterBypassStat: filterBypassStat.
-        ResetArgsVibe,
+    filterBypassStat: filterBypassStat,
+    ResetArgsVibe,
     ResetArgsWarp,
-    KillProcess,
     StatusGuard: StatusGuard,
     disconnectVibe,
-    saveSetting
+    saveSetting,
+    connectAuto,
+    KillProcess,
+    changeISP,
+    connect
 };

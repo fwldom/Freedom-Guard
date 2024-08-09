@@ -17,7 +17,7 @@ const versionapp = "1.3.0";
 const ipc = require('electron').ipcRenderer;
 const { trackEvent } = require('@aptabase/electron/renderer');
 var sect = "main";
-var {connectVibe,connectWarp,settingWarp,settingVibe,AssetsPath,ResetArgsVibe,ResetArgsWarp,testProxy} = require('./connect.js');
+var { connectVibe, connectWarp, settingWarp, settingVibe,changeISP, AssetsPath, ResetArgsVibe, ResetArgsWarp, testProxy, KillProcess, connectAuto,connect,isp } = require('./connect.js');
 // #endregion
 // #region Global Var
 __dirname = __dirname.replace("app.asar", "")
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Onclick Button and Onchange inputs
     ChangeStatusbtn = document.getElementById("ChangeStatus");
     ChangeStatusbtn.onclick = () => {
-        connectWarp();
+        connect(core= document.getElementById("core-up-at").value);
     };
     document.getElementById("Gool").onclick = () => {
         if (document.getElementById("Gool").checked) SetServiceWarp("gool", true);
@@ -118,8 +118,9 @@ function Onload() {
     catch {
         try {
             if (process.platform == "win32") {
-                exec("start https://fwldom.github.io/Freedom")
+                exec("start https://fwldom.github.io/Freedom");
             }
+            document.getElementById("select-isp").style.display = "flex";
             write_file("one.one", "ok");
         }
         catch { };
@@ -142,13 +143,13 @@ function Onload() {
 function SetAnim(id, anim) {
     document.getElementById(id).style.animation = anim;
 }
-function SetAttr(id,attr,value) {
+function SetAttr(id, attr, value) {
     document.getElementById(id).setAttribute(attr, value);
 }
-function SetHTML(id,value){
+function SetHTML(id, value) {
     document.getElementById(id).innerHTML = value;
 };
-function SetBorderColor(id,value){
+function SetBorderColor(id, value) {
     document.getElementById(id).style.borderColor = value;
 };
 function HelpStart(step = 1) {
@@ -168,8 +169,8 @@ function HelpStart(step = 1) {
             HelpStartElem.onclick = () => {
                 HelpStart(2);
             };
+            document.body.appendChild(HelpStartElem);
         }
-        document.body.appendChild(HelpStartElem);
     }
     else if (step == 2) {
         HelpStartElem = document.getElementById("HelpMess");
@@ -222,7 +223,7 @@ function CloseAllSections() {
     document.getElementById("vibe-profile-manage").style.display = "none";
     document.getElementById("profile-add").style.display = "none";
 }
-function OnEvent(id,event) {
+function OnEvent(id, event) {
     var event = new Event(event, {
         bubbles: true,
         cancelable: false,
@@ -246,6 +247,7 @@ function SetSettingWarp() {
     document.getElementById("reserved-status").checked = settingWarp["reserved"];
     document.getElementById("Gool").checked = settingWarp["gool"];
     document.getElementById("Scan").checked = settingWarp["scan"];
+    SetValueInput("isp-text-guard", settingWarp["isp"])
 }
 function SetValueInput(id, Value) {
     // Set Value In Input
@@ -256,47 +258,6 @@ function SetServiceWarp(para, status) {
     settingWarp[para] = status;
     ResetArgsWarp();
     saveSetting();
-}
-function KillProcess() {
-    if (childProcess != null) {
-        childProcess.kill();
-        if (process.platform === 'win32') {
-            spawn('taskkill', ['/PID', childProcess.pid, '/F', '/T']); // Windows
-        } else {
-            childProcess.kill('SIGTERM'); // POSIX systems
-        }
-        childProcess = null;
-    }
-}
-function Run(nameFile, args, runa = "user") {
-    KillProcess();
-    var exePath = `"${path.join(__dirname, "assets", "bin", nameFile)}"`; // Adjust the path to your .exe file
-    if (process.platform == "linux") {
-        exePath = `"${path.join(__dirname, "assets", "bin", nameFile.replace(".exe", ""))}"`; // Adjust the path to your .exe file
-        exec("chmod +x " + exePath);
-        if (runa == "admin") {
-            childProcess = spawn(exePath, args, { shell: true, runAsAdmin: true });
-        } else childProcess = spawn(exePath, args, { shell: true, runAsAdmin: true });
-    }
-    else {
-        if (runa == "admin") {
-            childProcess = spawn(exePath, args, { shell: true, runAsAdmin: true });
-        } else childProcess = spawn(exePath, args, { shell: true, runAsAdmin: true });
-    }
-    childProcess.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-    });
-
-    childProcess.stderr.on('data', (data) => {
-        if (data instanceof Buffer) {
-            data = data.toString(); // Convert Buffer to string
-        }
-        console.error(`stderr: ${data}`);
-    });
-
-    childProcess.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-    });
 }
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -319,6 +280,24 @@ function Showmess(time = 2500, text = "message text", type = "info") {
 // #region Section Setting Warp
 document.getElementById("find-best-endpoint").addEventListener("click", () => {
     FindBestEndpointWarp();
+});
+document.getElementById("isp-text-guard").addEventListener("click", () => {
+    changeISP(document.getElementById("isp-text-guard").value);
+});
+document.getElementById("select-isp-mci").addEventListener("click", () => {
+    document.getElementById("isp-text-guard").value = "MCI"
+    changeISP(document.getElementById("isp-text-guard").value);
+    document.getElementById("select-isp").style.display = "none";
+});
+document.getElementById("select-isp-irancell").addEventListener("click", () => {
+    document.getElementById("isp-text-guard").value = "IRANCELL"
+    changeISP(document.getElementById("isp-text-guard").value);
+    document.getElementById("select-isp").style.display = "none";
+});
+document.getElementById("select-isp-other").addEventListener("click", () => {
+    document.getElementById("isp-text-guard").value = "other"
+    changeISP(document.getElementById("isp-text-guard").value);
+    document.getElementById("select-isp").style.display = "none";
 });
 document.getElementById("vpn-type-selected").addEventListener("change", () => {
     if (document.getElementById("vpn-type-selected").value == "tun") {

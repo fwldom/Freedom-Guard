@@ -26,10 +26,13 @@ h2 {
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #ChangeStatus {
-    margin-top: 7rem;
+    margin-top: 7vh;
     width: 175px;
     height: 175px;
     font-size: 55px;
@@ -959,4 +962,35 @@ select option {
         width: 50%;
         height: 10vh;
     }
+}
+#select-isp {
+    background-color: #3F36AE;
+    position: absolute;
+    z-index: 15;
+    border-radius: 15px;
+    left: 10vw;
+    width: 80vw;
+    height: 50vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    flex-wrap: wrap;
+}
+#select-isp > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 20vw;
+    height: 20vh;
+    background-color: #3F36AE;
+    border-radius: 15px;
+    margin: 10px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+#select-isp > div:hover {
+    background-color: #8338ec;
+    transform: scale(1.1);
 }

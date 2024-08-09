@@ -36,6 +36,13 @@
                 ]
             },
             {
+                "from": "main/cores",
+                "to": "main/cores",
+                "filter": [
+                    "**/*"
+                ]
+            },
+            {
                 "from": "svgs/",
                 "to": "svgs/",
                 "filter": [

@@ -25,8 +25,8 @@
         <div class="content">
             <div class="text" id="text-loading-1">LOADING...</div>
             <div class="text" id="text-loading-2">LOADING...</div>
-            <img src="./assets/iran.jpg" style="align-items: flex-end;" height="32%" id="" alt="">
-            <p>به یاد محسن شکاری</p>
+            <img src="./assets/iran.jpg" style="justify-self: flex-start;margin-top: auto;" height="25%" id="" alt="">
+            <p>به یاد مهسا امینی </p>
             <div id="text-hashtag" dir="rtl" style="justify-content: flex-end;margin-right: 2vw;color:red;">
                 #زن_زندگی_آزادی</div>
         </div>
@@ -81,6 +81,12 @@
             </div>
         </div>
     </div>
+    <div id="select-isp">
+        <div id="select-isp-mci">MCI همراه اول</div>
+        <div id="select-isp-irancell">IRANCELL ایرانسل</div>
+        <div id="select-isp-other">Other غیره،وای فای</div>
+        <p>بعدا میتوانید از تنظیمات تغییر دهید</p>
+    </div>
     <div id="setting">
         <nav id="nav-top" style="position: sticky;  top: 0%;
   left: 0%;background-color: rgba(255, 255, 255, 0.3);width: 100%;min-height: 7.5vh;z-index: 10;">
@@ -109,6 +115,22 @@
                 <option value="warp">Freedom Warp (main)</option>
                 <option value="vibe">Freedom Vibe</option>
                 <option value="browser">Freedom Browser</option>
+            </select>
+        </div>
+        <b>VPN Core</b>
+        <div id="core-guard" class="form-control-c">
+            <select value="auto" id="core-up-at">
+                <option value="auto">Automatic</option>
+                <option value="vibe">Freedom Vibe</option>
+                <option value="warp">Freedom Warp</option>
+            </select>
+        </div>
+        <b>Your ISP:</b>
+        <div id="isp-guard" class="form-control-c">
+            <select value="other" id="isp-text-guard">
+                <option value="other">All ISP</option>
+                <option value="MCI">MCI (HamrahAval)</option>
+                <option value="IRANCELL">Irancell</option>
             </select>
         </div>
         <b>Endpoint</b>
@@ -170,7 +192,7 @@
     <div id="menu">
         <div id="menu-dns" class="bx-tada-hover">Set DNS</div>
         <div id="menu-freedom-vibe" class="bx-tada-hover bx-spin-click">Freedom Vibe</div>
-        <div id="menu-freedom-browser" class="bx-tada-hover bx-spin-click">Freedom Browser</div>
+        <div id="menu-freedom-browser" class="bx-tada-hover bx-spin-click">Browser</div>
         <div id="menu-exit" class="bx-tada-hover bx-spin-click">Exit Menu</div>
     </div>
     <!-- #endregion Loading -->
@@ -284,10 +306,6 @@
 </body>
     <!-- #region Scripts -->
 <script src="./renderer.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
-<script src="./assets/js/bootstrap.min.js"></script>
-<script src="./assets/js/slick-carousel_1.6.0.js"></script>
-<script src="./assets/js/script.js?v1.5"></script>
 <!-- #endregion Scripts -->
 
 </html>

@@ -15,8 +15,8 @@ var mainWindow = null
 var ViewBrowser = null;
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 400,  // تنظیم عرض پنجره
-    height: 800, // تنظیم ارتفاع پنجره
+    width: 800,  // تنظیم عرض پنجره
+    height: 600, // تنظیم ارتفاع پنجره
     icon: path.join(__dirname, 'ico.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -27,7 +27,7 @@ function createWindow() {
     titleBarOverlay: "Freedom Guard",
     title: "Freedom Guard",
   });
-  mainWindow.loadFile("./main/index.html");
+  mainWindow.loadFile("./index.html");
   mainWindow.on('resize', function () {
     try {
       ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width / 1.3, height: mainWindow.getBounds().height / 1.3 });
@@ -113,14 +113,6 @@ if (!gotTheLock) {
       mainWindow.focus()
     }
     mainWindow.webContents.send('start-link', commandLine.pop() + "s");
-    var url = commandLine.pop()
-    const urlParts = url.split("://")[1];
-    const urlParams = urlParts.split("&");
-    const urlInfo = {};
-    urlParams.forEach(param => {
-      const [key, value] = param.split("=");
-      urlInfo[key] = value;
-    });
   })
 }
 let tray
