@@ -5,7 +5,11 @@ body {
     align-items: center;
     flex-direction: column;
     flex-wrap: wrap;
-    background-color: #170a3a;
+    height: 97vh;
+    animation: rotateBackground 10s ease infinite;
+    background: #4e0544;
+    background-size: cover;
+    background-image: url(assets/world.png), linear-gradient(180deg, #252C37 0%, rgba(45, 44, 61, 0.5) 49%, rgba(0, 212, 255, 0.4) 100%);
 }
 
 h1 {
@@ -31,6 +35,15 @@ h2 {
     align-items: center;
 }
 
+#ip-ping-warp {
+    margin-bottom: 23vh;
+}
+
+#ip-ping-warp b,
+#ip-ping-vibe b {
+    margin-left: 1vw;
+}
+
 #ChangeStatus {
     margin-top: 7vh;
     width: 175px;
@@ -40,7 +53,7 @@ h2 {
     background: linear-gradient(#ccc 0 0) padding-box, linear-gradient(to right, #9c20aa, #fb3570) border-box;
     color: #313149;
     padding: 10px;
-    border: 15px solid transparent;
+    border: 5px solid transparent;
     border-radius: 100px;
     display: flex;
     justify-content: center;
@@ -116,7 +129,7 @@ h2 {
 
 .options {
     position: absolute;
-    bottom: 25%;
+    bottom: 20%;
     width: 70%;
     height: 100px;
     border: none;
@@ -195,25 +208,42 @@ h2 {
     top: 10%;
     right: 10%;
     width: 80%;
-    height: 78%;
+    height: 73%;
     overflow-y: auto;
     border-radius: 10px;
     transition: 0.3s;
     flex-direction: row;
     grid-template-columns: 100%;
     grid-template-rows: 10%;
-    background-color: #fb3570;
+    background-color: rgba(93, 53, 251, 0.268);
     color: beige;
     z-index: 5;
 }
+.box-select-country::-webkit-scrollbar-button {
+    width: 2px;
+    color: black;
+}
+.box-select-country::-webkit-scrollbar {
+    width: 8px; 
+}
+.box-select-country::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
 
+.box-select-country::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #FF7E5F, #FEB47B); 
+    border-radius: 0px;
+}
+.box-select-country::-webkit-scrollbar-thumb:hover {
+    background-color: #555; 
+}
 .box-select-country>div {
     flex: 1 0 80%;
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 10px;
-    border-bottom: 1px solid #222831;
+    border-bottom: 1px solid #233654;
 }
 
 .box-select-country>div:hover {
@@ -237,7 +267,7 @@ h2 {
 
 .options-select-cfon {
     position: absolute;
-    bottom: 2%;
+    bottom: 1vh;
     width: 100%;
     height: 20%;
     border: none;
@@ -267,10 +297,11 @@ h2 {
 }
 
 .box-select-country-mini {
-    background-color: #9c20aa;
-    border-radius: 50px;
-    width: 90%;
-    height: 75%;
+    background-color: #252C37;
+    border-radius: 5px;
+    width: 90vw;
+    height: 50%;
+    margin-top: 3vh;
     font-size: 25px;
 }
 
@@ -410,36 +441,43 @@ h2 {
     display: none;
     justify-content: center;
     align-items: center;
-    position: absolute;
-    width: 100%;
-    left: 0%;
-    top: 0%;
-    height: 100%;
-    backdrop-filter: blur(4px);
+    position: fixed;
+    width: 98vw;
+    left: 1vw;
+    top: 1vh;
+    height: 97vh;
+    backdrop-filter: blur(15px);
+    background-color: rgba(55, 28, 91, 0.1);
     flex-wrap: wrap;
+    gap: 3vh;
     z-index: 5;
-    flex-direction: row;
+    overflow: hidden;
+    flex-direction: column;
+    border-radius: 15px; /* انحنای گوشه‌های منو کمتر */
+    padding: 15px;
 }
 
-#menu>div {
-    flex: 1 0 45%;
-    min-height: 145px;
-    width: 45%;
-    max-width: 145px;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.1);
+#menu > div {
+    width: 30%;
+    height: 30vh;
+    background-color: #172233; /* رنگ تیره‌تر کارت‌ها */
+    border-radius: 15px; /* گوشه‌های کارت‌ها کمی گردتر */
     display: flex;
     justify-content: center;
     align-items: center;
-    color: rgb(255, 255, 255);
+    color: #ffffff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 10px;
     cursor: pointer;
+    transition: transform 0.55s ease, box-shadow 0.25s ease;
+    background-image: linear-gradient(145deg, #1b2a42, #101622);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.7); /* سایه ظریف‌تر کارت‌ها */
 }
 
-#menu>div:hover {
-    box-shadow: rgba(123, 120, 190, 0.2) 1px 1px 10px 10px;
-    transition: 0.5s;
+#menu > div:hover {
+    box-shadow: rgba(0, 150, 255, 0.6) 0px 8px 20px; /* سایه برجسته‌تر و رنگ جذاب‌تر در هاور */
+    transform: scale(1.08) translateY(-5px); /* انیمیشن برجسته‌تر با کوچک‌ترین حرکت */
+    background-color: #22334a; /* تغییر رنگ کارت در هنگام هاور */
+    background-image: linear-gradient(145deg, #243b55, #141b28); /* گرادیان روشن‌تر در هاور */
 }
 
 #menu>#menu-freedom-get,
@@ -539,12 +577,11 @@ h2 {
 
 #freedom-vibe>#vibe-profile {
     background-color: rgba(191, 188, 199, 0.185);
-    width: 98vw;
     left: 1vw;
     backdrop-filter: blur(50px);
     bottom: 1vh;
     position: sticky;
-    height: 2.5em;
+    height: 5vh;
     border-radius: 15px;
     color: white;
     display: flex;
@@ -963,6 +1000,7 @@ select option {
         height: 10vh;
     }
 }
+
 #select-isp {
     background-color: #3F36AE;
     position: absolute;
@@ -977,7 +1015,8 @@ select option {
     color: white;
     flex-wrap: wrap;
 }
-#select-isp > div {
+
+#select-isp>div {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -990,7 +1029,8 @@ select option {
     cursor: pointer;
     transition: 0.5s;
 }
-#select-isp > div:hover {
+
+#select-isp>div:hover {
     background-color: #8338ec;
     transform: scale(1.1);
 }

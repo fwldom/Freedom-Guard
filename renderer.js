@@ -17,19 +17,19 @@ const versionapp = "1.3.0";
 const ipc = require('electron').ipcRenderer;
 const { trackEvent } = require('@aptabase/electron/renderer');
 var sect = "main";
-var { connectVibe, connectWarp, settingWarp, settingVibe,changeISP, AssetsPath, ResetArgsVibe, ResetArgsWarp, testProxy, KillProcess, connectAuto,connect,isp } = require('./connect.js');
+var { connectVibe, connectWarp, settingWarp, ConnectedVibe, FindBestEndpointWarp, settingVibe, changeISP, AssetsPath, ResetArgsVibe, ResetArgsWarp, testProxy, KillProcess, connectAuto, connect, isp } = require('./connect.js');
 // #endregion
 // #region Global Var
 __dirname = __dirname.replace("app.asar", "")
 var Psicountry = ["IR", "AT", "BE", "BG", "BR", "CA", "CH", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GB", "HU", "HR", "IE", "IN", "IT", "JP", "LV", "NL", "NO", "PL", "PT", "RO", "RS", "SE", "SG", "SK", "UA", "US"];
-var PsicountryFullname = ["disable", "Austria", "Belgium", "Bulgaria", "Brazil", "Canada", "Switzerland", "Czech Republic", "Germany", "Denmark", "Estonia", "Spain", "Finland", "France", "United Kingdom", "Hungary", "Croatia", "Ireland", "India", "Italy", "Japan", "Latvia", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Serbia", "Sweden", "Singapore", "Slovakia", "Ukraine", "United States"];
+var PsicountryFullname = ["Auto Server", "Austria", "Belgium", "Bulgaria", "Brazil", "Canada", "Switzerland", "Czech Republic", "Germany", "Denmark", "Estonia", "Spain", "Finland", "France", "United Kingdom", "Hungary", "Croatia", "Ireland", "India", "Italy", "Japan", "Latvia", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Serbia", "Sweden", "Singapore", "Slovakia", "Ukraine", "United States"];
 // #endregion
 // #region all Listener
 document.addEventListener("DOMContentLoaded", () => {
     // Onclick Button and Onchange inputs
     ChangeStatusbtn = document.getElementById("ChangeStatus");
     ChangeStatusbtn.onclick = () => {
-        connect(core= document.getElementById("core-up-at").value);
+        connect(core = document.getElementById("core-up-at").value);
     };
     document.getElementById("Gool").onclick = () => {
         if (document.getElementById("Gool").checked) SetServiceWarp("gool", true);
@@ -80,7 +80,11 @@ function Onload() {
     process.platform == "win32" ? exec(path.join(__dirname, "register-url-win.bat")) : ("");
     // Start Add Element Countries to box select country psiphon
     var container = document.getElementById("box-select-country");
+    var configBox = document.createElement("div");
+    configBox.innerHTML = "Freedom Warp Psiphon"
+    configBox.style = "border:none;font-size:1em"
     container.innerHTML = ""
+    container.appendChild(configBox);
     Psicountry.forEach((country, index) => {
         country = country.toLowerCase()
         let countryDiv = document.createElement("div");
@@ -100,7 +104,40 @@ function Onload() {
             SetCfon(country);
             (document.getElementById("Scan").checked) ? document.getElementById("Scan").click() : ("");
             document.getElementById("box-select-country").style.display = "none";
+            settingWarp["core"] = country.toUpperCase() == "IR" ? "auto" : "warp";
+            saveSetting();
+            SetSettingWarp();
         });
+    });
+    var configBox = document.createElement("div");
+    configBox.innerHTML = "Freedom Vibe Server"
+    configBox.style = "border:none;font-size:1em"
+    container.appendChild(configBox);
+    configsVibeName.forEach((config, index) => {
+        var configBox = document.createElement("div");
+        configBox.id = "config-box-vibe-sel" + index;
+        configBox.classList.add("config-box-vibe-sel" + index);
+        configBox.title = config;
+        let img = document.createElement("img");
+        img.src = path.join(__dirname, "svgs", "glob" + ".svg");
+        img.id = "imgOfCfon";
+        let p = document.createElement("p");
+        p.id = "textOfCfonS";
+        p.textContent = configsVibeName[index];
+        configBox.appendChild(img);
+        configBox.appendChild(p);
+        configBox.addEventListener("click", () => {
+            settingVibe["config"] = configsVibeLink[index];
+            (document.getElementById("Scan").checked) ? document.getElementById("Scan").click() : ("");
+            document.getElementById("box-select-country").style.display = "none";
+            document.getElementById("config-box-vibe-sel" + index).style.color = "#ff31d1f";
+            settingWarp["core"] = "vibe";
+            document.getElementById("textOfCfon").innerHTML = configsVibeName[index];
+            saveSetting();
+            document.getElementById("imgOfCfonCustom").src = path.join(__dirname, "svgs", "glob" + ".svg");
+            SetSettingWarp();
+        });
+        document.getElementById("box-select-country").appendChild(configBox);
     });
     // End Added All Elements
     try {
@@ -212,6 +249,7 @@ function SetCfon(country) {
     document.getElementById("textOfCfon").innerHTML = PsicountryFullname[Psicountry.indexOf(country.toString().toUpperCase())];
     document.getElementById("imgOfCfonCustom").src = path.join(__dirname, "svgs", country.toString().toLowerCase() + ".svg");
     ResetArgsWarp();
+    saveSetting();
     // Set Psiphon Country 
 }
 function CloseAllSections() {
@@ -248,6 +286,9 @@ function SetSettingWarp() {
     document.getElementById("Gool").checked = settingWarp["gool"];
     document.getElementById("Scan").checked = settingWarp["scan"];
     SetValueInput("isp-text-guard", settingWarp["isp"])
+    SetValueInput("core-up-at", settingWarp["core"])
+    SetHTML("textOfCfon", settingWarp["core"] == "warp" ? PsicountryFullname[Psicountry.indexOf(settingWarp["cfonc"].toUpperCase())] : configsVibeName[configsVibeLink.indexOf(settingVibe["config"])]);
+    settingWarp["core"] == "vibe" ? document.getElementById("imgOfCfonCustom").src = path.join(__dirname, "svgs", "glob" + ".svg") : SetCfon(Psicountry[Psicountry.indexOf(settingWarp["cfonc"].toUpperCase())]);
 }
 function SetValueInput(id, Value) {
     // Set Value In Input
@@ -257,7 +298,6 @@ function SetServiceWarp(para, status) {
     // Change
     settingWarp[para] = status;
     ResetArgsWarp();
-    saveSetting();
 }
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -276,12 +316,15 @@ function Showmess(time = 2500, text = "message text", type = "info") {
         }, 1000);
     }, time);
 }
+setInterval(() => {
+    document.getElementById("message").style.display = "none";
+}, 20000);
 // #endregion
 // #region Section Setting Warp
 document.getElementById("find-best-endpoint").addEventListener("click", () => {
     FindBestEndpointWarp();
 });
-document.getElementById("isp-text-guard").addEventListener("click", () => {
+document.getElementById("isp-text-guard").addEventListener("change", () => {
     changeISP(document.getElementById("isp-text-guard").value);
 });
 document.getElementById("select-isp-mci").addEventListener("click", () => {
@@ -316,10 +359,13 @@ document.getElementById("reserved-status").addEventListener("change", () => {
     else SetServiceWarp("reserved", false);
 });
 document.getElementById("setting-show").addEventListener("click", () => {
+    document.getElementById("setting").style.transition = "1s";
     if (document.getElementById("setting").style.display == "") {
         CloseAllSections();
         document.getElementById("setting").style.display = "flex";
+        document.getElementById("setting").style.width = "";
     } else {
+        document.getElementById("setting").style.width = "0%";
         document.getElementById("setting").style.display = "";
     }
 });
@@ -331,6 +377,18 @@ document.getElementById("setting-show-vibe").addEventListener("click", () => {
         document.getElementById("setting-vibe").style.display = "";
     }
 });
+document.getElementById("menu-website").addEventListener("click", () => {
+    if (process.platform == "win32") {
+        exec("start https://fwldom.github.io/Freedom")
+    }
+    else if (process.platform == "linux") {
+        exec("xdg-open https://fwldom.github.io/Freedom");
+    }
+    else if (process.platform == "darwin") {
+        exec("open https://fwldom.github.io/Freedom")
+    }
+})
+document.getElementById("menu-about").addEventListener("click", () => { document.getElementById("about-app").style.display = "flex" })
 document.getElementById("about").addEventListener("click", () => { document.getElementById("about-app").style.display = "flex" })
 document.getElementById("close-about").addEventListener("click", () => { document.getElementById("about-app").style.display = "" })
 //#endregion
@@ -522,6 +580,7 @@ function SetDNS(dns1, dns2) {
 // #region deep links 
 const { ipcRenderer } = require('electron');
 const { randomBytes } = require("crypto");
+const { setTimeout } = require("timers/promises");
 ipcRenderer.on('start-vibe', (event, ev) => {
     ResetArgsVibe();
     LoadVibe();
@@ -547,5 +606,6 @@ ipcRenderer.on('start-link', (event, link) => {
 Onload();
 setInterval(() => {
     testProxy();
+    saveSetting();
 }, 7500);
 

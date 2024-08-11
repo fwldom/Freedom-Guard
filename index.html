@@ -23,8 +23,8 @@
     <!-- #region Loading -->
     <div id="loading">
         <div class="content">
-            <div class="text" id="text-loading-1">LOADING...</div>
-            <div class="text" id="text-loading-2">LOADING...</div>
+            <div class="text" style="margin-bottom: 10vh;" id="text-loading-1">LOADING...</div>
+            <div class="text" style="margin-bottom: 10vh;" id="text-loading-2">LOADING...</div>
             <img src="./assets/iran.jpg" style="justify-self: flex-start;margin-top: auto;" height="25%" id="" alt="">
             <p>به یاد مهسا امینی </p>
             <div id="text-hashtag" dir="rtl" style="justify-content: flex-end;margin-right: 2vw;color:red;">
@@ -36,18 +36,11 @@
             document.getElementById("loading").style.display = "flex";
             document.getElementById("text-loading-1").innerHTML = textloading;
             document.getElementById("text-loading-2").innerHTML = textloading;
-            if (time != "") {
-                setTimeout(() => {
-                    document.getElementById("loading").style.display = "none";
-                }, time);
-            }
-            else {
-                setTimeout(() => {
-                    document.getElementById("loading").style.display = "none";
-                }, 2000);
-            }
+            setTimeout(() => {
+                document.getElementById("loading").style.display = "none";
+            }, time);
         }
-        Loading(5500);
+        Loading(2500);
     </script>
     <!-- #endregion Loading -->
     <!-- #region Freedom Warp => setting & main  -->
@@ -71,12 +64,12 @@
     <div class="box-select-country" id="box-select-country">
     </div>
     <div class="options-select-cfon">
-        <p>Psiphon Country</p>
-        <i class="bx bxs-chevron-down bx-tada-hover"></i>
+        <!-- <p>Psiphon Country</p>
+        <i class="bx bxs-chevron-down bx-tada-hover"></i> -->
         <div class="box-select-country-mini" id="box-select-country-mini">
             <div id="flagOfCfon">
                 <img src="svgs/ir.svg" id="imgOfCfonCustom" width="50px">
-                <div id="textOfCfon">disable</div>
+                <div id="textOfCfon">Auto Server</div>
                 <i class="bx bx-chevron-right"></i>
             </div>
         </div>
@@ -87,7 +80,7 @@
         <div id="select-isp-other">Other غیره،وای فای</div>
         <p>بعدا میتوانید از تنظیمات تغییر دهید</p>
     </div>
-    <div id="setting">
+    <div id="setting" style="width: 0;">
         <nav id="nav-top" style="position: sticky;  top: 0%;
   left: 0%;background-color: rgba(255, 255, 255, 0.3);width: 100%;min-height: 7.5vh;z-index: 10;">
             <button id="close-setting">
@@ -190,12 +183,14 @@
         </div>
     </div>
     <div id="menu">
-        <div id="menu-dns" class="bx-tada-hover">Set DNS</div>
-        <div id="menu-freedom-vibe" class="bx-tada-hover bx-spin-click">Freedom Vibe</div>
-        <div id="menu-freedom-browser" class="bx-tada-hover bx-spin-click">Browser</div>
-        <div id="menu-exit" class="bx-tada-hover bx-spin-click">Exit Menu</div>
+        <div id="menu-dns">Set DNS</div>
+        <div id="menu-freedom-browser">Browser</div>
+        <div id="menu-freedom-vibe" >Freedom Vibe</div>
+        <div id="menu-exit">Exit Menu</div>
+        <div id="menu-website">Website App</div>
+        <div id="menu-about">About App</div>
     </div>
-    <!-- #endregion Loading -->
+    <!-- #endregion Warp -->
     <!-- #region Freedom Vibe => main & setting-->
     <div id="freedom-vibe">
         <button class="setting-show-vibe" id="setting-show-vibe"><i class=" bx bxs-cog"></i></button>
@@ -304,7 +299,7 @@
     </div>
     <!-- #endregion Other All -->
 </body>
-    <!-- #region Scripts -->
+<!-- #region Scripts -->
 <script src="./renderer.js"></script>
 <!-- #endregion Scripts -->
 
