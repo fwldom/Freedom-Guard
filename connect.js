@@ -7,6 +7,7 @@ const ipc = require('electron').ipcRenderer;
 const { trackEvent } = require('@aptabase/electron/renderer');
 const { spawn, exec } = require("child_process");
 const { config } = require('process');
+const Winreg = require('winreg');
 // #endregion
 //#region Functions
 var childProcess = null;
@@ -143,6 +144,29 @@ async function testProxy() {
         return false;
     }
 }
+
+const setProxy = async (proxy) => {
+    const proxyKey = new Winreg({
+        hive: Winreg.HKCU,
+        key: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings'
+    });
+    proxyKey.set('ProxyEnable', Winreg.REG_DWORD, '1', (err) => {
+        if (err) console.log('Error setting ProxyEnable:', err);
+    });
+    proxyKey.set('ProxyServer', Winreg.REG_SZ, proxy, (err) => {
+        if (err) console.log('Error setting ProxyServer:', err);
+    });
+};
+
+const offProxy = async (proxy) => {
+    const proxyKey = new Winreg({
+        hive: Winreg.HKCU,
+        key: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings'
+    });
+    proxyKey.set('ProxyEnable', Winreg.REG_DWORD, '0', (err) => {
+        if (err) console.log('Error setting ProxyEnable:', err);
+    });
+};
 //#endregion
 // #region Connection
 function ConnectedVibe(stat = "normal") {
@@ -171,7 +195,7 @@ function disconnectVibe() {
         exec("taskkill /IM " + "HiddifyCli.exe" + " /F");
     }
     //Disable the proxy settings
-    exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
+    offProxy(settingWarp["proxy"]);
     //Remove the box shadow and animation from the vibe status element
     sect == "main" ? SetAttr("changeStatus-vibe", "style", "box-shadow:;") : ("")
     sect == "main" ? SetAttr("changeStatus-vibe", "style", "animation:;") : ("")
@@ -184,7 +208,7 @@ function disconnectVibe() {
         exec("bash " + path.join(__dirname, "assets", "bash", "reset_proxy.sh"));
     }
     else {
-        exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
+        offProxy(settingWarp["proxy"]);
     };
     sect == "main" ? SetAnim("ChangeStatus", "Connect 5s") : ("");
     setTimeout(() => {
@@ -247,7 +271,7 @@ async function connectVibe(num = number) {
             exec("bash " + path.join(__dirname, "assets", "bash", "reset_proxy.sh"));
         }
         else {
-            exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
+            offProxy(settingWarp["proxy"]);
         };
         sect == "main" ? SetAnim("ChangeStatus", "Connect 7s infinite") : ("");
         sect == "main" ? SetAnim("changeStatus-vibe", "changeStatus-vibe-animation 5s infinite") : ("");
@@ -321,8 +345,7 @@ async function connectWarp(num) {
             exec("bash " + path.join(__dirname, "assets", "bash", "set_proxy.sh") + ` ${settingWarp["proxy"].replace(":", " ")}`);
         }
         else if (process.platform == "win32" & !settingWarp["tun"]) {
-            exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /F');
-            exec(`reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyServer /t REG_SZ /d ${settingWarp["proxy"]} /F`);
+            setProxy(settingWarp["proxy"]);
         }
         StatusGuard = true;
         await sleep(15000);
@@ -354,7 +377,7 @@ async function connectWarp(num) {
         }
         else {
             exec("pkill warp-plus");
-            exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
+            offProxy(settingWarp["proxy"]);
         };
         sect == "main" ? SetAnim("ChangeStatus", "Connect 5s") : ("");
         setTimeout(() => {

@@ -112,7 +112,8 @@
         "bootstrap-icons": "^1.11.3",
         "electron-google-analytics": "^1.0.2",
         "geoip-lite": "^1.4.10",
-        "node-gyp": "^10.1.0"
+        "node-gyp": "^10.1.0",
+        "winreg": "^1.2.5"
     },
     "devDependencies": {
         "electron": "^31.1.0",
