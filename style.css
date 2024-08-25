@@ -5,13 +5,13 @@ body {
     align-items: center;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 97vh;
+    overflow: hidden;
+    height: 98vh;
     animation: rotateBackground 10s ease infinite;
     background: #4e0544;
     background-size: cover;
     background-image: url(assets/world.png), linear-gradient(180deg, #252C37 0%, rgba(45, 44, 61, 0.5) 49%, rgba(0, 212, 255, 0.4) 100%);
 }
-
 h1 {
     color: rgb(95, 93, 93);
     font-size: 16px;

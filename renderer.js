@@ -1,3 +1,5 @@
+
+// start code
 // #region Libraries
 ;
 const { open } = require("fs");
@@ -17,7 +19,7 @@ const versionapp = "1.3.0";
 const ipc = require('electron').ipcRenderer;
 const { trackEvent } = require('@aptabase/electron/renderer');
 var sect = "main";
-var { connectVibe, connectWarp, settingWarp, ConnectedVibe, FindBestEndpointWarp, settingVibe, changeISP, AssetsPath, ResetArgsVibe, ResetArgsWarp, testProxy, KillProcess, connectAuto, connect, isp } = require('./connect.js');
+var { connectVibe, connectWarp, setProxy, offProxy, settingWarp, ConnectedVibe, FindBestEndpointWarp, settingVibe, changeISP, AssetsPath, ResetArgsVibe, ResetArgsWarp, testProxy, KillProcess, connectAuto, connect, isp } = require('./connect.js');
 // #endregion
 // #region Global Var
 __dirname = __dirname.replace("app.asar", "")
@@ -32,13 +34,17 @@ document.addEventListener("DOMContentLoaded", () => {
         connect(core = document.getElementById("core-up-at").value);
     };
     document.getElementById("Gool").onclick = () => {
-        if (document.getElementById("Gool").checked) SetServiceWarp("gool", true);
+        if (document.getElementById("Gool").checked) { SetServiceWarp("gool", true); settingWarp["core"] = "warp" }
         else SetServiceWarp("gool", false);
+        document.getElementById("core-up-at").value = "warp";
+        settingWarp["core"] = "warp"
     };
     document.getElementById("Scan").onclick = () => {
         if (document.getElementById("Scan").checked) SetServiceWarp("scan", true);
         else SetServiceWarp("scan", false);
         SetCfon("IR");
+        document.getElementById("core-up-at").value = "warp";
+        settingWarp["core"] = "warp"
     };
     document.getElementById("box-select-country-mini").addEventListener("click", () => {
         if (document.getElementById("box-select-country").style.display == "grid") {
@@ -53,21 +59,33 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     document.getElementById("selector-ip-version").onchange = () => {
         SetServiceWarp("ipver", document.getElementById("selector-ip-version").value.match(/\d+/g)).toString();
+        document.getElementById("core-up-at").value = "warp";
+        settingWarp["core"] = "warp";
     };
     document.getElementById("end-point-address").onchange = () => {
         SetServiceWarp("endpoint", document.getElementById("end-point-address").value);
+        document.getElementById("core-up-at").value = "warp";
+        settingWarp["core"] = "warp"
     };
     document.getElementById("bind-address-text").onchange = () => {
         SetServiceWarp("proxy", document.getElementById("bind-address-text").value);
+        document.getElementById("core-up-at").value = "warp";
+        settingWarp["core"] = "warp"
     };
     document.getElementById("warp-key-text").onchange = () => {
         SetServiceWarp("warpkey", document.getElementById("warp-key-text").value);
+        document.getElementById("core-up-at").value = "warp";
+        settingWarp["core"] = "warp"
     };
     document.getElementById("dns-warp-text").onchange = () => {
         SetServiceWarp("dns", document.getElementById("dns-warp-text").value);
+        document.getElementById("core-up-at").value = "warp";
+        settingWarp["core"] = "warp"
     };
     document.getElementById("scan-rtt-text").onchange = () => {
         SetServiceWarp("scanrtt", document.getElementById("scan-rtt-text").value);
+        document.getElementById("core-up-at").value = "warp";
+        settingWarp["core"] = "warp"
     };
 });
 // #endregion
@@ -602,10 +620,14 @@ ipcRenderer.on('start-link', (event, link) => {
     alert(link);
 });
 // #endregion
-// Interval Timers and Loads
+// #region Interval Timers and Loads
+setInterval(() => {
+    document.getElementById("loading").style.display = "none";
+}, 7500);
 Onload();
 setInterval(() => {
     testProxy();
     saveSetting();
 }, 7500);
-
+//#endregion
+// end code
