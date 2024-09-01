@@ -9,7 +9,7 @@ const ipc = require('electron').ipcMain;
 const { initialize } = require('@aptabase/electron/main');
 const { setInterval } = require('timers/promises');
 
-initialize("A-EU-5072151346");
+initialize("A-EU-");
 var currentURL = "";
 var mainWindow = null
 var ViewBrowser = null;

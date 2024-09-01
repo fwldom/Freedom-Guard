@@ -19,7 +19,7 @@ const versionapp = "1.3.0";
 const ipc = require('electron').ipcRenderer;
 const { trackEvent } = require('@aptabase/electron/renderer');
 var sect = "main";
-var { connectVibe, connectWarp, setProxy, offProxy, settingWarp, ConnectedVibe, FindBestEndpointWarp, settingVibe, changeISP, AssetsPath, ResetArgsVibe, ResetArgsWarp, testProxy, KillProcess, connectAuto, connect, isp } = require('./connect.js');
+var {Onloading, connectVibe, connectWarp, setProxy, offProxy, settingWarp, ConnectedVibe, FindBestEndpointWarp, settingVibe, changeISP, AssetsPath, ResetArgsVibe, ResetArgsWarp, testProxy, KillProcess, connectAuto, connect, isp } = require('./connect.js');
 // #endregion
 // #region Global Var
 __dirname = __dirname.replace("app.asar", "")
@@ -31,20 +31,24 @@ document.addEventListener("DOMContentLoaded", () => {
     // Onclick Button and Onchange inputs
     ChangeStatusbtn = document.getElementById("ChangeStatus");
     ChangeStatusbtn.onclick = () => {
+        saveSetting();
+        Onloading();
         connect(core = document.getElementById("core-up-at").value);
     };
     document.getElementById("Gool").onclick = () => {
         if (document.getElementById("Gool").checked) { SetServiceWarp("gool", true); settingWarp["core"] = "warp" }
         else SetServiceWarp("gool", false);
         document.getElementById("core-up-at").value = "warp";
-        settingWarp["core"] = "warp"
+        settingWarp["core"] = "warp";
+        saveSetting();
     };
     document.getElementById("Scan").onclick = () => {
         if (document.getElementById("Scan").checked) SetServiceWarp("scan", true);
         else SetServiceWarp("scan", false);
         SetCfon("IR");
         document.getElementById("core-up-at").value = "warp";
-        settingWarp["core"] = "warp"
+        settingWarp["core"] = "warp";
+        saveSetting();
     };
     document.getElementById("box-select-country-mini").addEventListener("click", () => {
         if (document.getElementById("box-select-country").style.display == "grid") {
@@ -52,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             document.getElementById("box-select-country").style.display = "grid";
         }
+        saveSetting();
     });
     document.getElementById("close-setting").onclick = () => {
         document.getElementById("setting").style.display = "none";
@@ -177,6 +182,7 @@ function Onload() {
             }
             document.getElementById("select-isp").style.display = "flex";
             write_file("one.one", "ok");
+            trackEvent("new-user");
         }
         catch { };
         HelpStart();
@@ -191,7 +197,6 @@ function Onload() {
             }, 1500);
         }
     }
-    trackEvent("start-warp");
 };
 // #endregion
 // #region Functions other
@@ -465,7 +470,6 @@ function LoadVibe() {
     document.getElementById("dns-remote-address").value = settingVibe["dns-remote"];
     document.getElementById("fragment-status-vibe").checked = settingVibe["fragment"];
     document.getElementById("fragment-vibe-size-text").value = settingVibe["fragment-size"];
-    trackEvent("start-vibe");
 }
 async function saveSetting() {
     // Save setting vibe & setting warp In vibe.json & warp.json
@@ -623,7 +627,7 @@ ipcRenderer.on('start-link', (event, link) => {
 // #region Interval Timers and Loads
 setInterval(() => {
     document.getElementById("loading").style.display = "none";
-}, 7500);
+}, 5000);
 Onload();
 setInterval(() => {
     testProxy();
