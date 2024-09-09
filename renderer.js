@@ -19,7 +19,7 @@ const versionapp = "1.3.0";
 const ipc = require('electron').ipcRenderer;
 const { trackEvent } = require('@aptabase/electron/renderer');
 var sect = "main";
-var {Onloading, connectVibe, connectWarp, setProxy, offProxy, settingWarp, ConnectedVibe, FindBestEndpointWarp, settingVibe, changeISP, AssetsPath, ResetArgsVibe, ResetArgsWarp, testProxy, KillProcess, connectAuto, connect, isp } = require('./connect.js');
+var { Onloading, connectVibe, connectWarp, setProxy, offProxy, settingWarp, ConnectedVibe, FindBestEndpointWarp, settingVibe, changeISP, AssetsPath, ResetArgsVibe, ResetArgsWarp, testProxy, KillProcess, connectAuto, connect, isp } = require('./connect.js');
 // #endregion
 // #region Global Var
 __dirname = __dirname.replace("app.asar", "")
@@ -91,6 +91,10 @@ document.addEventListener("DOMContentLoaded", () => {
         SetServiceWarp("scanrtt", document.getElementById("scan-rtt-text").value);
         document.getElementById("core-up-at").value = "warp";
         settingWarp["core"] = "warp"
+    };
+    document.getElementById("config-fg-text").onchange = () => {
+        SetServiceWarp("configfg", document.getElementById("config-fg-text").value);
+        settingWarp["core"] = "auto";
     };
 });
 // #endregion
@@ -311,6 +315,7 @@ function SetSettingWarp() {
     document.getElementById("Scan").checked = settingWarp["scan"];
     SetValueInput("isp-text-guard", settingWarp["isp"])
     SetValueInput("core-up-at", settingWarp["core"])
+    SetValueInput("config-fg-text", settingWarp["configfg"])
     SetHTML("textOfCfon", settingWarp["core"] == "warp" ? PsicountryFullname[Psicountry.indexOf(settingWarp["cfonc"].toUpperCase())] : configsVibeName[configsVibeLink.indexOf(settingVibe["config"])]);
     settingWarp["core"] == "vibe" ? document.getElementById("imgOfCfonCustom").src = path.join(__dirname, "svgs", "glob" + ".svg") : SetCfon(Psicountry[Psicountry.indexOf(settingWarp["cfonc"].toUpperCase())]);
 }
@@ -350,6 +355,8 @@ document.getElementById("find-best-endpoint").addEventListener("click", () => {
 });
 document.getElementById("isp-text-guard").addEventListener("change", () => {
     changeISP(document.getElementById("isp-text-guard").value);
+    settingWarp["isp"] = document.getElementById("isp-text-guard").value;
+    saveSetting();
 });
 document.getElementById("select-isp-mci").addEventListener("click", () => {
     document.getElementById("isp-text-guard").value = "MCI"
@@ -550,7 +557,7 @@ document.getElementById("add-config-vibe").addEventListener("click", () => {
     document.getElementById("profile-add").style.display = "flex";
 });
 document.getElementById("add-config-vibe-submit").addEventListener("click", () => {
-    if (document.getElementById("add-config-vibe-link").value.trim().length  > 2) {
+    if (document.getElementById("add-config-vibe-link").value.trim().length > 2) {
         configsVibeName.push(document.getElementById("add-config-vibe-name").value);
         configsVibeLink.push(document.getElementById("add-config-vibe-link").value);
         document.getElementById("profile-add").style.display = "none";

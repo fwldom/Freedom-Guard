@@ -27,6 +27,7 @@ function changeISP(newisp) {
     console.log("NEW ISP IS:" + newisp)
     settingWarp["isp"] = newisp;
     saveSetting();
+    Onloading();
 }
 async function Run(nameFile, args, runa, core) {
     console.log("Runing New Process...");
@@ -210,6 +211,7 @@ function ConnectedVibe(stat = "normal") {
     }
     settingVibe["status"] = true;
     StatusGuard = true;
+    RefreshLinks();
 }
 function disconnectVPN() {
     // function runed when the proxy is disconnected
@@ -252,8 +254,22 @@ async function connect(core = 'warp', config = 'auto', os = process.platform, nu
     else if (core == "auto") await connectAuto(num);
 }
 var number = 0
+function RefreshLinks() {
+    reqRefreshLinks = new XMLHttpRequest();
+    reqRefreshLinks.open('GET', settingWarp["configfg"], true);
+    reqRefreshLinks.onload = function () {
+        if (reqRefreshLinks.status >= 200 && reqRefreshLinks.status < 400) {
+            links = JSON.parse(reqRefreshLinks.responseText);
+            console.log("Links Refreshed");
+        } else {
+            console.log("Error Refreshing Links");
+        }
+    }
+    reqRefreshLinks.send();
+}
 async function connectAuto(num = 0) {
     number = num;
+    RefreshLinks();
     console.log("ISP IS " + settingWarp["isp"] + " | Start Auto Server");
     if (settingWarp["isp"] == "MCI") {
         if (links["MCI"].lenght <= num) { disconnectVPN(); return true };
@@ -335,6 +351,10 @@ async function connectVibe(num = number) {
         }
         else {
             var configs = [settingVibe["config"]];
+            if (settingVibe["config"].startsWith("vless") || settingVibe[config].startsWith("vmess") | settingVibe[config].startsWith("trojan") | settingVibe[config].startsWith("shadowsocks")) {
+                write_file(path.join(__dirname, "config", "config.txt"), btoa(settingVibe["config"]));
+                configs = [path.join(__dirname, "config", "config.txt")];
+            }
         }
         for (var config of configs) {
             ResetArgsVibe(config);
@@ -540,7 +560,7 @@ var settingWarp = {
     startup: "warp",
     isp: "other",
     core: "auto",
-    "configfg":"https://raw.githubusercontent.com/fwldom/Freedom-Guard/config/links.json"
+    "configfg": "https://raw.githubusercontent.com/fwldom/Freedom-Guard/main/config/links.json"
 };
 var argsWarp = [""];
 var argsVibe = [""];

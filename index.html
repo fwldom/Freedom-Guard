@@ -92,12 +92,11 @@
                 <option value="IPV6">IP Version 6</option>
             </select>
         </div>
-        <b style="margin-top: 2vh;">VPN Type Warp</b>
-        <div id="vpn-type">
-            <select value="system" id="vpn-type-selected">
-                <option value="system">System Proxy</option>
-                <option value="tun">VPN Mode (Tun)</option>
-            </select>
+        <b>Config Freedom Guard for auto mode</b>
+        <div id="config-fg" class="form-control-c">
+            <input type="text" class="input input-alt" placeholder="https://links.json" id="config-fg-text"
+                value="https://raw.githubusercontent.com/fwldom/Freedom-Guard/main/config/links.json">
+            <span class="input-border input-border-alt"></span>
         </div>
         <b style="margin-top: 2vh;">Startup at</b>
         <div id="start-up">
@@ -138,6 +137,13 @@
         <div id="warp-key" class="form-control-c">
             <input type="text" class="input input-alt" placeholder="key : xxxxxxxxxxxxx" id="warp-key-text">
             <span class="input-border input-border-alt"></span>
+        </div>
+        <b style="margin-top: 2vh;">VPN Type Warp</b>
+        <div id="vpn-type">
+            <select value="system" id="vpn-type-selected">
+                <option value="system">System Proxy</option>
+                <option value="tun">VPN Mode (Tun)</option>
+            </select>
         </div>
         <b>DNS</b>
         <div id="dns-warp" class="form-control-c">
@@ -182,7 +188,7 @@
     <div id="menu">
         <div id="menu-dns">Set DNS</div>
         <div id="menu-freedom-browser">Browser</div>
-        <div id="menu-freedom-vibe" >Freedom Vibe</div>
+        <div id="menu-freedom-vibe">Freedom Vibe</div>
         <div id="menu-exit">Exit Menu</div>
         <div id="menu-website">Website App</div>
         <div id="menu-about">About App</div>
