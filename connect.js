@@ -155,9 +155,6 @@ async function testProxy() {
             });
             console.log("Fliternet Bypassed");
             filterBypassStat = true;
-            try {
-                ConnectedVibe(stat = "start");
-            } catch { }
             return true;
         }
         catch {
@@ -351,8 +348,8 @@ async function connectVibe(num = number) {
         }
         else {
             var configs = [settingVibe["config"]];
-            if (settingVibe["config"].startsWith("vless") || settingVibe[config].startsWith("vmess") | settingVibe[config].startsWith("trojan") | settingVibe[config].startsWith("shadowsocks")) {
-                write_file(path.join(__dirname, "config", "config.txt"), btoa(settingVibe["config"]));
+            if (settingVibe["config"].startsWith("vless") || settingVibe["config"].startsWith("vmess") || settingVibe["config"].startsWith("trojan") || settingVibe["config"].startsWith("shadowsocks") ) {
+                write_file(path.join(__dirname, "config", "config.txt"), btoa(unescape(encodeURIComponent(settingVibe["config"]))));
                 configs = [path.join(__dirname, "config", "config.txt")];
             }
         }

@@ -324,7 +324,7 @@ function SetValueInput(id, Value) {
     document.getElementById(id).value = Value;
 }
 function SetServiceWarp(para, status) {
-    // Change
+    // Change warp settings
     settingWarp[para] = status;
     ResetArgsWarp();
 }

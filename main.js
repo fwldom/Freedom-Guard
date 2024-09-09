@@ -15,8 +15,8 @@ var mainWindow = null
 var ViewBrowser = null;
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,  // تنظیم عرض پنجره
-    height: 600, // تنظیم ارتفاع پنجره
+    width: 800,
+    height: 600,
     icon: path.join(__dirname, 'ico.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
