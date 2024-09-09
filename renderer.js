@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // #endregion
 // #region Functions For Load
 function Onload() {
+    trackEvent("start-app");
     ResetArgsWarp();
     process.platform == "win32" ? exec(path.join(__dirname, "register-url-win.bat")) : ("");
     // Start Add Element Countries to box select country psiphon
@@ -438,7 +439,8 @@ var configsVibeName = [
     "AzadNet | META IRAN",
     "WARP | IRCF",
     "TELEGRAM | V2RAY",
-    "TVC | VLESS"
+    "TVC | VLESS",
+    "ALL | FREE",
 ];
 var configsVibeLink = [
     "auto",
@@ -447,7 +449,8 @@ var configsVibeLink = [
     "https://raw.githubusercontent.com/AzadNetCH/Clash/main/AzadNet_META_IRAN-Direct.yml",
     "https://raw.githubusercontent.com/ircfspace/warpsub/main/export/warp",
     "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/mix",
-    "https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/xray/base64/vless"
+    "https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/xray/base64/vless",
+    "https://raw.githubusercontent.com/saeidghodrati/V2ray-FREE-configs/main/All_Configs_base64_Sub.txt"
 ];
 function LoadVibe() {
     document.getElementById("freedom-vibe").style.display = "flex";
@@ -547,7 +550,7 @@ document.getElementById("add-config-vibe").addEventListener("click", () => {
     document.getElementById("profile-add").style.display = "flex";
 });
 document.getElementById("add-config-vibe-submit").addEventListener("click", () => {
-    if (document.getElementById("add-config-vibe-link").value.trim().lenght > 2) {
+    if (document.getElementById("add-config-vibe-link").value.trim().length  > 2) {
         configsVibeName.push(document.getElementById("add-config-vibe-name").value);
         configsVibeLink.push(document.getElementById("add-config-vibe-link").value);
         document.getElementById("profile-add").style.display = "none";

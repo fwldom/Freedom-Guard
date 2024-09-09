@@ -13,7 +13,6 @@ const Winreg = require('winreg');
 // #region Functions
 var childProcess = null;
 function KillProcess(core = "warp") {
-    console.log("Killing Process...");
     if (childProcess != null) {
         if (process.platform === 'win32') {
             exec('taskkill /IM ' + (core == "warp" ? "warp-plus.exe" : "HiddifyCli.exe") + ' /F /T'); // Windows
@@ -86,7 +85,7 @@ async function Run(nameFile, args, runa, core) {
         if ((StatusGuard || settingVibe["status"]) & settingWarp["core"] == "auto") {
             sect == "main" ? connectAuto(number + 1) : disconnectVPN("");
         }
-        else {
+        else if (settingVibe["config"] != "auto") {
             sect == "main" ? disconnectVPN(mode = "try") : disconnectVPN();
         }
     });
@@ -130,7 +129,7 @@ async function testProxy() {
     var startTime = Date.now();
     try {
         const testConnection = await axios.get('https://api.ipify.org?format=json', {
-            timeout: 5000, 
+            timeout: 5000,
         });
         console.log('IP :', testConnection.data.ip);
         var endTime = Date.now(); // Capture the end time
@@ -340,7 +339,6 @@ async function connectVibe(num = number) {
         for (var config of configs) {
             ResetArgsVibe(config);
             Run("HiddifyCli.exe", argsVibe, "admin", core = "vibe");
-            trackEvent("conn-vibe");
             await sleep(25000);
             settingVibe["status"] = true;
             if (settingVibe["status"] == true) {
@@ -367,7 +365,6 @@ async function connectVibe(num = number) {
 async function connectWarp(num) {
     // Function Connect To Warp
     console.log("Start Warp Server");
-    trackEvent("conn-warp");
     if (StatusGuard == false) {
         sect == "main" ? SetAnim("ChangeStatus", "Connect 7s infinite") : ("");
         // Start warp plus
@@ -418,7 +415,6 @@ async function connectWarp(num) {
 // #endregion
 // #region Reset Args
 function ResetArgsVibe(config = "auto") {
-    console.log("Reset Args Vibe");
     argsVibe = [];
     argsVibe.push("run");
     argsVibe.push("--config");
@@ -451,7 +447,6 @@ async function saveSetting() {
     catch { };
     ResetArgsVibe();
     ResetArgsWarp();
-    console.log("Saved Settings...");
 };
 read_file = function (path) {
     return fs.readFileSync(path, 'utf8');
@@ -460,7 +455,6 @@ write_file = function (path, output) {
     fs.writeFileSync(path, output);
 }
 function ResetArgsWarp() {
-    console.log("Reset Args Warp...");
     argsWarp = [];
     if (settingWarp["proxy"] != "127.0.0.1:8086" & settingWarp["proxy"] != "") {
         argsWarp.push("--bind");
@@ -545,7 +539,8 @@ var settingWarp = {
     tun: false,
     startup: "warp",
     isp: "other",
-    core: "auto"
+    core: "auto",
+    "configfg":"https://raw.githubusercontent.com/fwldom/Freedom-Guard/config/links.json"
 };
 var argsWarp = [""];
 var argsVibe = [""];
