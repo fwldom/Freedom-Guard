@@ -164,7 +164,7 @@ async function testProxy() {
     } catch (error) {
         console.error('Error Test Connection:', error.message);
         sect == "main" ? SetHTML("ip-ping-vibe", "Not Connected To Internet") : ("");
-        sect == "main" ? SetHTML("ip-ping-vibe", "Not Connected To Internet") : ("");
+        sect == "main" ? SetHTML("ip-ping-warp", "Not Connected To Internet") : ("");
         testproxystat = false;
         return false;
     }

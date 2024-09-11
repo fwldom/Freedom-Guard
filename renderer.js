@@ -463,7 +463,9 @@ document.getElementById("menu-freedom-browser").onclick = () => {
     ipc.send("load-browser", "")
 };
 document.getElementById("menu-dns").onclick = () => { document.getElementById("dns-set").style.display = "flex" };
-document.getElementById("menu-exit").onclick = () => (document.getElementById("menu").style.display = "");
+document.getElementById("menu-exit").onclick = () => {
+    document.getElementById("menu").style.display = "";
+};
 //#endregion
 // #region Section Freedom-Vibe
 

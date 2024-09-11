@@ -453,19 +453,19 @@ h2 {
     justify-content: center;
     align-items: center;
     position: fixed;
-    width: 97vw;
-    left: 1vw;
-    top: 1vh;
-    height: 95vh;
-    backdrop-filter: blur(15px);
-    background-color: rgba(55, 28, 91, 0.1);
+    width: 95.5vw;
+    transition: all 1s;
+    left: 0.9vw;
+    top: 0.9vh;
+    height: 94.5vh;
+    backdrop-filter: blur(25px);
+    background-color: rgba(86, 35, 119, 0.26);
     flex-wrap: wrap;
     gap: 3vh;
     z-index: 5;
     overflow: hidden;
     flex-direction: column;
-    border-radius: 15px;
-    /* انحنای گوشه‌های منو کمتر */
+    border-radius: 10px;
     padding: 15px;
 }
 
