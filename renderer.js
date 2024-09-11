@@ -419,7 +419,7 @@ document.getElementById("reserved-status").addEventListener("change", () => {
 });
 document.getElementById("setting-show").addEventListener("click", () => {
     document.getElementById("setting").style.transition = "1s";
-    if (document.getElementById("setting").style.display == "") {
+    if (document.getElementById("setting").style.display == "none") {
         CloseAllSections();
         document.getElementById("setting").style.display = "flex";
         document.getElementById("setting").style.width = "";
