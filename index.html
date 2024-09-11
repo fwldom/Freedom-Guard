@@ -85,13 +85,6 @@
             </button>
             <button id="about"><i class='bx bxs-info-circle'></i></button>
         </nav>
-        <b style="margin-top: 2vh;">IP Version</b>
-        <div id="ip-version">
-            <select name="" id="selector-ip-version">
-                <option value="IPV4">IP Version 4</option>
-                <option value="IPV6">IP Version 6</option>
-            </select>
-        </div>
         <b>Config Freedom Guard for auto mode</b>
         <div id="config-fg" class="form-control-c">
             <input type="text" class="input input-alt" placeholder="https://links.json" id="config-fg-text"
@@ -122,11 +115,18 @@
                 <option value="IRANCELL">Irancell</option>
             </select>
         </div>
+        <b style="margin-top: 0.5vh;border-top: 2px solid white;padding-top: 2vh;">IP Version</b>
+        <div id="ip-version">
+            <select name="" id="selector-ip-version">
+                <option value="IPV4">IP Version 4</option>
+                <option value="IPV6">IP Version 6</option>
+            </select>
+        </div>
         <b>Endpoint</b>
         <div id="end-point" class="form-control-c">
             <input placeholder="IP : 192.x.x.x" class="input input-alt" type="text" id="end-point-address">
-            <button class="btn btn-primary" id="find-best-endpoint">Find Best</button>
             <span class="input-border input-border-alt"></span>
+            <button class="btn btn-primary" id="find-best-endpoint">Find Best Endpoint</button>
         </div>
         <b>Bind Address</b>
         <div id="bind-address" class="form-control-c">
@@ -183,6 +183,9 @@
                 <input type="checkbox" id="reserved-status" />
                 <span class="slider"></span>
             </label>
+        </div>
+        <div id="reset-setting-warp">
+            <button id="reset-setting-warp-btn" class="btn">Reset setting Warp</button>
         </div>
     </div>
     <div id="menu">
@@ -288,7 +291,7 @@
         <p> Freedom Guard 1.3.0 (Mahsa Version)</p>
         <p> Developed By Fwldom 👩‍💻</p>
         <p>👇 Acknowledgements 👇</p>
-        <p> <a href="https://github.com/hiddify/hiddify-core/">hiddify-core 2.1.5</a> from Hiddify</p>
+        <p> <a href="https://github.com/hiddify/hiddify-core/">hiddify-core 2.3.0</a> from Hiddify</p>
         <p> <a href="https://github.com/bepass-org/warp-plus">warp-plus 1.2.4</a> from bepass-org</p>
         <p> <a href="https://github.com/fwldom/Freedom-Guard">Freedom Browser 1.3</a> from fwldom</p>
         <p> <a href="https://github.com/Ptechgithub/warp">Scanner Endpoint 1.2</a> from Ptechgithub</p>

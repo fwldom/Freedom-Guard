@@ -1,3 +1,7 @@
+
+// Start Code
+// #region Libraries
+;
 const { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } = require('electron');
 const { net, protocol, session, BrowserView } = require('electron')
 const { dialog } = require('electron');
@@ -8,11 +12,17 @@ const { eventNames } = require('process');
 const ipc = require('electron').ipcMain;
 const { initialize } = require('@aptabase/electron/main');
 const { setInterval } = require('timers/promises');
-
+;
+// #endregion
+// #region Vars
 initialize("A-EU-");
 var currentURL = "";
 var mainWindow = null
 var ViewBrowser = null;
+var pageTitle = "";
+const gotTheLock = app.requestSingleInstanceLock()
+// #endregion
+// #region functions
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
@@ -35,12 +45,6 @@ function createWindow() {
     catch { };
   });
 };
-setInterval(() => {
-  try {
-    ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width / 1.3, height: mainWindow.getBounds().height / 1.3 });
-  }
-  catch { };
-}, 5000)
 function CreateViewBrowser(url) {
   ViewBrowser = new BrowserView();
   mainWindow.setBrowserView(ViewBrowser);
@@ -50,46 +54,16 @@ function CreateViewBrowser(url) {
   setTimeout(() => {
     mainWindow.setSize(800, 600);
   }, 1000);
-}
-if (process.defaultApp) {
-  if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient('freedom-guard', process.execPath, [path.resolve(process.argv[1])])
-  }
-} else {
-  app.setAsDefaultProtocolClient('freedom-guard')
 };
-ipc.on("load-main-app", (event) => {
-  mainWindow.loadFile("index.html");
-  mainWindow.removeBrowserView(ViewBrowser);
-});
-ipc.on('hide-browser', (event, url) => {
-  mainWindow.removeBrowserView(ViewBrowser);
-});
-ipc.on('show-browser', (event, url) => {
-  mainWindow.setBrowserView(ViewBrowser);
-});
-var pageTitle = "";
-ipc.on('load-browser', (event) => {
-  CreateViewBrowser("https://fwldom.github.io/freedom-site-browser/index.html");
-  mainWindow.loadFile("browser.html");
-  ViewBrowser.webContents.on("did-finish-load", (event) => {
-    currentURL = ViewBrowser.webContents.getURL();
-    pageTitle = ViewBrowser.webContents.getTitle();
-    mainWindow.webContents.send('set-url', (currentURL));
-    pageTitle = ViewBrowser.webContents.getTitle();
-    mainWindow.webContents.send('set-title', (pageTitle));
-  });
-  ViewBrowser.webContents.on("did-navigate", (event, url) => {
-    currentURL = ViewBrowser.webContents.getURL();
-    pageTitle = ViewBrowser.webContents.getTitle();
-    mainWindow.webContents.send('set-url', (url));
-  });
-  mainWindow.maximize();
-  ViewBrowser.setBounds({ x: 10, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width, height: mainWindow.getBounds().height / 1.3 });
-});
-ipc.on('load-url-browser', (event, url) => {
-  ViewBrowser.webContents.loadURL(url);
-});
+
+// #endregion
+// #region Interval
+setInterval(() => { // Resize View Browser 
+  try {
+    ViewBrowser.setBounds({ x: 0, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width / 1.3, height: mainWindow.getBounds().height / 1.3 });
+  }
+  catch { };
+}, 5000)
 setInterval(() => {
   try {
     if (currentURL != ViewBrowser.webContents.getURL()) {
@@ -101,8 +75,15 @@ setInterval(() => {
   }
   catch { };
 }, 5000);
-const gotTheLock = app.requestSingleInstanceLock()
-
+// #endregion
+// #region Startup
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient('freedom-guard', process.execPath, [path.resolve(process.argv[1])])
+  }
+} else {
+  app.setAsDefaultProtocolClient('freedom-guard')
+};
 if (!gotTheLock) {
   app.quit()
 } else {
@@ -211,13 +192,9 @@ app.whenReady().then(() => {
   tray.setTitle('VPN (Warp, Vibe , Psiphon)')
 })
 app.on('ready', createWindow);
-
-app.on('before-quit', () => {
-  exec("taskkill /IM " + "HiddifyCli.exe" + " /F");
-  exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
-  exec("taskkill /IM " + "warp-plus.exe" + " /F");
-  if (process.platform !== 'darwin') {
-    app.quit();
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
   }
 });
 app.setUserTasks([
@@ -229,12 +206,53 @@ app.setUserTasks([
     title: 'New Window',
     description: 'Create a new window'
   }
-])
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+]);
+// #endregion
+// #region IPC
+ipc.on("load-main-app", (event) => {
+  mainWindow.loadFile("index.html");
+  mainWindow.removeBrowserView(ViewBrowser);
+});
+ipc.on('hide-browser', (event, url) => {
+  mainWindow.removeBrowserView(ViewBrowser);
+});
+ipc.on('show-browser', (event, url) => {
+  mainWindow.setBrowserView(ViewBrowser);
+});
+ipc.on('load-browser', (event) => {
+  CreateViewBrowser("https://fwldom.github.io/freedom-site-browser/index.html");
+  mainWindow.loadFile("browser.html");
+  ViewBrowser.webContents.on("did-finish-load", (event) => {
+    currentURL = ViewBrowser.webContents.getURL();
+    pageTitle = ViewBrowser.webContents.getTitle();
+    mainWindow.webContents.send('set-url', (currentURL));
+    pageTitle = ViewBrowser.webContents.getTitle();
+    mainWindow.webContents.send('set-title', (pageTitle));
+  });
+  ViewBrowser.webContents.on("did-navigate", (event, url) => {
+    currentURL = ViewBrowser.webContents.getURL();
+    pageTitle = ViewBrowser.webContents.getTitle();
+    mainWindow.webContents.send('set-url', (url));
+  });
+  mainWindow.maximize();
+  ViewBrowser.setBounds({ x: 10, y: mainWindow.getBounds().height / 6, width: mainWindow.getBounds().width, height: mainWindow.getBounds().height / 1.3 });
+});
+ipc.on('load-url-browser', (event, url) => {
+  ViewBrowser.webContents.loadURL(url);
+});
+// #endregion
+// #region Quit
+app.on('before-quit', () => {
+  exec("taskkill /IM " + "HiddifyCli.exe" + " /F");
+  exec('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /F');
+  exec("taskkill /IM " + "warp-plus.exe" + " /F");
+  if (process.platform !== 'darwin') {
+    app.quit();
   }
 });
+// #endregion Quit
+// #region other
+// Handle Write JSON file
 ipcMain.handle('write-json', async (event, filePath, data) => {
   return new Promise((resolve, reject) => {
     fs.writeFile(filePath, JSON.stringify(data, null, 2), (err) => {
@@ -244,7 +262,7 @@ ipcMain.handle('write-json', async (event, filePath, data) => {
   });
 });
 
-// Handle read JSON file
+// Handle Read JSON file
 ipcMain.handle('read-json', async (event, filePath) => {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf-8', (err, data) => {
@@ -253,3 +271,5 @@ ipcMain.handle('read-json', async (event, filePath) => {
     });
   });
 });
+// #endregion
+// End Code

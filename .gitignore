@@ -1,4 +1,6 @@
 node_modules
+webui
+tmp
 out
 dist
 .vscode
@@ -15,3 +17,4 @@ reg.php
 Users.txt
 configsVibeLink.json
 configsVibeName.json
+one.one

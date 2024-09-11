@@ -1,3 +1,5 @@
+
+/* Start Code*/
 /* #region warp */
 body {
     display: flex;
@@ -12,6 +14,7 @@ body {
     background-size: cover;
     background-image: url(assets/world.png), linear-gradient(180deg, #252C37 0%, rgba(45, 44, 61, 0.5) 49%, rgba(0, 212, 255, 0.4) 100%);
 }
+
 h1 {
     color: rgb(95, 93, 93);
     font-size: 16px;
@@ -219,24 +222,29 @@ h2 {
     color: beige;
     z-index: 5;
 }
+
 .box-select-country::-webkit-scrollbar-button {
     width: 2px;
     color: black;
 }
+
 .box-select-country::-webkit-scrollbar {
-    width: 8px; 
+    width: 8px;
 }
+
 .box-select-country::-webkit-scrollbar-track {
-    background: #f1f1f1; 
+    background: #f1f1f1;
 }
 
 .box-select-country::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #FF7E5F, #FEB47B); 
+    background: linear-gradient(180deg, #FF7E5F, #FEB47B);
     border-radius: 0px;
 }
+
 .box-select-country::-webkit-scrollbar-thumb:hover {
-    background-color: #555; 
+    background-color: #555;
 }
+
 .box-select-country>div {
     flex: 1 0 80%;
     display: flex;
@@ -453,15 +461,18 @@ h2 {
     z-index: 5;
     overflow: hidden;
     flex-direction: column;
-    border-radius: 15px; /* انحنای گوشه‌های منو کمتر */
+    border-radius: 15px;
+    /* انحنای گوشه‌های منو کمتر */
     padding: 15px;
 }
 
-#menu > div {
+#menu>div {
     width: 30%;
     height: 30vh;
-    background-color: #172233; /* رنگ تیره‌تر کارت‌ها */
-    border-radius: 15px; /* گوشه‌های کارت‌ها کمی گردتر */
+    background-color: #172233;
+    /* رنگ تیره‌تر کارت‌ها */
+    border-radius: 15px;
+    /* گوشه‌های کارت‌ها کمی گردتر */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -470,14 +481,19 @@ h2 {
     cursor: pointer;
     transition: transform 0.55s ease, box-shadow 0.25s ease;
     background-image: linear-gradient(145deg, #1b2a42, #101622);
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.7); /* سایه ظریف‌تر کارت‌ها */
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.7);
+    /* سایه ظریف‌تر کارت‌ها */
 }
 
-#menu > div:hover {
-    box-shadow: rgba(0, 150, 255, 0.6) 0px 8px 20px; /* سایه برجسته‌تر و رنگ جذاب‌تر در هاور */
-    transform: scale(1.08) translateY(-5px); /* انیمیشن برجسته‌تر با کوچک‌ترین حرکت */
-    background-color: #22334a; /* تغییر رنگ کارت در هنگام هاور */
-    background-image: linear-gradient(145deg, #243b55, #141b28); /* گرادیان روشن‌تر در هاور */
+#menu>div:hover {
+    box-shadow: rgba(0, 150, 255, 0.6) 0px 8px 20px;
+    /* سایه برجسته‌تر و رنگ جذاب‌تر در هاور */
+    transform: scale(1.08) translateY(-5px);
+    /* انیمیشن برجسته‌تر با کوچک‌ترین حرکت */
+    background-color: #22334a;
+    /* تغییر رنگ کارت در هنگام هاور */
+    background-image: linear-gradient(145deg, #243b55, #141b28);
+    /* گرادیان روشن‌تر در هاور */
 }
 
 #menu>#menu-freedom-get,
@@ -930,7 +946,6 @@ h2 {
     z-index: -1;
 }
 
-/* #endregion */
 * {
     transition: 0.5s;
 }
@@ -1034,3 +1049,18 @@ select option {
     background-color: #8338ec;
     transform: scale(1.1);
 }
+/* #endregion */
+/* #region Public*/
+.btn {
+    width: auto;
+    padding: 10px;
+    height: auto;
+    font-size: medium;
+    background-color: #0974f1;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: none;
+    border-radius: 7px;
+}
+/* #endregion */
+/* End Code*/ 

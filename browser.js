@@ -1,3 +1,4 @@
+// Start Code
 // #region Libraries 
 const ipc = require('electron').ipcRenderer;
 const axios = require('axios');
@@ -261,3 +262,4 @@ setInterval(() => {
 }, 10000);
 testProxy();
 trackEvent("start-browser");
+// End Code

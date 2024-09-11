@@ -192,6 +192,26 @@ const offProxy = async (proxy) => {
         if (err) console.log('Error setting ProxyEnable:', err);
     });
 };
+function Onloading() {
+    try {
+        // Restore var settingWarp  from json
+        settingWarp = JSON.parse(read_file("warp.json"));
+    }
+    catch {
+        saveSetting()
+    }
+    try {
+        settingVibe = JSON.parse(read_file("vibe.json")); // Load Setting From File.json 
+        configsVibeName = JSON.parse(read_file("configsVibeName.json")); // Load Setting From File.json 
+        configsVibeLink = JSON.parse(read_file("configsVibeLink.json")); // Load Setting From File.json 
+    }
+    catch {
+        saveSetting();
+    }
+    if (settingVibe["config"] == "") {
+        settingVibe["config"] = "auto";
+    }
+}
 // #endregion
 // #region Connection
 function ConnectedVibe(stat = "normal") {
@@ -348,7 +368,7 @@ async function connectVibe(num = number) {
         }
         else {
             var configs = [settingVibe["config"]];
-            if (settingVibe["config"].startsWith("vless") || settingVibe["config"].startsWith("vmess") || settingVibe["config"].startsWith("trojan") || settingVibe["config"].startsWith("shadowsocks") ) {
+            if (settingVibe["config"].startsWith("vless") || settingVibe["config"].startsWith("vmess") || settingVibe["config"].startsWith("trojan") || settingVibe["config"].startsWith("shadowsocks")) {
                 write_file(path.join(__dirname, "config", "config.txt"), btoa(unescape(encodeURIComponent(settingVibe["config"]))));
                 configs = [path.join(__dirname, "config", "config.txt")];
             }
@@ -606,26 +626,6 @@ var links = {
     }
 }
 //#endregion
-function Onloading() {
-    try {
-        // Restore var settingWarp  from json
-        settingWarp = JSON.parse(read_file("warp.json"));
-    }
-    catch {
-        saveSetting()
-    }
-    try {
-        settingVibe = JSON.parse(read_file("vibe.json")); // Load Setting From File.json 
-        configsVibeName = JSON.parse(read_file("configsVibeName.json")); // Load Setting From File.json 
-        configsVibeLink = JSON.parse(read_file("configsVibeLink.json")); // Load Setting From File.json 
-    }
-    catch {
-        saveSetting();
-    }
-    if (settingVibe["config"] == "") {
-        settingVibe["config"] = "auto";
-    }
-}
 Onloading();
 module.exports = {
     connectVibe,

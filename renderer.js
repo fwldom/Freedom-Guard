@@ -1,5 +1,5 @@
 
-// start code
+// Start code
 // #region Libraries
 ;
 const { open } = require("fs");
@@ -95,6 +95,34 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("config-fg-text").onchange = () => {
         SetServiceWarp("configfg", document.getElementById("config-fg-text").value);
         settingWarp["core"] = "auto";
+    };
+    document.getElementById("reset-setting-warp-btn").onclick = () => {
+        console.log("Reseting setting Warp ....")
+        settingWarp = {
+            proxy: "127.0.0.1:8086",
+            gool: false,
+            scan: false,
+            endpoint: "",
+            cfon: false,
+            cfonc: "IR",
+            ipver: 4,
+            warpver: "",
+            warpkey: "",
+            scanrtt: "",
+            verbose: false,
+            cache: "",
+            wgconf: "",
+            config: "",
+            reserved: "",
+            dns: "",
+            tun: false,
+            startup: "warp",
+            isp: "other",
+            core: "auto",
+            "configfg": "https://raw.githubusercontent.com/fwldom/Freedom-Guard/main/config/links.json"
+        };
+        saveSetting();
+        SetSettingWarp();
     };
 });
 // #endregion
@@ -644,4 +672,4 @@ setInterval(() => {
     saveSetting();
 }, 7500);
 //#endregion
-// end code
+// End code
