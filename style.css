@@ -1,4 +1,3 @@
-
 /* Start Code*/
 /* #region warp */
 body {
@@ -9,11 +8,14 @@ body {
     flex-wrap: wrap;
     overflow: hidden;
     height: 98vh;
+    background-repeat: no-repeat;
     animation: rotateBackground 10s ease infinite;
     background: #4e0544;
     background-size: cover;
-    background-image: url(assets/world.png), linear-gradient(180deg, #252C37 0%, rgba(45, 44, 61, 0.5) 49%, rgba(0, 212, 255, 0.4) 100%);
+    background-image: url(assets/world.png), linear-gradient(180deg, #252C37 0%, rgba(35, 31, 88, 0.5) 35%, rgba(0, 212, 255, 0.4) 100%);
+
 }
+
 
 h1 {
     color: rgb(95, 93, 93);
@@ -360,7 +362,6 @@ h2 {
     width: 100%;
     min-height: fit-content;
     background-color: transparent;
-    border-top: 1px solid #10061b;
     padding: 10px;
     display: flex;
     align-items: center;
@@ -372,6 +373,8 @@ h2 {
     color: #ccc;
     margin: 3px;
     margin-left: 10px;
+    border-top: 2px solid #ffffff11;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 #close-setting,
@@ -450,10 +453,10 @@ h2 {
     justify-content: center;
     align-items: center;
     position: fixed;
-    width: 98vw;
+    width: 97vw;
     left: 1vw;
     top: 1vh;
-    height: 97vh;
+    height: 95vh;
     backdrop-filter: blur(15px);
     background-color: rgba(55, 28, 91, 0.1);
     flex-wrap: wrap;
@@ -468,12 +471,11 @@ h2 {
 
 #menu>div {
     width: 30%;
-    height: 30vh;
+    height: 10vh;
     background-color: #172233;
-    /* رنگ تیره‌تر کارت‌ها */
-    border-radius: 15px;
-    /* گوشه‌های کارت‌ها کمی گردتر */
+    border-radius: 10px;
     display: flex;
+    text-align: center;
     justify-content: center;
     align-items: center;
     color: #ffffff;
@@ -481,25 +483,16 @@ h2 {
     cursor: pointer;
     transition: transform 0.55s ease, box-shadow 0.25s ease;
     background-image: linear-gradient(145deg, #1b2a42, #101622);
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.7);
-    /* سایه ظریف‌تر کارت‌ها */
+    box-shadow: 0px 5px 15px rgba(6, 28, 128, 0.7);
 }
 
 #menu>div:hover {
     box-shadow: rgba(0, 150, 255, 0.6) 0px 8px 20px;
-    /* سایه برجسته‌تر و رنگ جذاب‌تر در هاور */
     transform: scale(1.08) translateY(-5px);
-    /* انیمیشن برجسته‌تر با کوچک‌ترین حرکت */
     background-color: #22334a;
-    /* تغییر رنگ کارت در هنگام هاور */
     background-image: linear-gradient(145deg, #243b55, #141b28);
-    /* گرادیان روشن‌تر در هاور */
 }
 
-#menu>#menu-freedom-get,
-#menu>#menu-exit {
-    margin-bottom: auto;
-}
 
 /*#endregion
 /* #region Section Freedom-Vibe */
@@ -1014,6 +1007,9 @@ select option {
         width: 50%;
         height: 10vh;
     }
+    #menu>div {
+        width: 75%;
+    }
 }
 
 #select-isp {
@@ -1049,6 +1045,7 @@ select option {
     background-color: #8338ec;
     transform: scale(1.1);
 }
+
 /* #endregion */
 /* #region Public*/
 .btn {
@@ -1062,5 +1059,6 @@ select option {
     border: none;
     border-radius: 7px;
 }
+
 /* #endregion */
-/* End Code*/ 
+/* End Code*/
