@@ -12,6 +12,7 @@ const { eventNames } = require('process');
 const ipc = require('electron').ipcMain;
 const { initialize } = require('@aptabase/electron/main');
 const { setInterval } = require('timers/promises');
+const { fileURLToPath } = require('url');
 ;
 // #endregion
 // #region Vars
@@ -239,6 +240,9 @@ ipc.on('load-browser', (event) => {
 });
 ipc.on('load-url-browser', (event, url) => {
   ViewBrowser.webContents.loadURL(url);
+});
+ipc.on('load-file',(event,Pathfile) => {
+  mainWindow.loadFile(path.join(__dirname,Pathfile));
 });
 // #endregion
 // #region Quit

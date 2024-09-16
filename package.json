@@ -1,5 +1,4 @@
-{
-    "name": "freedom-guard",
+{    "name": "freedom-guard",
     "productName": "Freedom Guard",
     "description": "Warp + Psiphon + Freedom Vibe + Freedom Browser",
     "keywords": [],
@@ -38,6 +37,13 @@
             {
                 "from": "main/cores",
                 "to": "main/cores",
+                "filter": [
+                    "**/*"
+                ]
+            },
+            {
+                "from": "plus/",
+                "to": "plus/",
                 "filter": [
                     "**/*"
                 ]
@@ -85,6 +91,7 @@
         },
         "files": [
             "assets/**/*",
+            "plus/**/*",
             "!assets/bin/*",
             "!dist/",
             "node_modules/boxicons/css/boxicons.min.css",

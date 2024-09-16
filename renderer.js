@@ -462,6 +462,9 @@ document.getElementById("menu-freedom-vibe").onclick = () => {
 document.getElementById("menu-freedom-browser").onclick = () => {
     ipc.send("load-browser", "")
 };
+document.getElementById("menu-freedom-plus").onclick = () => {
+    ipc.send("load-file", "./plus/index.html")
+};
 document.getElementById("menu-dns").onclick = () => { document.getElementById("dns-set").style.display = "flex" };
 document.getElementById("menu-exit").onclick = () => {
     document.getElementById("menu").style.display = "";
