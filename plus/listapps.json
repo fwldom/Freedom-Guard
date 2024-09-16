@@ -1,0 +1,19 @@
+{
+    "Calculator": {
+        "name": "Calculator",
+        "icon": "https://raw.githubusercontent.com/fwldom/Calculator_Web.github.io/main/icon.png",
+        "directory":"./apps/Calculator",
+        "type": "app",
+        "description": "A simple calculator app",
+        "version": "1.0.0",
+        "author": "Fwldom",
+        "website": "https://github.com/Fwldom/Calculator",
+        "license": "MIT",
+        "download":{
+            "index.js":"https://raw.githubusercontent.com/fwldom/Calculator_Web.github.io/main/index.js",
+            "index.html":"https://raw.githubusercontent.com/fwldom/Calculator_Web.github.io/main/index.html",
+            "style.css":"https://raw.githubusercontent.com/fwldom/Calculator_Web.github.io/main/style.css",
+            "icon.png":"https://raw.githubusercontent.com/fwldom/Calculator_Web.github.io/main/icon.png"
+        }
+    }
+}

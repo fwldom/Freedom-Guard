@@ -241,8 +241,11 @@ ipc.on('load-browser', (event) => {
 ipc.on('load-url-browser', (event, url) => {
   ViewBrowser.webContents.loadURL(url);
 });
-ipc.on('load-file',(event,Pathfile) => {
-  mainWindow.loadFile(path.join(__dirname,Pathfile));
+ipc.on('load-file', (event, Pathfile) => {
+  mainWindow.loadFile(path.join(__dirname, Pathfile));
+});
+ipc.on('load-file-plus', (event, Pathfile) => {
+  mainWindow.loadFile(path.join(Pathfile));
 });
 // #endregion
 // #region Quit

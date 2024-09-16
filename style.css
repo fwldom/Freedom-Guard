@@ -412,8 +412,8 @@ h2 {
     position: absolute;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(10px);
-    background-color: rgba(0, 0, 0, 1.0);
+    backdrop-filter: blur(20px);
+    background-color: rgba(30, 17, 104,0.3);
     flex-direction: column;
     z-index: 9;
     border-radius: 15px;
