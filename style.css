@@ -12,8 +12,6 @@ body {
     animation: rotateBackground 10s ease infinite;
     background: #4e0544;
     background-size: cover;
-    background-image: url(assets/world.png), linear-gradient(180deg, #252C37 0%, rgba(35, 31, 88, 0.5) 35%, rgba(0, 212, 255, 0.4) 100%);
-
 }
 
 

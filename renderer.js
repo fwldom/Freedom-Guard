@@ -229,7 +229,14 @@ function Onload() {
                 ipc.send("load-browser", "");
             }, 1500);
         }
-    }
+    };
+    // Load Background
+    backgroundList = ["1.jpg", "2.png","3.jpg","4.jpg","5.jpg","6.jpg","7.jpg"];
+    function getRandomImage() {
+        const randomIndex = Math.floor(Math.random() * backgroundList.length);
+        return "assets/background/" + backgroundList[randomIndex];
+    };
+    document.body.style.backgroundImage = `url(${getRandomImage()}),  linear-gradient(180deg, #252C37 0%, rgba(35, 31, 88, 0.5) 35%, rgba(0, 212, 255, 0.4) 100%)`;
 };
 // #endregion
 // #region Functions other

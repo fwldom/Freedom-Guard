@@ -22,13 +22,13 @@ function KillProcess(core = "warp") {
         childProcess.kill();
         childProcess = null;
     }
-}
+};
 function changeISP(newisp) {
     console.log("NEW ISP IS:" + newisp)
     settingWarp["isp"] = newisp;
     saveSetting();
     Onloading();
-}
+};
 async function Run(nameFile, args, runa, core) {
     console.log("Runing New Process...");
     KillProcess(core = core);
@@ -51,10 +51,16 @@ async function Run(nameFile, args, runa, core) {
         if (data.toString().includes("serving proxy")) {
             if (process.platform == "linux" && !settingWarp["tun"]) {
                 exec("bash " + path.join(__dirname, "assets", "bash", "set_proxy.sh") + ` ${settingWarp["proxy"].replace(":", " ")}`);
+                if (await testProxy()) {
+                    ConnectedWarp();
+                }
             }
             else if (process.platform == "win32" && !settingWarp["tun"]) {
                 console.log("set proxy");
                 setProxy(settingWarp["proxy"]);
+                if (await testProxy()) {
+                    ConnectedWarp();
+                }
             }
         }
         else if (data.toString().includes("CORE STARTED:")) {
@@ -63,7 +69,7 @@ async function Run(nameFile, args, runa, core) {
             }
         }
     });
-    childProcess.stderr.on('data', (data) => {
+    childProcess.stderr.on('data', async (data) => {
         if (data instanceof Buffer) {
             data = data.toString(); // Convert Buffer to string
         }
@@ -71,10 +77,16 @@ async function Run(nameFile, args, runa, core) {
         if (data.toString().includes("serving proxy")) {
             if (process.platform == "linux" && !settingWarp["tun"]) {
                 exec("bash " + path.join(__dirname, "assets", "bash", "set_proxy.sh") + ` ${settingWarp["proxy"].replace(":", " ")}`);
+                if (await testProxy()) {
+                    ConnectedWarp();
+                }
             }
             else if (process.platform == "win32" && !settingWarp["tun"]) {
                 console.log("set proxy");
                 setProxy(settingWarp["proxy"]);
+                if (await testProxy()) {
+                    ConnectedWarp();
+                }
             }
         }
         else if (data.toString().includes("CORE STARTED:")) {
@@ -121,10 +133,10 @@ function FindBestEndpointWarp(type = 'find') {
             sect == "main" ? Showmess(3000, "Finded Best Endpoint. Reconnecting") : ("");
         }
     });
-}
+};
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-}
+};
 async function testProxy() {
     console.log("Testing Proxy...");
     var startTime = Date.now();
@@ -168,7 +180,7 @@ async function testProxy() {
         testproxystat = false;
         return false;
     }
-}
+};
 const setProxy = async (proxy) => {
     console.log("Set proxy...")
     const proxyKey = new Winreg({
@@ -229,6 +241,20 @@ function ConnectedVibe(stat = "normal") {
     settingVibe["status"] = true;
     StatusGuard = true;
     RefreshLinks();
+}
+function ConnectedWarp(stat = "normal") {
+    console.log("Connected Warp");
+    // function runed when the proxy is connected
+    sect == "main" ? SetAttr("changeStatus-vibe", "style", "box-shadow:0px 0px 50px 10px rgba(98, 255, 0, 0.7);") : ("")
+    sect == "main" ? SetAttr("changeStatus-vibe", "style", "animation:;") : ("")
+    sect == "main" ? SetHTML("status-vibe-conn", "🚀 Connected") : ('');
+    sect == "main" ? SetAnim("ChangeStatus", "Load") : ("");
+    sect == "main" ? SetBorderColor("ChangeStatus", "#15ff00") : ("");
+    if (stat == "normal") {
+        sect == "main" ? Showmess(5000, "🚀!Connected To Warp!🚀") : ("");
+        trackEvent("connected-warp");
+    }
+    StatusGuard = true;
 }
 function disconnectVPN() {
     // function runed when the proxy is disconnected
