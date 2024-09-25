@@ -241,6 +241,10 @@ ipc.on('load-browser', (event) => {
 ipc.on('load-url-browser', (event, url) => {
   ViewBrowser.webContents.loadURL(url);
 });
+ipc.on('exit-app', (event) => {
+  mainWindow.close();
+  app.exit();
+});
 ipc.on('load-file', (event, Pathfile) => {
   mainWindow.loadFile(path.join(__dirname, Pathfile));
 });

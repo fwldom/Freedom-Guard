@@ -43,7 +43,7 @@
     <!-- #region Freedom Warp => setting & main  -->
     <h2 id="Status" title="false"></h2>
     <button id="ChangeStatus" class="bx-spin-hover"><i class="bx bx-power-off"></i></button>
-    <button class="menu-show" id="menu-show"><i class="bx bx-menu-alt-left"></i></button>
+    <button class="menu-show" id="menu-show"><i class="bx bx-menu-alt-left bx-flashing-hover"></i></button>
     <button class="setting-show bx bx-tada-hover" id="setting-show"><i class=" bx bxs-cog"></i></button>
     <div class="options">
         <p>Gool</p>
@@ -58,7 +58,7 @@
         </label>
     </div>
     <p id="ip-ping-warp">IP : x.x.x.x | Ping : ms</p>
-    <div class="box-select-country" id="box-select-country">
+    <div class="box-select-country" id="box-select-country" style="transition: all 1.3s ease 0s;top: 100vh;">
     </div>
     <div class="options-select-cfon">
         <!-- <p>Psiphon Country</p>
@@ -77,12 +77,13 @@
         <div id="select-isp-other">Other غیره،وای فای</div>
         <p>بعدا میتوانید از تنظیمات تغییر دهید</p>
     </div>
-    <div id="setting" style="width: 0;display: none;">
+    <div id="setting" style="position: absolute; display: flex; transition: all 0.9s ease 0s; right: -150vw;">
         <nav id="nav-top" style="position: sticky;  top: 0%;
-  left: 0%;background-color: rgba(82, 80, 116, 0.568);width: 100%;min-height: 7.5vh;z-index: 10;">
+  left: 0%;display: flex;align-items: center;background: linear-gradient(90deg,rgba(32, 117, 29, 0.7) 5%,rgb(12, 20, 128,0.7) 100%,rgba(128, 97, 12, 0.7) 100%);backdrop-filter: blur(25px);width: 100%;min-height: 7.5vh;z-index: 10;">
             <button id="close-setting">
                 <i class='bx bx-arrow-back'></i>
             </button>
+            <b style="color: #db8522;margin-left: 2vw;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;font-weight: bold;">Settings Freedom Guard</b>
             <button id="about"><i class='bx bxs-info-circle'></i></button>
         </nav>
         <b>Config Freedom Guard for auto mode</b>
@@ -188,10 +189,11 @@
             </label>
         </div>
         <div id="reset-setting-warp">
+            <button id="change-background-warp-btn" class="btn">Change background</button>
             <button id="reset-setting-warp-btn" class="btn">Reset setting Warp</button>
         </div>
     </div>
-    <div id="menu">
+    <div id="menu" style="position: absolute; display: flex; transition: all 1.3s ease 0s; left: -110vw;">
         <div id="menu-dns">Set DNS</div>
         <div id="menu-freedom-browser">Freedom Browser</div>
         <div id="menu-freedom-vibe">Freedom Vibe</div>
@@ -199,6 +201,7 @@
         <div id="menu-website">Website App</div>
         <div id="menu-about">About App</div>
         <div id="menu-exit">Exit Menu</div>
+        <div id="menu-exit-app">Exit Freedom Guard</div>
     </div>
     <!-- #endregion Warp -->
     <!-- #region Freedom Vibe => main & setting-->
@@ -242,7 +245,7 @@
                     <i class='bx bx-arrow-back'></i>
                 </button>
             </nav>
-            <b>Config URL vless,vmess,url file,...</b>
+            <b>Config URL vless,vmess,url file,trojan ...</b>
             <div id="config-vibe" class="form-control-c">
                 <input placeholder="config URL: https://|vless://" class="input input-alt" type="text"
                     id="config-vibe-text">

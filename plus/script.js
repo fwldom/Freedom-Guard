@@ -45,14 +45,13 @@ fetch('listapps.json')
             if (!fs.existsSync(path.join(__dirname, './apps'))) {
                 fs.mkdirSync(path.join(__dirname, "./apps"));
             };
-            downloadFiles([
-                { "url": app["download"]["index.html"], "savePath": path.join(__dirname, app.directory, "index.html") },
-                { "url": app["download"]["style.css"], "savePath": path.join(__dirname, app.directory, "style.css") },
-                { "url": app["download"]["icon.png"], "savePath": path.join(__dirname, app.directory, "icon.png") },
-                { "url": app["download"]["index.js"], "savePath": path.join(__dirname, app.directory, "index.js") },
-            ], app = app)
-
-        }
+            var Files = [];
+            for (let key in app["files"]) {
+                Files[key] = app.files[key];
+            }
+            console.log(Files);
+            downloadFiles(Files, app = app)
+    }
     })
     .catch(error => console.error('Error loading apps:', error));
 
@@ -101,19 +100,24 @@ read_file = function (path) {
 write_file = function (path, output) {
     fs.writeFileSync(path, output);
 };
+function getFileNameFromUrl(url) {
+    const parts = url.split('/');
+    return parts[parts.length - 1];
+}
 async function downloadFiles(filesToDownload, app) {
     showDownloadDialog();
 
     let completed = 0;
     const totalFiles = filesToDownload.length;
 
-    for (const file of filesToDownload) {
-        await checkAndDownloadFile(file.url, file.savePath);
+    for (var file of filesToDownload) {
+        console.log(file);
+        await checkAndDownloadFile(file, path.join(__dirname,"./apps/",app.name,getFileNameFromUrl(file)));
         completed++;
         const progress = (completed / totalFiles) * 100;
         downloadProgress.value = progress;
         downloadStatus.innerText = `در حال دانلود: ${completed}/${totalFiles} فایل`;
-        if (!fs.existsSync(file.savePath)) {
+        if (!fs.existsSync(path.join(__dirname,"./apps/",app.name,getFileNameFromUrl(file)))) {
             alert("Error Download Files Try Again");
             hideDownloadDialog();
             return;

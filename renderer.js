@@ -25,6 +25,7 @@ var { Onloading, connectVibe, connectWarp, setProxy, offProxy, settingWarp, Conn
 __dirname = __dirname.replace("app.asar", "")
 var Psicountry = ["IR", "AT", "BE", "BG", "BR", "CA", "CH", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GB", "HU", "HR", "IE", "IN", "IT", "JP", "LV", "NL", "NO", "PL", "PT", "RO", "RS", "SE", "SG", "SK", "UA", "US"];
 var PsicountryFullname = ["Auto Server", "Austria", "Belgium", "Bulgaria", "Brazil", "Canada", "Switzerland", "Czech Republic", "Germany", "Denmark", "Estonia", "Spain", "Finland", "France", "United Kingdom", "Hungary", "Croatia", "Ireland", "India", "Italy", "Japan", "Latvia", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Serbia", "Sweden", "Singapore", "Slovakia", "Ukraine", "United States"];
+var backgroundList = ["1.jpg", "2.png", "3.jpg", "4.jpg", "5.jpg", "6.jpg", "7.jpg", "8.jpg", "9.jpg", "10.jpg", "11.jpg", "12.jpg"];
 // #endregion
 // #region all Listener
 document.addEventListener("DOMContentLoaded", () => {
@@ -51,16 +52,23 @@ document.addEventListener("DOMContentLoaded", () => {
         saveSetting();
     };
     document.getElementById("box-select-country-mini").addEventListener("click", () => {
-        if (document.getElementById("box-select-country").style.display == "grid") {
-            document.getElementById("box-select-country").style.display = "none";
+        if (document.getElementById("box-select-country").style.top != "100vh") {
+            document.getElementById("box-select-country").style.height = "0%";
+            document.getElementById("box-select-country").style.top = "100vh";
         } else {
+            document.getElementById("box-select-country").style.height = "75%";
             document.getElementById("box-select-country").style.display = "grid";
+            document.getElementById("box-select-country").style.top = "10vh";
         }
         saveSetting();
     });
     document.getElementById("close-setting").onclick = () => {
-        document.getElementById("setting").style.display = "none";
-        document.getElementById("setting-vibe").style.display = "none";
+        document.getElementById("setting").style.position = "absolute"
+        document.getElementById("setting").style.right = "-150vw";
+        document.getElementById("setting").style.visibility = "0.3";
+        setTimeout(() => {
+            document.getElementById("setting").style.display = "";
+        }, 1300);
     };
     document.getElementById("selector-ip-version").onchange = () => {
         SetServiceWarp("ipver", document.getElementById("selector-ip-version").value.match(/\d+/g)).toString();
@@ -124,6 +132,9 @@ document.addEventListener("DOMContentLoaded", () => {
         saveSetting();
         SetSettingWarp();
     };
+    document.getElementById("change-background-warp-btn").onclick =  () => {
+        document.body.style.backgroundImage = `url(${getRandomImage()}),  linear-gradient(180deg, #252C37 0%, rgba(35, 31, 88, 0.5) 35%, rgba(0, 212, 255, 0.4) 100%)`;
+    }
 });
 // #endregion
 // #region For Connections Warp
@@ -231,12 +242,11 @@ function Onload() {
         }
     };
     // Load Background
-    backgroundList = ["1.jpg", "2.png","3.jpg","4.jpg","5.jpg","6.jpg","7.jpg","8.jpg","9.jpg","10.jpg","11.jpg","12.jpg"];
-    function getRandomImage() {
-        const randomIndex = Math.floor(Math.random() * backgroundList.length);
-        return "assets/background/" + backgroundList[randomIndex];
-    };
     document.body.style.backgroundImage = `url(${getRandomImage()}),  linear-gradient(180deg, #252C37 0%, rgba(35, 31, 88, 0.5) 35%, rgba(0, 212, 255, 0.4) 100%)`;
+};
+function getRandomImage() {
+    const randomIndex = Math.floor(Math.random() * backgroundList.length);
+    return "assets/background/" + backgroundList[randomIndex];
 };
 // #endregion
 // #region Functions other
@@ -396,16 +406,22 @@ document.getElementById("isp-text-guard").addEventListener("change", () => {
 document.getElementById("select-isp-mci").addEventListener("click", () => {
     document.getElementById("isp-text-guard").value = "MCI"
     changeISP(document.getElementById("isp-text-guard").value);
+    settingWarp["isp"] = document.getElementById("isp-text-guard").value;
+    saveSetting();
     document.getElementById("select-isp").style.display = "none";
 });
 document.getElementById("select-isp-irancell").addEventListener("click", () => {
     document.getElementById("isp-text-guard").value = "IRANCELL"
     changeISP(document.getElementById("isp-text-guard").value);
+    settingWarp["isp"] = document.getElementById("isp-text-guard").value;
+    saveSetting();
     document.getElementById("select-isp").style.display = "none";
 });
 document.getElementById("select-isp-other").addEventListener("click", () => {
     document.getElementById("isp-text-guard").value = "other"
     changeISP(document.getElementById("isp-text-guard").value);
+    settingWarp["isp"] = document.getElementById("isp-text-guard").value;
+    saveSetting();
     document.getElementById("select-isp").style.display = "none";
 });
 document.getElementById("vpn-type-selected").addEventListener("change", () => {
@@ -425,15 +441,10 @@ document.getElementById("reserved-status").addEventListener("change", () => {
     else SetServiceWarp("reserved", false);
 });
 document.getElementById("setting-show").addEventListener("click", () => {
-    document.getElementById("setting").style.transition = "1s";
-    if (document.getElementById("setting").style.display == "none") {
-        CloseAllSections();
-        document.getElementById("setting").style.display = "flex";
-        document.getElementById("setting").style.width = "";
-    } else {
-        document.getElementById("setting").style.width = "0%";
-        document.getElementById("setting").style.display = "";
-    }
+    document.getElementById("setting").style.display = "flex";
+    document.getElementById("setting").style.position = "absolute";
+    document.getElementById("setting").style.right = "";
+    document.getElementById("setting").style.visibility = "1";
 });
 document.getElementById("setting-show-vibe").addEventListener("click", () => {
     if (document.getElementById("setting-vibe").style.display == "") {
@@ -461,6 +472,10 @@ document.getElementById("close-about").addEventListener("click", () => { documen
 // #region Section Menu
 document.getElementById("menu-show").onclick = () => {
     document.getElementById("menu").style.display = "flex";
+    document.getElementById("menu").style.transition = "1.3s";
+    document.getElementById("menu").style.position = "absolute";
+    document.getElementById("menu").style.left = "";
+    document.getElementById("menu").style.visibility = "1";
 };
 document.getElementById("menu-freedom-vibe").onclick = () => {
     Loading("");
@@ -474,7 +489,16 @@ document.getElementById("menu-freedom-plus").onclick = () => {
 };
 document.getElementById("menu-dns").onclick = () => { document.getElementById("dns-set").style.display = "flex" };
 document.getElementById("menu-exit").onclick = () => {
-    document.getElementById("menu").style.display = "";
+    document.getElementById("menu").style.transition = "1.3s";
+    document.getElementById("menu").style.position = "absolute"
+    document.getElementById("menu").style.left = "-110vw";
+    document.getElementById("menu").style.visibility = "0.3";
+    setTimeout(() => {
+        document.getElementById("menu").style.display = "";
+    }, 1300);
+};
+document.getElementById("menu-exit-app").onclick = () => {
+    ipc.send("exit-app", "")
 };
 //#endregion
 // #region Section Freedom-Vibe
@@ -653,6 +677,7 @@ function SetDNS(dns1, dns2) {
 const { ipcRenderer } = require('electron');
 const { randomBytes } = require("crypto");
 const { setTimeout } = require("timers/promises");
+const { Console } = require("console");
 ipcRenderer.on('start-vibe', (event, ev) => {
     ResetArgsVibe();
     LoadVibe();

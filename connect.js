@@ -24,7 +24,7 @@ function KillProcess(core = "warp") {
     }
 };
 function changeISP(newisp) {
-    console.log("NEW ISP IS:" + newisp)
+    console.log("NEW ISP IS: " + newisp)
     settingWarp["isp"] = newisp;
     saveSetting();
     Onloading();

@@ -1,3 +1,4 @@
+/*///////////////////////////////////////////*/
 /* Start Code*/
 /* #region warp */
 body {
@@ -8,8 +9,8 @@ body {
     flex-wrap: wrap;
     overflow: hidden;
     height: 98vh;
+    transition: 0.7s;
     background-repeat: no-repeat;
-    animation: rotateBackground 10s ease infinite;
     background: #4e0544;
     background-size: cover;
 }
@@ -255,8 +256,8 @@ h2 {
 }
 
 .box-select-country>div:hover {
-    background-color: #5900ff;
-    transition: 0.5s;
+    background-color: #5900ffab;
+    transition: 0.8s;
 }
 
 .box-select-country>div>* {
@@ -1007,6 +1008,8 @@ select option {
     }
     #menu>div {
         width: 75%;
+        height: 8.3vh;
+        padding: 0.3vh;
     }
 }
 
@@ -1057,6 +1060,25 @@ select option {
     border: none;
     border-radius: 7px;
 }
+::-webkit-scrollbar {
+    width: 1.5vw;
+}
+
+::-webkit-scrollbar-track {
+    background: linear-gradient(180deg, rgba(95, 80, 15, 0.678) 15%, rgb(20, 7, 77) 50%, rgba(7, 97, 119, 0.7) 75%);
+    border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #386b41a6;
+    backdrop-filter: blur(55px);
+    border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0b68807a;
+}
 
 /* #endregion */
 /* End Code*/
+/*/////////////////////////////////////////*/
