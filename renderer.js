@@ -25,7 +25,7 @@ var { Onloading, connectVibe, connectWarp, setProxy, offProxy, settingWarp, Conn
 __dirname = __dirname.replace("app.asar", "")
 var Psicountry = ["IR", "AT", "BE", "BG", "BR", "CA", "CH", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GB", "HU", "HR", "IE", "IN", "IT", "JP", "LV", "NL", "NO", "PL", "PT", "RO", "RS", "SE", "SG", "SK", "UA", "US"];
 var PsicountryFullname = ["Auto Server", "Austria", "Belgium", "Bulgaria", "Brazil", "Canada", "Switzerland", "Czech Republic", "Germany", "Denmark", "Estonia", "Spain", "Finland", "France", "United Kingdom", "Hungary", "Croatia", "Ireland", "India", "Italy", "Japan", "Latvia", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Serbia", "Sweden", "Singapore", "Slovakia", "Ukraine", "United States"];
-var backgroundList = ["1.jpg", "2.png", "3.jpg", "4.jpg", "5.jpg", "6.jpg", "7.jpg", "8.jpg", "9.jpg", "10.jpg", "11.jpg", "12.jpg"];
+var backgroundList = ["1.png", "2.png", "3.jpg", "4.jpg", "5.jpg", "6.jpg", "7.jpg", "8.jpg", "9.jpg", "10.jpg", "11.jpg", "12.jpg","13.jpg","14.jpg","15.jpg","16.jpg"];
 // #endregion
 // #region all Listener
 document.addEventListener("DOMContentLoaded", () => {
@@ -132,8 +132,10 @@ document.addEventListener("DOMContentLoaded", () => {
         saveSetting();
         SetSettingWarp();
     };
-    document.getElementById("change-background-warp-btn").onclick =  () => {
-        document.body.style.backgroundImage = `url(${getRandomImage()}),  linear-gradient(180deg, #252C37 0%, rgba(35, 31, 88, 0.5) 35%, rgba(0, 212, 255, 0.4) 100%)`;
+    document.getElementById("change-background-warp-btn").onclick = () => {
+        const randomImage = getRandomImage();
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundImage = `url(${randomImage}), linear-gradient(180deg, #252C37 0%, rgba(35, 31, 88, 0.5) 35%, rgba(0, 212, 255, 0.4) 100%)`;
     }
 });
 // #endregion
@@ -241,8 +243,7 @@ function Onload() {
             }, 1500);
         }
     };
-    // Load Background
-    document.body.style.backgroundImage = `url(${getRandomImage()}),  linear-gradient(180deg, #252C37 0%, rgba(35, 31, 88, 0.5) 35%, rgba(0, 212, 255, 0.4) 100%)`;
+  
 };
 function getRandomImage() {
     const randomIndex = Math.floor(Math.random() * backgroundList.length);
@@ -708,5 +709,6 @@ setInterval(() => {
     testProxy();
     saveSetting();
 }, 7500);
+
 //#endregion
 // End code

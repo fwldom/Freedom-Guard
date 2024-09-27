@@ -167,6 +167,7 @@ async function testProxy() {
             });
             console.log("Fliternet Bypassed");
             filterBypassStat = true;
+            ConnectedVibe("warp");
             return true;
         }
         catch {
@@ -248,7 +249,7 @@ function ConnectedWarp(stat = "normal") {
     sect == "main" ? SetAttr("changeStatus-vibe", "style", "box-shadow:0px 0px 50px 10px rgba(98, 255, 0, 0.7);") : ("")
     sect == "main" ? SetAttr("changeStatus-vibe", "style", "animation:;") : ("")
     sect == "main" ? SetHTML("status-vibe-conn", "🚀 Connected") : ('');
-    sect == "main" ? SetAnim("ChangeStatus", "Load") : ("");
+    sect == "main" ? SetAnim("ChangeStatus", "null !important") : ("");
     sect == "main" ? SetBorderColor("ChangeStatus", "#15ff00") : ("");
     if (stat == "normal") {
         sect == "main" ? Showmess(5000, "🚀!Connected To Warp!🚀") : ("");

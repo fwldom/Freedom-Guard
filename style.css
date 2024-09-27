@@ -1,18 +1,65 @@
 /*///////////////////////////////////////////*/
 /* Start Code*/
 /* #region warp */
+
 body {
+    flex-direction: column;
+    flex-wrap: wrap;
+    background: radial-gradient(circle at center, #1b1b1b, #0d0d0d 40%, #000000);
+    background-attachment: fixed;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    flex-wrap: wrap;
+    background: linear-gradient(145deg, #1b0033, #0d001a, #2c003e,#05295e,#0974f1);
+    background-size: 200% 200%;
+    font-family: 'Arial', sans-serif;
     overflow: hidden;
-    height: 98vh;
-    transition: 0.7s;
-    background-repeat: no-repeat;
-    background: #4e0544;
-    background-size: cover;
+    animation: DarkGradientMove 15s ease infinite;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 0, 127, 0.15), transparent 50%), 
+                radial-gradient(circle at 70% 70%, rgba(140, 32, 170, 0.15), transparent 50%);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    animation: NeonGlow 1s ease-in-out infinite;
+}
+
+@keyframes DarkGradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 50% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes NeonGlow {
+    0% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
+    }
 }
 
 
@@ -53,25 +100,35 @@ h2 {
     width: 175px;
     height: 175px;
     font-size: 55px;
-    color: black;
-    background: linear-gradient(#ccc 0 0) padding-box, linear-gradient(to right, #9c20aa, #fb3570) border-box;
-    color: #313149;
+    color: white;
+    background: linear-gradient(#2502eb86 0 0) padding-box, linear-gradient(to right, #2c003e, #ff007f) border-box;
     padding: 10px;
     border: 5px solid transparent;
     border-radius: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: ChangeStatusAnimOff 10s infinite;
+    animation: ChangeStatusAnimOff 10s infinite, glow 2s ease-in-out infinite;
+    box-shadow: 0 0 50px rgba(255, 0, 127, 0.3);
+    transition: background 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+    cursor: pointer;
+}
+
+#ChangeStatus:hover {
+    transition: 0.8s;
+    backdrop-filter: blur(50px);
+    background: transparent;
+    border-color:#1100ff;
+    box-shadow: 0 0 50px rgba(255, 0, 128, 0.432), 0 0 20px rgba(44, 0, 62, 0.5);
 }
 
 @keyframes ChangeStatusAnimOff {
     10% {
-        background: linear-gradient(#ccc 0 0) padding-box, linear-gradient(to right, #9c20aa, #fb3570) border-box;
+        border-color: #9c20aa;
     }
 
     20% {
-        border-color: #9c20aa;
+        border-color: #fb3570;
     }
 
     50% {
@@ -79,7 +136,19 @@ h2 {
     }
 
     100% {
-        border-color: #fb3570;
+        border-color: #970f53af;
+    }
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 0, 127, 0.3), 0 0 5px rgba(44, 0, 62, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 380px rgba(255, 0, 127, 0.3), 0 0 55px rgba(44, 0, 62, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 50px rgba(255, 0, 127, 0.3), 0 0 5px rgba(44, 0, 62, 0.3);
     }
 }
 
@@ -104,6 +173,8 @@ h2 {
         transform: rotate(7200deg);
     }
 }
+
+
 
 .menu-show {
     padding: 7px;
@@ -344,7 +415,7 @@ h2 {
 #setting,
 #setting-vibe {
     display: none;
-    position: absolute;
+    position: fixed;
     right: 0%;
     top: 0%;
     width: 80%;
@@ -414,7 +485,7 @@ h2 {
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(20px);
-    background-color: rgba(30, 17, 104,0.3);
+    background-color: rgba(30, 17, 104, 0.3);
     flex-direction: column;
     z-index: 9;
     border-radius: 15px;
@@ -1006,6 +1077,7 @@ select option {
         width: 50%;
         height: 10vh;
     }
+
     #menu>div {
         width: 75%;
         height: 8.3vh;
@@ -1060,6 +1132,7 @@ select option {
     border: none;
     border-radius: 7px;
 }
+
 ::-webkit-scrollbar {
     width: 1.5vw;
 }
