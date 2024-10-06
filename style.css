@@ -21,7 +21,6 @@ body {
     background-size: 200% 200%;
     font-family: 'Arial', sans-serif;
     overflow: hidden;
-    animation: DarkGradientMove 15s ease infinite;
 }
 
 body::before {
@@ -35,32 +34,9 @@ body::before {
                 radial-gradient(circle at 70% 70%, rgba(140, 32, 170, 0.15), transparent 50%);
     mix-blend-mode: screen;
     pointer-events: none;
-    animation: NeonGlow 1s ease-in-out infinite;
 }
 
-@keyframes DarkGradientMove {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 50% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
 
-@keyframes NeonGlow {
-    0% {
-        opacity: 0.5;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0.5;
-    }
-}
 
 
 h1 {
