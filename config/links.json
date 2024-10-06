@@ -9,7 +9,7 @@
         "lenght": 6
     },
     "IRANCELL": {
-        "0": "warp,auto,true",
+        "0": "warp,scan,true",
         "1": "warp,gool,true",
         "2": "vibe,https://raw.githubusercontent.com/yebekhe/TVC/main/subscriptions/xray/normal/mix",
         "3": "warp,endpoint,engage.cloudflareclient.com:2408",
