@@ -473,7 +473,7 @@ document.getElementById("close-about").addEventListener("click", () => { documen
 // #region Section Menu
 document.getElementById("menu-show").onclick = () => {
     document.getElementById("menu").style.display = "flex";
-    document.getElementById("menu").style.transition = "1.3s";
+    document.getElementById("menu").style.transition = "0.5s";
     document.getElementById("menu").style.position = "absolute";
     document.getElementById("menu").style.left = "";
     document.getElementById("menu").style.visibility = "1";

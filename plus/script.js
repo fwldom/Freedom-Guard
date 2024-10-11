@@ -2,7 +2,7 @@ const fs = require('fs');
 const axios = require('axios');
 const path = require('path');
 const ipc = require('electron').ipcRenderer;
-__dirname = path.join(__dirname.replace("app.asar"));
+__dirname = path.join(__dirname.replace("app.asar",""));
 
 fetch('listapps.json')
     .then(response => response.json())

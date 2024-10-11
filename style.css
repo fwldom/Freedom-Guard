@@ -84,7 +84,7 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: ChangeStatusAnimOff 10s infinite, glow 2s ease-in-out infinite;
+    animation: ChangeStatusAnimOff 10s infinite;
     box-shadow: 0 0 50px rgba(255, 0, 127, 0.3);
     transition: background 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
     cursor: pointer;
@@ -92,7 +92,7 @@ h2 {
 
 #ChangeStatus:hover {
     transition: 0.8s;
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(5px);
     background: transparent;
     border-color:#1100ff;
     box-shadow: 0 0 50px rgba(255, 0, 128, 0.432), 0 0 20px rgba(44, 0, 62, 0.5);
@@ -460,7 +460,6 @@ h2 {
     position: absolute;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(20px);
     background-color: rgba(30, 17, 104, 0.3);
     flex-direction: column;
     z-index: 9;
@@ -504,7 +503,7 @@ h2 {
     left: 0.9vw;
     top: 0.9vh;
     height: 94.5vh;
-    backdrop-filter: blur(25px);
+    backdrop-filter: blur(5px);
     background-color: rgba(86, 35, 119, 0.26);
     flex-wrap: wrap;
     gap: 3vh;
@@ -534,7 +533,7 @@ h2 {
 
 #menu>div:hover {
     box-shadow: rgba(0, 150, 255, 0.6) 0px 8px 20px;
-    transform: scale(1.08) translateY(-5px);
+    transform: translateY(-5px);
     background-color: #22334a;
     background-image: linear-gradient(145deg, #243b55, #141b28);
 }
@@ -633,7 +632,7 @@ h2 {
 #freedom-vibe>#vibe-profile {
     background-color: rgba(191, 188, 199, 0.185);
     left: 1vw;
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(5px);
     bottom: 1vh;
     position: sticky;
     height: 5vh;
@@ -659,7 +658,7 @@ h2 {
     top: 49vh;
     height: 50vh;
     background-color: rgba(191, 188, 199, 0.185);
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(5px);
     display: none;
     justify-content: center;
     align-items: center;
@@ -710,7 +709,7 @@ h2 {
     justify-content: flex-start;
     align-items: center;
     background-color: rgba(191, 188, 199, 0.185);
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(5px);
     box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.2);
     border-radius: 15px;
     color: white;
@@ -729,7 +728,7 @@ h2 {
     margin: 3vh;
     width: 80%;
     background-color: rgba(113, 111, 121, 0.185);
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(5px);
 }
 
 #vibe-profile-manage #config-box-vibe-sel,
@@ -836,7 +835,7 @@ h2 {
     top: 30%;
     height: 40%;
     left: 12.5%;
-    backdrop-filter: blur(25px);
+    backdrop-filter: blur(5px);
     background-color: rgba(255, 255, 255, 0.3);
     justify-content: center;
     align-items: center;
@@ -880,7 +879,7 @@ h2 {
     flex-direction: column;
     z-index: 15;
     background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(25px);
+    backdrop-filter: blur(5px);
 }
 
 .content {
@@ -1120,7 +1119,7 @@ select option {
 
 ::-webkit-scrollbar-thumb {
     background: #386b41a6;
-    backdrop-filter: blur(55px);
+    backdrop-filter: blur(5px);
     border-radius: 0px;
 }
 
