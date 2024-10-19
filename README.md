@@ -2,6 +2,8 @@
  Warp + Psiphon + Gool + Scan + Freedom Vibe + Freedom Browser
 > Freedom Guard is tool for bypass censorship of internet.<br>
 > Woman Life Freedom
+> پروژه گارد آزادی به آدرس زیر منتقل شد.
+> https://github.com/Freedom-Guard/Freedom-Guard
 # نرم افزار گارد آزادی
  وارپ + سایفون + گول + اسکن + مرورگر آزادی + Freedom Vibe
 > نرم افزار گارد آزادی یک نرم افزار برای دور زدن سانسور اینترنت است. 
